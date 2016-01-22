@@ -1,9 +1,10 @@
-package com.run.poker.entity;
+package com.run.poker.player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.run.poker.entity.PlayerEntity;
 import com.run.poker.utils.CardUtils;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -35,9 +36,9 @@ public class Enemy extends PlayerEntity {
 	);
 	
 	public Enemy() {
-		this.setName(CardUtils.randomAny(NAMES, true));
-		this.setTitle(CardUtils.randomAny(TITLES, false));
-		this.setGold(CardUtils.randomNumber(500, 5000));
+		this.setName(CardUtils.random(NAMES, true));
+		this.setTitle(CardUtils.random(TITLES, false));
+		this.setGold(CardUtils.random(500, 5000));
 	}
 	
 	@Override

@@ -3,9 +3,9 @@ package com.run.poker.deck;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.run.poker.entity.Enemy;
-import com.run.poker.entity.Player;
 import com.run.poker.entity.PlayerEntity;
+import com.run.poker.player.Enemy;
+import com.run.poker.player.Player;
 
 /**
  * 

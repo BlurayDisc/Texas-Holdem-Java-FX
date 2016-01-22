@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
 
-import com.run.poker.entity.Card;
+import com.run.poker.card.Card;
 
 /**
  * @author RuN
@@ -16,10 +16,10 @@ public class Hand {
 	
 	public Hand(List<Card> cards) {
 		this.setRank(Rank.HighCard);
-		this.anaylse(cards);
+		this.analyse(cards);
 	}
 	
-	public void anaylse(List<Card> cards) {
+	public void analyse(List<Card> cards) {
 		
 		if (isThreeOfaKind(cards)) {
 			rank = Rank.ThreeOfaKind;

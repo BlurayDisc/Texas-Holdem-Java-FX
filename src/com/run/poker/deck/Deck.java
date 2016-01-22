@@ -3,8 +3,8 @@ package com.run.poker.deck;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import com.run.poker.entity.Card;
-import com.run.poker.entity.Suit;
+import com.run.poker.card.Card;
+import com.run.poker.card.Suit;
 
 /**
  * A standard deck of 52 poker cards.
@@ -19,7 +19,7 @@ public class Deck {
 	public Deck() {
 		this.deck = new LinkedList<>();
 	}
-	
+
 	/**
 	 * Fills up the deck with 1 set of poker cards, excluding 
 	 * the two jokers.

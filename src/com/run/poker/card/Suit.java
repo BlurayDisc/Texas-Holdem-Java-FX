@@ -1,4 +1,4 @@
-package com.run.poker.entity;
+package com.run.poker.card;
 
 /**
  * Object representing a suit of a card.

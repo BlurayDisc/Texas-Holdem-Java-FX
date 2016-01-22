@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.run.poker.card.Card;
 import com.run.poker.hand.Hand;
 
 public abstract class PlayerEntity extends GameEntity {
@@ -15,7 +16,7 @@ public abstract class PlayerEntity extends GameEntity {
 	private String name;
 	private String title;
 	private int gold;
-	private List<Card> cards;
+	protected List<Card> cards;
 	
 	public PlayerEntity() {
 		this.setName("New Player");
