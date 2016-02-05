@@ -1,65 +1,58 @@
 package com.run.poker.hand;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.TreeSet;
-
-import com.run.poker.card.Card;
-
 /**
+ * <p> List of poker hands rankings
+ * <pre>
+ * 1 Straight flush
+ * 2 Four of a kind
+ * 3 Full house
+ * 4 Flush
+ * 5 Straight
+ * 6 Three of a kind
+ * 7 Two pair
+ * 8 One pair
+ * 9 High card
+ *	</pre>
+ *
  * @author RuN
  * @see https://en.wikipedia.org/wiki/List_of_poker_hands
  */
-public class Hand {
+public enum Hand {
 	
-	private Rank rank;
-	
-	public Hand(List<Card> cards) {
-		this.setRank(Rank.HighCard);
-		this.analyse(cards);
-	}
-	
-	public void analyse(List<Card> cards) {
-		
-		if (isThreeOfaKind(cards)) {
-			rank = Rank.ThreeOfaKind;
-		} else if (isTwoPair(cards)) {
-			rank = Rank.TwoPair;
-		} else if (isOnePair(cards)) {
-			rank = Rank.OnePair;
-		} else {
-			rank = Rank.HighCard;
-		}
-	}
-	
-	private static boolean isThreeOfaKind(List<Card> cards) {
-		boolean threeOfaKind = false;
-		for (Card card: cards) {
-			int frequency = Collections.frequency(cards, card);
-			if (frequency >= 3) {
-				threeOfaKind = true;
-				break;
-			}
-		}
-		return threeOfaKind;
-	}
-	
-	private static boolean isTwoPair(List<Card> cards) {
-		TreeSet<Card> set = new TreeSet<>(cards);
-		return cards.size() == set.size() + 1;
-	}
-	
-	private static boolean isOnePair(List<Card> cards) {
-		TreeSet<Card> set = new TreeSet<>(cards);
-		return cards.size() == set.size() + 1;
-	}
-	
-	public Rank getRank() {
-		return rank;
-	}
+	 StraightFlush(9),
+	 FourOfaKind(8),
+	 FullHouse(7),
+	 Flush(6),
+	 Straight(5),
+	 ThreeOfaKind(4),
+	 TwoPair(3),
+	 OnePair(2),
+	 HighCard(1);
+	 
+	 private int rank;
+	 
+	 private Hand(int rank) {
+		 this.rank = rank;
+	 }
+	 
+	 public int getRank(){
+		 return rank;
+	 }
 
-	public void setRank(Rank rank) {
-		this.rank = rank;
-	}
-
+//	public int compareTo(Hand hand) {
+//		if (this.rank.getRank() == hand.rank.getRank()) {
+//			switch (rank) {
+//			case StraightFlush:
+//			case FourOfaKind:
+//			case FullHouse:
+//			case Flush:
+//			case Straight:
+//			case ThreeOfaKind:
+//			case TwoPair:
+//			case OnePair:
+//			case HighCard:
+//			}
+//		}
+//		return this.rank.getRank() > hand.rank.getRank() ? 1 : -1;
+//	}
 }

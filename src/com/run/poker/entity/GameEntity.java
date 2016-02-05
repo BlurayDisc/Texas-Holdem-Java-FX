@@ -12,12 +12,17 @@ public abstract class GameEntity {
 	public int x, y;
 	
 	/**
-	 * 
-	 * @param gc
+	 * Draws this GameEntity with the passed in GraphicsContext.
+	 * @param gc The GC of an initialized Canvas.
 	 */
 	public abstract void draw(GraphicsContext gc);
 	
-	public void setPosition(int x, int y) {
+	/**
+	 * Moves this GameEntity to a point(x, y) on the Canvas.
+	 * @param x
+	 * @param y
+	 */
+	public void move(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}

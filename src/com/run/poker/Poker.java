@@ -15,6 +15,8 @@ import javafx.stage.Stage;
  */
 public class Poker extends Application {
 	
+	public static final String APP_NAME = "Texas Hold'em Poker v 0.1";
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -36,8 +38,7 @@ public class Poker extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		PrimaryStage stage = new PrimaryStage();
-		stage.init();
-		stage.show();
+		primaryStage = new PrimaryStage();
+		primaryStage.show();
 	}
 }

@@ -3,9 +3,8 @@ package com.run.poker.deck;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.run.poker.entity.PlayerEntity;
+import com.run.poker.entity.BasePlayerEntity;
 import com.run.poker.player.Enemy;
-import com.run.poker.player.Player;
 
 /**
  * 
@@ -14,7 +13,7 @@ import com.run.poker.player.Player;
  */
 public class Table {
 
-	private List<PlayerEntity> playerList = new ArrayList<>();
+	private List<BasePlayerEntity> playerList = new ArrayList<>();
 	private Deck deck = new Deck();
 	private Dealer dealer = null;
 	
@@ -35,25 +34,25 @@ public class Table {
 	 * Draws two cards for every player in this table.
 	 */
 	void drawTwo() {
-		for (PlayerEntity player: playerList) {
-			player.acquire(deck.poll());
-			player.acquire(deck.poll());
-		}
+		drawOne();
+		drawOne();
 	}
 	
 	/**
 	 * 
 	 */
 	void drawOne() {
-		
+		for (BasePlayerEntity player: playerList) {
+			player.acquire(deck.poll());
+		}
 	}
 	
 	/**
 	 * Adds a player to the table.
-	 * @param player The player.
+	 * @param entity The player.
 	 */
-	public void addPlayer(Player player) {
-		playerList.add(player);
+	public void addPlayer(BasePlayerEntity entity) {
+		playerList.add(entity);
 	}
 	
 	/**
@@ -67,7 +66,7 @@ public class Table {
 	public String toString() {
 		String str = "Current Deck: " + deck + "\n";
 		str += "  Players: \n";
-		for (PlayerEntity p: playerList) {
+		for (BasePlayerEntity p: playerList) {
 			str += "  " + p + "\n";
 		}
 		return str;

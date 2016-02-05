@@ -1,0 +1,12 @@
+
+
+Version:	3.8
+CmdLine:	C:\Users\run_y_000\Desktop\test.exe --l4j-debug
+WOW64:		yes
+Working dir:	C:\Users\run_y_000\Desktop\.
+Bundled JRE:	C:\Program Files\Java\jre1.8.0_72
+Check launcher:	C:\Program Files\Java\jre1.8.0_72\bin\javaw.exe (OK)
+Launcher:	C:\Program Files\Java\jre1.8.0_72\bin\javaw.exe
+Launcher args:	-jar "C:\Users\run_y_000\Desktop\test.exe"
+Args length:	42/32768 chars
+Exit code:	0

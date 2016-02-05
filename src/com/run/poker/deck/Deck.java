@@ -21,20 +21,22 @@ public class Deck {
 	}
 
 	/**
-	 * Fills up the deck with 1 set of poker cards, excluding 
-	 * the two jokers.
+	 * Fills up the deck with 1 set of poker cards.
+	 * <p> The two jokers are excluded from this deck.
+	 * <p> Cards start from 2 and finish at 14 with 14 representing Ace.
 	 */
 	public void fill() {
-		for (int value = 1; value < 14; value++) {
+		for (int value = 2; value < 15; value++) {
 			for (Suit suit: Suit.values()) {
-				Card card = new Card();
-				card.setValue(value);
-				card.setSuit(suit);
+				Card card = new Card(suit, value);
 				deck.add(card);
 			}
 		}
 	}
 	
+	/**
+	 * Shuffles the deck
+	 */
 	public void shuffle() {
 		Collections.shuffle(deck);
 	}

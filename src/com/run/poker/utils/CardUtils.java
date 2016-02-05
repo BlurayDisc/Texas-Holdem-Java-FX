@@ -5,12 +5,19 @@ import java.util.List;
 import com.run.poker.card.Card;
 import com.run.poker.card.Suit;
 
+/**
+ * Utility class that manages common functions to the Card Entity, 
+ * Math and Random.
+ * 
+ * @author RuN
+ *
+ */
 public class CardUtils {
 
 	/**
 	 * Random and return any item from the list.
 	 * @param list The list of values to be used as base.
-	 * @param <T> Type of the list for auto unboxing.
+	 * @param <T> Type of the list for auto-unboxing.
 	 * @param remove Whether to remove a value on each retrieve.
 	 * @return
 	 */
@@ -28,7 +35,7 @@ public class CardUtils {
 	}
 	
 	/**
-	 * Randoms a number ranges between the lower <-> upper range.
+	 * Random a number ranges between the lower <-> upper range.
 	 * @param lowerRange
 	 * @param upperRange
 	 * @return

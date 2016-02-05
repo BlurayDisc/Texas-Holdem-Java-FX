@@ -1,11 +1,12 @@
 package com.run.poker.view;
 
+import com.run.poker.Poker;
+import com.run.poker.card.Card;
 import com.run.poker.ls.Persistence;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -13,9 +14,20 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * Main Stage, before game starts.
+ * @author RuN
+ *
+ */
 public class PrimaryStage extends Stage {
-
 	
+	public PrimaryStage() {
+		init();
+	}
+
+	/**
+	 * Initializes the stage.
+	 */
 	public void init() {
 		VBox layout = new VBox(20);
 		Scene start = new Scene(layout);
@@ -23,40 +35,47 @@ public class PrimaryStage extends Stage {
 		layout.setPrefSize(500, 500);
 		layout.setAlignment(Pos.CENTER);
 		
-        Text title = new Text("Texas Hold'em Poker");
+        Text title = new Text(Poker.APP_NAME);
         title.setFont(new Font("SansSerif", 22));
         
-        Image icon = new Image("file:resources/back.jpg");
-        ImageView imageView = new ImageView(icon);
+        ImageView imageView = new ImageView(Card.BACK);
         
 		Button newButton = new Button("New Game");
 		newButton.getStyleClass().add("button2");
-		newButton.setMinSize(150, 50);
+		newButton.setPrefSize(150, 50);
 		newButton.setOnAction(event -> {
 			GameStage stage = new GameStage();
-			stage.setStage(this);
-			stage.init();
-			stage.show();
+			stage.initOwner(this);
 			this.hide();
+			stage.show();
 		});
 		
 		Button loadButton = new Button("Continue");
 		loadButton.getStyleClass().add("button1");
-		loadButton.setMinSize(150, 50);
+		loadButton.setPrefSize(150, 50);
 		loadButton.setOnAction(event -> Persistence.load());
 		
 		Button exitButton = new Button("Exit");
 		exitButton.getStyleClass().add("button1");
-		exitButton.setMinSize(150, 50);
-		exitButton.setOnAction(event -> System.exit(0));
-		
-		Pane spacing = new Pane();
-		spacing.setPrefSize(100, 100);
+		exitButton.setPrefSize(150, 50);
+		exitButton.setOnAction(event -> {
+			Persistence.save();
+			System.exit(0);
+		});
 		
 		layout.getChildren().addAll(title, imageView, newButton, loadButton, exitButton);
 		
-		this.setTitle("Texas Poker Hold'em");
-		this.setScene(start);
+		this.setTitle(Poker.APP_NAME);
+		this.getIcons().add(Card.BACK);
 		this.setOnCloseRequest(e -> Persistence.save());
+		this.setScene(start);
+	}
+	
+	/**
+	 * Template
+	 */
+	public void addSpacing() {
+		Pane spacing = new Pane();
+		spacing.setPrefSize(100, 100);
 	}
 }

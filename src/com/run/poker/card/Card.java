@@ -1,18 +1,20 @@
 package com.run.poker.card;
 
 import com.run.poker.entity.GameEntity;
+import com.run.poker.utils.FileUtils;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class Card extends GameEntity {
+public class Card extends GameEntity implements Comparable<Card> {
 
+	public static final int GAP = 10;
 	public static final int WIDTH = 120;
 	public static final int HEIGHT = 160;
-	private static final int FONT_SIZE = 40;
-	private static final Image IMAGE = new Image("file:resources/card.jpg");
+	public static final Image FRONT = FileUtils.loadFromJar("images/card.jpg");
+	public static final Image BACK = FileUtils.loadFromJar("images/back.jpg");
 	
 	private Suit suit;
 	private int value;
@@ -48,44 +50,38 @@ public class Card extends GameEntity {
 	 */
 	public String getPrettyValue() {
 		switch (value) {
-			case 1:  return "A";
 			case 11: return "J";
 			case 12: return "Q";
 			case 13: return "K";
+			case 14: return "A";
 			default: return String.valueOf(value);
 		}
 	}
 	
 	@Override
 	public void draw(GraphicsContext gc) {
+		//Clear
 		gc.clearRect(x, y, WIDTH, HEIGHT);
-		gc.drawImage(IMAGE, x, y);
-		gc.setFill(suit == Suit.Heart || suit == Suit.Clubs ? 
+		//Draw image base
+		gc.drawImage(FRONT, x, y);
+		//Draw suit and value
+        gc.setFont(new Font(40));
+		gc.setFill(suit == Suit.Heart || suit == Suit.Diamonds ? 
 				Color.RED : 
 				Color.BLACK);
-        gc.setFont(new Font(FONT_SIZE));
-        gc.fillText(this.toString(), x + 10, y + FONT_SIZE);
-        
-//        gc.setFill(Color.GREEN);
-//        gc.setStroke(Color.BLUE);
-//        gc.setLineWidth(5);
-//        gc.strokeLine(40, 10, 10, 40);
-//        gc.fillOval(10, 60, 30, 30);
-//        gc.strokeOval(60, 60, 30, 30);
-//        gc.fillRoundRect(110, 60, 30, 30, 10, 10);
-//        gc.strokeRoundRect(160, 60, 30, 30, 10, 10);
-//        gc.fillArc(10, 110, 30, 30, 45, 240, ArcType.OPEN);
-//        gc.fillArc(60, 110, 30, 30, 45, 240, ArcType.CHORD);
-//        gc.fillArc(110, 110, 30, 30, 45, 240, ArcType.ROUND);
-//        gc.strokeArc(10, 160, 30, 30, 45, 240, ArcType.OPEN);
-//        gc.strokeArc(60, 160, 30, 30, 45, 240, ArcType.CHORD);
-//        gc.strokeArc(110, 160, 30, 30, 45, 240, ArcType.ROUND);
-//        gc.fillPolygon(new double[]{10, 40, 10, 40},
-//                       new double[]{210, 210, 240, 240}, 4);
-//        gc.strokePolygon(new double[]{60, 90, 60, 90},
-//                         new double[]{210, 210, 240, 240}, 4);
-//        gc.strokePolyline(new double[]{110, 140, 110, 140},
-//                          new double[]{210, 210, 240, 240}, 4);
+		//Draw text With offsets
+        gc.fillText(this.toString(), x + 5, y + 35);
+	}
+	
+	@Override
+	public int compareTo(Card o) {
+		if (o == this) return 0;
+		if (this.value == o.value) {
+			return this.suit.getRank() == o.getSuit().getRank() ? 0 : 
+				   this.suit.getRank() > o.getSuit().getRank() ? 1 : -1;
+		} else {
+			return this.value > o.value ? 1 : -1;
+		}
 	}
 	
 	@Override
