@@ -1,8 +1,7 @@
 package com.run.poker.controller;
 
-import java.util.Collections;
-
-import com.run.poker.deck.Deck;
+import com.run.poker.deck.Dealer;
+import com.run.poker.deck.Table;
 import com.run.poker.player.Player;
 
 import javafx.beans.property.StringProperty;
@@ -15,7 +14,12 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class GameController {
 
+	private Table table;
 	private Player player;
+	
+	public GameController() {
+		this.table = new Table();
+	}
 	
 	/**
 	 * Creates a player.
@@ -23,6 +27,11 @@ public class GameController {
 	public void createPlayer(String name) {
 		player = new Player(name);
 		player.move(20, 425);
+		table.addPlayer(player);
+	}
+	
+	public void createEnemy() {
+		table.addBot();
 	}
 	
 	/**
@@ -31,14 +40,15 @@ public class GameController {
 	 * @param numCards
 	 */
 	public void fillCards(int numCards) {
-		Deck deck = new Deck();
-		deck.fill();
-		deck.shuffle();
-		player.hands.clear();
+		
+		Dealer dealer = table.callDealer();
+		dealer.newDeck();
+		
+		player.clear();
 		for (int i = 0; i < numCards; i++) {
-			player.hands.add(deck.poll());
+			dealer.drawOne();
 		}
-		player.hands.sort(Collections.reverseOrder());
+		player.sort();
 	}
 	
 	public void setPlayerName(String name) {

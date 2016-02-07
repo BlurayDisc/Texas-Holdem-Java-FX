@@ -7,27 +7,41 @@ import com.run.poker.entity.BasePlayerEntity;
 import com.run.poker.player.Enemy;
 
 /**
+ * <p> Table entity that consist of a list of players, a dealer and a 
+ * deck of cards.
+ * 
+ * <p> It's API are not exposed to public use is due to the OO design. 
+ * Developers should be calling the {@link #callDealer()} method 
+ * first and then send commands to the dealer.
  * 
  * @author RuN
  *
  */
 public class Table {
 
-	private List<BasePlayerEntity> playerList = new ArrayList<>();
-	private Deck deck = new Deck();
-	private Dealer dealer = null;
+	private List<BasePlayerEntity> playerList;
+	private Dealer dealer;
+	private Deck deck;
 	
 	public Table() {
-		deck.fill();
-		deck.shuffle();
+		this.playerList = new ArrayList<>();
+		this.dealer = new Dealer();
+		this.dealer.setTable(this);
 	}
 	
-	public Dealer getDealer() {
-		if (dealer == null) {
-			this.dealer = new Dealer();
-			this.dealer.setTable(this);
-		}
+	/**
+	 * Requests the Dealer for user commands and actions.
+	 * @return the Dealer in this table.
+	 */
+	public Dealer callDealer() {
 		return dealer;
+	}
+	
+	void newDeck() {
+		this.deck = new Deck();
+		deck.fill();
+		deck.shuffle();
+		
 	}
 	
 	/**
@@ -42,8 +56,8 @@ public class Table {
 	 * 
 	 */
 	void drawOne() {
-		for (BasePlayerEntity player: playerList) {
-			player.acquire(deck.poll());
+		for (BasePlayerEntity entity: playerList) {
+			entity.acquire(deck.poll());
 		}
 	}
 	

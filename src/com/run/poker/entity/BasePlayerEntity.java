@@ -1,7 +1,6 @@
 package com.run.poker.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 import com.run.poker.card.Card;
 import com.run.poker.hand.Analyser;
@@ -12,7 +11,24 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * <p> Base entity for player/enemy objects.
+ * <p> Players have different properties and their names can be modified 
+ * by the user on request. Players are also drawn differently: their 
+ * cards will be drawn on the screen and revealed to the user where as 
+ * Enemy will have their cards hidden.
+ * <p> Enemy are bots which inherits all the properties of a player but 
+ * with additional build in AI and functions. 
+ * 
+ * @author RuN
+ *
+ */
 public abstract class BasePlayerEntity extends GameEntity {
+	
+	/**
+	 * Current cards in hand.
+	 */
+	protected Hand hand = new Hand();
 	
 	/**
 	 * Player name.
@@ -29,11 +45,6 @@ public abstract class BasePlayerEntity extends GameEntity {
 	 */
 	protected IntegerProperty gold = new SimpleIntegerProperty(1000);
 	
-	/**
-	 * Current cards in hand.
-	 */
-	public List<Card> hands = new ArrayList<>();
-	
 	public BasePlayerEntity() {
 		
 	}
@@ -43,12 +54,30 @@ public abstract class BasePlayerEntity extends GameEntity {
 	 * @param card A card.
 	 */
 	public void acquire(Card card) {
-		hands.add(card);
+		hand.acquire(card);
 	}
 	
-	public Hand calculateHand(){
-		Analyser analyser = new Analyser(hands);
-		return analyser.analyse();
+	/**
+	 * Sorts the cards in this player's hand in reverse order.
+	 * <p> i.e. A, K, 10, 3, 3
+	 */
+	public void sort() {
+		hand.sort(Collections.reverseOrder());
+	}
+	
+	/**
+	 * Analysis the ranking of the current hand.
+	 */
+	public void analyse(){
+		Analyser analyser = new Analyser();
+		analyser.analyse(hand);
+	}
+	
+	/**
+	 * Clears and resets and current hand.
+	 */
+	public void clear() {
+		hand.clear();
 	}
 
 	public StringProperty getName() {
@@ -79,7 +108,7 @@ public abstract class BasePlayerEntity extends GameEntity {
 	public String toString() {
 		String str = name + " The " + title + " with $" + gold + ".";
 		str +=  " Hands: ";
-		for (Card card: hands) {
+		for (Card card: hand) {
 			str += card + ", ";
 		}
 		return str;

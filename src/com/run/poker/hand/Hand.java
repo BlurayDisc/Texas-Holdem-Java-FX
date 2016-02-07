@@ -1,5 +1,9 @@
 package com.run.poker.hand;
 
+import java.util.ArrayList;
+
+import com.run.poker.card.Card;
+
 /**
  * <p> List of poker hands rankings
  * <pre>
@@ -17,42 +21,82 @@ package com.run.poker.hand;
  * @author RuN
  * @see https://en.wikipedia.org/wiki/List_of_poker_hands
  */
-public enum Hand {
+public class Hand extends ArrayList<Card> implements Comparable<Hand> {
 	
-	 StraightFlush(9),
-	 FourOfaKind(8),
-	 FullHouse(7),
-	 Flush(6),
-	 Straight(5),
-	 ThreeOfaKind(4),
-	 TwoPair(3),
-	 OnePair(2),
-	 HighCard(1);
-	 
-	 private int rank;
-	 
-	 private Hand(int rank) {
-		 this.rank = rank;
-	 }
-	 
-	 public int getRank(){
-		 return rank;
-	 }
+	private static final long serialVersionUID = 1284988029743194947L;
 
-//	public int compareTo(Hand hand) {
-//		if (this.rank.getRank() == hand.rank.getRank()) {
-//			switch (rank) {
-//			case StraightFlush:
-//			case FourOfaKind:
-//			case FullHouse:
-//			case Flush:
-//			case Straight:
-//			case ThreeOfaKind:
-//			case TwoPair:
-//			case OnePair:
-//			case HighCard:
-//			}
-//		}
-//		return this.rank.getRank() > hand.rank.getRank() ? 1 : -1;
-//	}
+	/**
+	 *
+	 */
+	enum Rank {
+		
+		StraightFlush(9),
+		FourOfaKind(8),
+		FullHouse(7),
+		Flush(6),
+		Straight(5),
+		ThreeOfaKind(4),
+		TwoPair(3),
+		OnePair(2),
+		HighCard(1);
+
+		private int order;
+		 
+		private Rank(int order) {
+			this.order = order;
+		}
+	}
+	
+	/**
+	 * Initial rank.
+	 */
+	private Rank rank = Rank.HighCard;
+	 
+	/**
+	 * Acquires one card.
+	 * @param card A card.
+	 */
+	public void acquire(Card card) {
+		if (this.size() >= 5) {
+			throw new IllegalArgumentException("Max cards per hand reached.");
+		}
+		this.add(card);
+	}
+	
+	public void setRank(Rank rank) {
+		this.rank = rank;
+	}
+
+	@Override
+	public int compareTo(Hand hand) {
+		int result = this.rank.order - hand.rank.order;
+		if (result == 0) {
+			switch (rank) {
+			case StraightFlush:
+				break;
+			case FourOfaKind:
+				break;
+			case FullHouse:
+				break;
+			case Flush:
+				break;
+			case Straight:
+				break;
+			case ThreeOfaKind:
+				break;
+			case TwoPair:
+				break;
+			case OnePair:
+				break;
+			case HighCard:
+				for (int i = 0; i < 5; i++) {
+					int value = this.get(i).compareTo(hand.get(i));
+					if (value == 0) continue;
+					return value;
+				}
+				break;
+			}
+		}
+		return result > 0 ? 1 : -1;
+	}
 }

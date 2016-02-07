@@ -30,7 +30,7 @@ public class Poker extends Application {
 		table.addBot();
 		table.addBot();
 		
-		Dealer dealer = table.getDealer();
+		Dealer dealer = table.callDealer();
 		dealer.drawTwo();
 		
 		System.out.println(table);

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.TreeSet;
 
 import com.run.poker.card.Card;
+import com.run.poker.entity.BasePlayerEntity;
+import com.run.poker.hand.Hand.Rank;
 
 /**
  * Computes the ranks of each hands.
@@ -13,47 +15,57 @@ import com.run.poker.card.Card;
  */
 public class Analyser {
 	
-	private List<Card> cards;
+	private Hand hand;
 	
-	public Analyser(List<Card> cards) {
-		this.cards = cards;
+	public Analyser() {
+		
 	}
 	
-	public Hand analyse() {
-		Hand hand;
+	/**
+	 * Analysis the rank of the current hand.
+	 * @param hand
+	 */
+	public void analyse(Hand hand) {
+		this.hand = hand;
 		if (isStraight()) {
-			hand = Hand.Straight;
+			hand.setRank(Rank.Straight);
 		} else if (isThreeOfaKind()) {
-			hand = Hand.ThreeOfaKind;
+			hand.setRank(Rank.ThreeOfaKind);
 		} else if (isTwoPair()) {
-			hand = Hand.TwoPair;
+			hand.setRank(Rank.TwoPair);
 		} else if (isOnePair()) {
-			hand = Hand.OnePair;
+			hand.setRank(Rank.OnePair);
 		} else {
-			hand = Hand.HighCard;
+			hand.setRank(Rank.HighCard);
 		}
-		return hand;
+	}
+	
+	/**
+	 * Analysis the rank orders of all the passed in players.
+	 * @param players
+	 */
+	public void analyse(List<BasePlayerEntity> players) {
+		
 	}
 	
 	private boolean isStraight() {
-		Collections.sort(cards);
-		boolean straight = false;
+		Collections.sort(hand);
 		Card previous = null;
-		for (Card card: cards) {
-			if (previous == null) {
-				previous = card;
-				continue;
+		for (Card card: hand) {
+			if (card != null) {
+				if (card.getValue() <= previous.getValue()) {
+					return false;
+				}
 			}
-			if (card.getValue() > previous.getValue())
 			previous = card;
 		}
-		return straight;
+		return true;
 	}
 	
 	private boolean isThreeOfaKind() {
 		boolean threeOfaKind = false;
-		for (Card card: cards) {
-			int frequency = Collections.frequency(cards, card);
+		for (Card card: hand) {
+			int frequency = Collections.frequency(hand, card);
 			if (frequency >= 3) {
 				threeOfaKind = true;
 				break;
@@ -63,12 +75,12 @@ public class Analyser {
 	}
 	
 	private boolean isTwoPair() {
-		TreeSet<Card> set = new TreeSet<>(cards);
-		return cards.size() == set.size() + 1;
+		TreeSet<Card> set = new TreeSet<>(hand);
+		return set.size() == 3;
 	}
 	
 	private boolean isOnePair() {
-		TreeSet<Card> set = new TreeSet<>(cards);
-		return cards.size() == set.size() + 1;
+		TreeSet<Card> set = new TreeSet<>(hand);
+		return set.size() == 4;
 	}
 }
