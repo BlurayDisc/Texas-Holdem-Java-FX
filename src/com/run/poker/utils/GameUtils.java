@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.run.poker.card.Card;
 import com.run.poker.card.Suit;
+import com.run.poker.player.Names;
+import com.run.poker.player.Title;
 
 /**
  * Utility class that manages common functions to the Card Entity, 
@@ -12,7 +14,15 @@ import com.run.poker.card.Suit;
  * @author RuN
  *
  */
-public class CardUtils {
+public class GameUtils {
+	
+	public static String randomName() {
+		return random(Names.list(), true).toString();
+	}
+	
+	public static String randomTitle() {
+		return random(Title.class).toString();
+	}
 
 	/**
 	 * Random and return any item from the list.

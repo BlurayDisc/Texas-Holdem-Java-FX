@@ -1,7 +1,8 @@
 package com.run.poker.player;
 
+import com.run.poker.card.Card;
 import com.run.poker.entity.BasePlayerEntity;
-import com.run.poker.utils.CardUtils;
+import com.run.poker.utils.GameUtils;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -13,15 +14,20 @@ import javafx.scene.canvas.GraphicsContext;
 public class Enemy extends BasePlayerEntity {
 	
 	public Enemy() {
-		this.name.set(CardUtils.random(Names.asList(), true).name());
-		this.title.set(CardUtils.random(Title.class).name());
-		this.gold.set(CardUtils.random(500, 5000));
+		this.name.set(GameUtils.randomName());
+		this.title.set(GameUtils.randomTitle());
+		this.gold.set(GameUtils.random(500, 5000));
 	}
 	
 	@Override
 	public void draw(GraphicsContext gc) {
-		// TODO Auto-generated method stub
-		
+		int i = 0;
+		for (Card card: holdCards) {
+			int x = this.x + i * (Card.WIDTH + Card.GAP);
+			int y = this.y;
+			card.move(x, y);
+			card.draw(gc);
+			i++;
+		}
 	}
-
 }

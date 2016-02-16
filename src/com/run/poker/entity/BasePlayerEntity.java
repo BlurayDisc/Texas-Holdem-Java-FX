@@ -1,10 +1,9 @@
 package com.run.poker.entity;
 
-import java.util.Collections;
-
 import com.run.poker.card.Card;
-import com.run.poker.hand.Analyser;
+import com.run.poker.hand.CommunityCards;
 import com.run.poker.hand.Hand;
+import com.run.poker.hand.HoldCards;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -23,12 +22,17 @@ import javafx.beans.property.StringProperty;
  * @author RuN
  *
  */
-public abstract class BasePlayerEntity extends GameEntity {
+public abstract class BasePlayerEntity extends GameEntity implements Comparable<BasePlayerEntity> {
 	
 	/**
-	 * Current cards in hand.
+	 * final cards in hand.
 	 */
 	protected Hand hand = new Hand();
+	
+	/**
+	 * Current hold cards.
+	 */
+	protected HoldCards holdCards = new HoldCards();
 	
 	/**
 	 * Player name.
@@ -54,30 +58,27 @@ public abstract class BasePlayerEntity extends GameEntity {
 	 * @param card A card.
 	 */
 	public void acquire(Card card) {
-		hand.acquire(card);
+		holdCards.add(card);
 	}
 	
 	/**
-	 * Sorts the cards in this player's hand in reverse order.
-	 * <p> i.e. A, K, 10, 3, 3
+	 * Joins the player's hold cards with the community cards on the table.
 	 */
-	public void sort() {
-		hand.sort(Collections.reverseOrder());
+	public void join(CommunityCards communityCards) {
+		for (Card card: holdCards) {
+			hand.acquire(card);
+		}
+		for (Card card: communityCards) {
+			hand.acquire(card.copy());
+		}
 	}
 	
-	/**
-	 * Analysis the ranking of the current hand.
-	 */
-	public void analyse(){
-		Analyser analyser = new Analyser();
-		analyser.analyse(hand);
+	public Hand hand() {
+		return hand;
 	}
 	
-	/**
-	 * Clears and resets and current hand.
-	 */
-	public void clear() {
-		hand.clear();
+	public HoldCards holdCards() {
+		return holdCards;
 	}
 
 	public StringProperty getName() {
@@ -105,9 +106,14 @@ public abstract class BasePlayerEntity extends GameEntity {
 	}
 	
 	@Override
+	public int compareTo(BasePlayerEntity that) {
+		return this.hand.compareTo(that.hand);
+	}
+	
+	@Override
 	public String toString() {
 		String str = name + " The " + title + " with $" + gold + ".";
-		str +=  " Hands: ";
+		str +=  " Hands: " + hand.getRank() + " ";
 		for (Card card: hand) {
 			str += card + ", ";
 		}

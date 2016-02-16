@@ -27,6 +27,18 @@ public class Card extends GameEntity implements Comparable<Card> {
 		this.suit = suit;
 		this.value = value;
 	}
+	
+	/**
+	 * Copy constructor.
+	 */
+	public Card(Card card) {
+		this.suit = card.suit;
+		this.value = card.value;
+	}
+	
+	public Card copy() {
+		return new Card(this);
+	}
 
 	public Suit getSuit() {
 		return suit;
@@ -99,7 +111,7 @@ public class Card extends GameEntity implements Comparable<Card> {
 	
 	@Override
 	public int hashCode() {
-		return value * suit.hashCode();
+		return value;
 	}
 	
 	@Override

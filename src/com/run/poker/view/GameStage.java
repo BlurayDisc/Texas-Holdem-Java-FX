@@ -50,6 +50,7 @@ public class GameStage extends Stage {
 	private void init() {
 		
 		controller.createPlayer("Newb");
+		controller.addBots(2);
 		
 		// Stage&Scene Layouts.
 		BorderPane layout = new BorderPane();
@@ -58,11 +59,28 @@ public class GameStage extends Stage {
 		layout.getStylesheets().add("com/run/poker/view/menuStyle.css");
 		
 		// Game Tool Bar
-		Button draw = new Button("Draw");
-		draw.getStyleClass().add("button1");
-		draw.setPrefSize(150, 50);
-		draw.setOnAction(event -> {
-			controller.fillCards(5);
+		Button deal = new Button("Deal");
+		deal.getStyleClass().add("button1");
+		deal.setPrefSize(150, 50);
+		deal.setOnAction(event -> {
+			controller.newDeck();
+			controller.deal();
+			controller.draw(gc);
+		});
+		
+		Button sort = new Button("Sort");
+		sort.getStyleClass().add("button1");
+		sort.setPrefSize(150, 50);
+		sort.setOnAction(event -> {
+			controller.sort();
+			controller.draw(gc);
+		});
+		
+		Button analyse = new Button("Analyse");
+		analyse.getStyleClass().add("button1");
+		analyse.setPrefSize(150, 50);
+		analyse.setOnAction(event -> {
+			controller.analyse();
 			controller.draw(gc);
 		});
 		
@@ -78,7 +96,7 @@ public class GameStage extends Stage {
 		exit.setPrefSize(150, 50);
 		exit.setOnAction(event -> closeAndShowOwner());
 
-		ToolBar toolbar = new ToolBar(draw, fullScreen, exit);
+		ToolBar toolbar = new ToolBar(deal, sort, analyse, fullScreen, exit);
 		layout.setTop(toolbar);
 		
 		// Main Canvas for GC

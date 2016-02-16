@@ -29,7 +29,7 @@ public enum Names {
 	private static final List<Names> NAMES = 
 			new ArrayList<>(Arrays.asList(Names.values()));
 	
-	public static List<Names> asList() {
+	public static List<Names> list() {
 		return NAMES;
 	}
 }

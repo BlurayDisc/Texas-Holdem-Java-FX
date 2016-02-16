@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.run.poker.card.Card;
 
 /**
+ * <p> The best five card poker hand is obtained by using the necessary 
+ * cards from the community and/or a particular player's hold cards. 
  * <p> List of poker hands rankings
  * <pre>
  * 1 Straight flush
@@ -26,10 +28,9 @@ public class Hand extends ArrayList<Card> implements Comparable<Hand> {
 	private static final long serialVersionUID = 1284988029743194947L;
 
 	/**
-	 *
+	 * The Ranking of Poker Hands.
 	 */
 	enum Rank {
-		
 		StraightFlush(9),
 		FourOfaKind(8),
 		FullHouse(7),
@@ -65,6 +66,10 @@ public class Hand extends ArrayList<Card> implements Comparable<Hand> {
 	
 	public void setRank(Rank rank) {
 		this.rank = rank;
+	}
+	
+	public Rank getRank() {
+		return rank;
 	}
 
 	@Override

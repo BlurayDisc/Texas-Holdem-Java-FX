@@ -12,12 +12,15 @@ import com.run.poker.card.Suit;
  * @author RuN
  *
  */
-public class Deck {
-	
-	private final LinkedList<Card> deck;
-	
+public class Deck extends LinkedList<Card> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8637787243176194920L;
+
 	public Deck() {
-		this.deck = new LinkedList<>();
+		
 	}
 
 	/**
@@ -29,7 +32,7 @@ public class Deck {
 		for (int value = 2; value < 15; value++) {
 			for (Suit suit: Suit.values()) {
 				Card card = new Card(suit, value);
-				deck.add(card);
+				add(card);
 			}
 		}
 	}
@@ -38,19 +41,6 @@ public class Deck {
 	 * Shuffles the deck
 	 */
 	public void shuffle() {
-		Collections.shuffle(deck);
-	}
-	
-	public void clear() {
-		deck.clear();
-	}
-	
-	public Card poll() {
-		return deck.poll();
-	}
-
-	@Override
-	public String toString() {
-		return deck.toString();
+		Collections.shuffle(this);
 	}
 }

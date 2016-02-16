@@ -2,6 +2,7 @@ package com.run.poker.controller;
 
 import com.run.poker.deck.Dealer;
 import com.run.poker.deck.Table;
+import com.run.poker.entity.BasePlayerEntity;
 import com.run.poker.player.Player;
 
 import javafx.beans.property.StringProperty;
@@ -25,31 +26,56 @@ public class GameController {
 	 * Creates a player.
 	 */
 	public void createPlayer(String name) {
-		player = new Player(name);
-		player.move(20, 425);
-		table.addPlayer(player);
+		this.player = table.addPlayer(name);
 	}
 	
-	public void createEnemy() {
-		table.addBot();
+	/**
+	 * Add n number of bots.
+	 * @param n
+	 */
+	public void addBots(int n) {
+		for (int i = 0; i < n; i++) {
+			table.addBot();
+		}
+	}
+	
+	public void newDeck() {
+		Dealer dealer = table.callDealer();
+		dealer.clear();
+		dealer.newDeck();
 	}
 	
 	/**
 	 * Test method.
-	 * <p> Fills the player's hand with 5 random cards.
-	 * @param numCards
+	 * <p> Fills the player's hand with 2 random cards.
 	 */
-	public void fillCards(int numCards) {
-		
+	public void deal() {
 		Dealer dealer = table.callDealer();
-		dealer.newDeck();
-		
-		player.clear();
-		for (int i = 0; i < numCards; i++) {
-			dealer.drawOne();
-		}
-		player.sort();
+		dealer.deal();
 	}
+	
+	/**
+	 * Test method.
+	 * <p> Do a test sort and anaylyse of hands.
+	 */
+	public void sort() {
+		Dealer dealer = table.callDealer();
+		dealer.sort();
+	}
+	
+	/**
+	 * Test method.
+	 * <p> Do a test sort and anaylyse of hands.
+	 */
+	public void analyse() {
+		Dealer dealer = table.callDealer();
+		dealer.analyse();
+		System.out.println(table);
+	}
+	
+	//*********************
+	//*  GUI Controllers  *
+	//*********************
 	
 	public void setPlayerName(String name) {
 		player.setName(name);
@@ -59,7 +85,13 @@ public class GameController {
 		return player.getName();
 	}
 	
+	/**
+	 * Draws the game entity object on the canvas. 
+	 * @param gc
+	 */
 	public void draw(GraphicsContext gc) {
-		player.draw(gc);
+		for (BasePlayerEntity entity: table.playerList()) {
+			entity.draw(gc);
+		}
 	}
 }
