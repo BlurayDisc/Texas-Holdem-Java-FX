@@ -3,8 +3,8 @@ package com.run.poker.view;
 import java.util.Optional;
 
 import com.run.poker.Poker;
-import com.run.poker.card.Card;
 import com.run.poker.controller.GameController;
+import com.run.poker.entity.Card;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;

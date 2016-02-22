@@ -1,10 +1,12 @@
-package com.run.poker.deck;
+package com.run.poker.entity;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-import com.run.poker.entity.BasePlayerEntity;
 import com.run.poker.hand.Analyser;
 import com.run.poker.hand.CommunityCards;
+import com.run.poker.hand.ShowDownCards;
 
 /**
  * A Dealer is associated with a table.
@@ -44,7 +46,7 @@ public class Dealer {
 	public void deal() {
 		Deck deck = table.deck();
 		for (int i = 0; i < 2; i++) {
-			for (BasePlayerEntity entity: table.playerList()) {
+			for (PlayerEntity entity: table.playerList()) {
 				entity.acquire(deck.poll());
 			}
 		}
@@ -87,34 +89,34 @@ public class Dealer {
 	//*  The determination  *
 	//***********************
 	
-	/**
-	 * Joins the player's hold cards with the community cards on the table.
-	 */
-	public void join() {
-		for (BasePlayerEntity entity: table.playerList()) {
-			entity.join(table.communityCards());
-		}
-	}
-	
-	/**
-	 * Sorts the cards in each of the player's hands, based on the natural 
-	 * ordering of the card object.
-	 * <p> i.e. A, K, 10, 3, 3
-	 */
 	public void sort() {
-		for (BasePlayerEntity entity: table.playerList()) {
-			Collections.sort(entity.hand(), Collections.reverseOrder());
+		for (PlayerEntity entity: table.playerList()) {
+			Collections.sort(entity.holdCards(), Collections.reverseOrder());
 		}
 	}
 	
 	/**
-	 * Analysis the ranking of the current hand for every players. The results 
-	 * are then compares and at last sort the players in descending order.
+	 * <p> Joins the player's hold cards with the community cards.
+	 * <p> Sorts the cards in each of the player's hands, based on the 
+	 * natural ordering of the card object.
+	 * <p> i.e. A, K, 10, 3, 3
+	 * <p> then analysis the ranking of the current hand for every players. 
+	 * The results are then compares and at last sort the players in 
+	 * descending order.
 	 */
-	public void analyse(){
-		for (BasePlayerEntity entity: table.playerList()) {
+	public void analyse() {
+		List<ShowDownCards> showDownCards = new ArrayList<>();
+		for (PlayerEntity entity: table.playerList()) {
+			
+			List<Card> cards = new ArrayList<>();
+			cards.addAll(entity.holdCards());
+			cards.addAll(table.communityCards());
+			
+			Collections.sort(cards, Collections.reverseOrder());
+			
 			Analyser analyser = new Analyser();
-			analyser.analyse(entity.hand());
+			ShowDownCards showdown = analyser.analyse(cards);
+			showDownCards.add(showdown);
 		}
 		Collections.sort(table.playerList(), Collections.reverseOrder());
 	}
@@ -124,9 +126,9 @@ public class Dealer {
 	 */
 	public void clear() {
 		table.communityCards().clear();
-		for (BasePlayerEntity entity: table.playerList()) {
+		for (PlayerEntity entity: table.playerList()) {
 			entity.holdCards().clear();
-			entity.hand().clear();
+			entity.showDownCards().clear();
 		}
 	}
 }

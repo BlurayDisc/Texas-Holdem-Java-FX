@@ -1,9 +1,7 @@
 package com.run.poker.entity;
 
-import com.run.poker.card.Card;
-import com.run.poker.hand.CommunityCards;
-import com.run.poker.hand.Hand;
 import com.run.poker.hand.HoldCards;
+import com.run.poker.hand.ShowDownCards;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -22,17 +20,17 @@ import javafx.beans.property.StringProperty;
  * @author RuN
  *
  */
-public abstract class BasePlayerEntity extends GameEntity implements Comparable<BasePlayerEntity> {
-	
-	/**
-	 * final cards in hand.
-	 */
-	protected Hand hand = new Hand();
+public abstract class PlayerEntity extends GameEntity implements Comparable<PlayerEntity> {
 	
 	/**
 	 * Current hold cards.
 	 */
 	protected HoldCards holdCards = new HoldCards();
+	
+	/**
+	 * Final showdown cards.
+	 */
+	protected ShowDownCards showDown = new ShowDownCards();
 	
 	/**
 	 * Player name.
@@ -49,7 +47,7 @@ public abstract class BasePlayerEntity extends GameEntity implements Comparable<
 	 */
 	protected IntegerProperty gold = new SimpleIntegerProperty(1000);
 	
-	public BasePlayerEntity() {
+	public PlayerEntity() {
 		
 	}
 	
@@ -61,24 +59,12 @@ public abstract class BasePlayerEntity extends GameEntity implements Comparable<
 		holdCards.add(card);
 	}
 	
-	/**
-	 * Joins the player's hold cards with the community cards on the table.
-	 */
-	public void join(CommunityCards communityCards) {
-		for (Card card: holdCards) {
-			hand.acquire(card);
-		}
-		for (Card card: communityCards) {
-			hand.acquire(card.copy());
-		}
-	}
-	
-	public Hand hand() {
-		return hand;
-	}
-	
 	public HoldCards holdCards() {
 		return holdCards;
+	}
+	
+	public ShowDownCards showDownCards() {
+		return showDown;
 	}
 
 	public StringProperty getName() {
@@ -106,15 +92,16 @@ public abstract class BasePlayerEntity extends GameEntity implements Comparable<
 	}
 	
 	@Override
-	public int compareTo(BasePlayerEntity that) {
-		return this.hand.compareTo(that.hand);
+	public int compareTo(PlayerEntity that) {
+		return this.showDown.compareTo(showDown);
 	}
 	
 	@Override
 	public String toString() {
-		String str = name + " The " + title + " with $" + gold + ".";
-		str +=  " Hands: " + hand.getRank() + " ";
-		for (Card card: hand) {
+		String str = name.get() + " The " + title.get() + 
+					 " with $" + gold.get() + "." +  
+					 "\n    Hands: " + showDown.getRank() + " ";
+		for (Card card: showDown) {
 			str += card + ", ";
 		}
 		return str;

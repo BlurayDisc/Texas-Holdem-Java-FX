@@ -1,12 +1,9 @@
-package com.run.poker.deck;
+package com.run.poker.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.run.poker.entity.BasePlayerEntity;
 import com.run.poker.hand.CommunityCards;
-import com.run.poker.player.Enemy;
-import com.run.poker.player.Player;
 
 /**
  * <p> Table entity that consist of a list of players, a dealer and a 
@@ -21,7 +18,7 @@ import com.run.poker.player.Player;
  */
 public class Table {
 
-	private List<BasePlayerEntity> playerList;
+	private List<PlayerEntity> playerList;
 	private List<Enemy> botList;
 	private Dealer dealer;
 	private Deck deck;
@@ -47,7 +44,7 @@ public class Table {
 	 * 
 	 * @return
 	 */
-	public List<BasePlayerEntity> playerList() {
+	public List<PlayerEntity> playerList() {
 		return playerList;
 	}
 	
@@ -125,7 +122,7 @@ public class Table {
 	public String toString() {
 		String str = "Current Deck: " + deck + "\n";
 		str += "  Players: \n";
-		for (BasePlayerEntity p: playerList) {
+		for (PlayerEntity p: playerList) {
 			str += "  " + p + "\n";
 		}
 		return str;

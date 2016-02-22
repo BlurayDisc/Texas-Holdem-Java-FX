@@ -1,13 +1,9 @@
 package com.run.poker.hand;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import com.run.poker.card.Card;
-import com.run.poker.entity.BasePlayerEntity;
-import com.run.poker.hand.Hand.Rank;
+import com.run.poker.entity.Card;
+import com.run.poker.hand.condition.Condition;
 
 /**
  * <p> Computes the ranks of each hands.
@@ -29,8 +25,6 @@ import com.run.poker.hand.Hand.Rank;
  */
 public class Analyser {
 	
-	private Hand hand;
-	
 	public Analyser() {
 		
 	}
@@ -39,112 +33,13 @@ public class Analyser {
 	 * Analysis the rank of the current hand.
 	 * @param hand
 	 */
-	public void analyse(Hand hand) {
-		this.hand = hand;
-		if (isStraightFlush()) {
-			hand.setRank(Rank.StraightFlush);
-		} else if (isFourOfaKind()) {
-			hand.setRank(Rank.FourOfaKind);
-		} else if (isFlush()) {
-			hand.setRank(Rank.Flush);
-		} else if (isStraight()) {
-			hand.setRank(Rank.Straight);
-		} else if (isThreeOfaKind()) {
-			hand.setRank(Rank.ThreeOfaKind);
-		} else if (isTwoPair()) {
-			hand.setRank(Rank.TwoPair);
-		} else if (isOnePair()) {
-			hand.setRank(Rank.OnePair);
-		} else {
-			hand.setRank(Rank.HighCard);
-		}
-	}
-	
-	/**
-	 * Analysis the rank orders of all the passed in players.
-	 * @param players
-	 */
-	public void analyse(List<BasePlayerEntity> players) {
-		
-	}
-	
-	private boolean isStraightFlush() {
-		boolean sf = true;
-		Card previous = null;
-		for (Card current: hand) {
-			if (previous != null) {
-				if (current.getValue() <= previous.getValue() || 
-					current.getSuit() != previous.getSuit()) {
-					sf = false;
-					break;
-				}
-			}
-			previous = current;
-		}
-		return sf;
-	}
-	
-	private boolean isFourOfaKind() {
-		boolean fourOfaKind = false;
-		for (Card card: hand) {
-			int frequency = Collections.frequency(hand, card);
-			if (frequency == 4) {
-				fourOfaKind = true;
-				break;
+	public ShowDownCards analyse(List<Card> hand) {
+		for (Condition condition: Condition.all()) {
+			if (condition.check(hand)) {
+				condition.finalise(hand);
+				return condition.result();
 			}
 		}
-		return fourOfaKind;
-	}
-	
-	private boolean isFlush() {
-		boolean flush = true;
-		Card previous = null;
-		for (Card current: hand) {
-			if (previous != null) {
-				if (current.getSuit() != previous.getSuit()) {
-					flush = false;
-					break;
-				}
-			}
-			previous = current;
-		}
-		return flush;
-	}
-	
-	private boolean isStraight() {
-		boolean straight = true;
-		Card previous = null;
-		for (Card current: hand) {
-			if (previous != null) {
-				if (current.getValue() <= previous.getValue()) {
-					straight = false;
-					break;
-				}
-			}
-			previous = current;
-		}
-		return straight;
-	}
-	
-	private boolean isThreeOfaKind() {
-		boolean threeOfaKind = false;
-		for (Card card: hand) {
-			int frequency = Collections.frequency(hand, card);
-			if (frequency >= 3) {
-				threeOfaKind = true;
-				break;
-			}
-		}
-		return threeOfaKind;
-	}
-	
-	private boolean isTwoPair() {
-		Set<Card> set = new HashSet<>(hand);
-		return set.size() == 3;
-	}
-	
-	private boolean isOnePair() {
-		Set<Card> set = new HashSet<>(hand);
-		return set.size() == 4;
+		throw new IllegalStateException();
 	}
 }

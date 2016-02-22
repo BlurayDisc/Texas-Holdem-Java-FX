@@ -1,9 +1,9 @@
 package com.run.poker.controller;
 
-import com.run.poker.deck.Dealer;
-import com.run.poker.deck.Table;
-import com.run.poker.entity.BasePlayerEntity;
-import com.run.poker.player.Player;
+import com.run.poker.entity.PlayerEntity;
+import com.run.poker.entity.Dealer;
+import com.run.poker.entity.Player;
+import com.run.poker.entity.Table;
 
 import javafx.beans.property.StringProperty;
 import javafx.scene.canvas.GraphicsContext;
@@ -90,7 +90,7 @@ public class GameController {
 	 * @param gc
 	 */
 	public void draw(GraphicsContext gc) {
-		for (BasePlayerEntity entity: table.playerList()) {
+		for (PlayerEntity entity: table.playerList()) {
 			entity.draw(gc);
 		}
 	}

@@ -1,7 +1,5 @@
-package com.run.poker.player;
+package com.run.poker.entity;
 
-import com.run.poker.card.Card;
-import com.run.poker.entity.BasePlayerEntity;
 import com.run.poker.utils.GameUtils;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -11,7 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
  * @author RuN
  *
  */
-public class Enemy extends BasePlayerEntity {
+public class Enemy extends PlayerEntity {
 	
 	public Enemy() {
 		this.name.set(GameUtils.randomName());
@@ -26,7 +24,7 @@ public class Enemy extends BasePlayerEntity {
 			int x = this.x + i * (Card.WIDTH + Card.GAP);
 			int y = this.y;
 			card.move(x, y);
-			card.draw(gc);
+			card.drawBack(gc);
 			i++;
 		}
 	}

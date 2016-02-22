@@ -1,10 +1,7 @@
-package com.run.poker.deck;
+package com.run.poker.entity;
 
 import java.util.Collections;
 import java.util.LinkedList;
-
-import com.run.poker.card.Card;
-import com.run.poker.card.Suit;
 
 /**
  * A standard deck of 52 poker cards.

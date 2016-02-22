@@ -1,7 +1,7 @@
 package com.run.poker.view;
 
 import com.run.poker.Poker;
-import com.run.poker.card.Card;
+import com.run.poker.entity.Card;
 import com.run.poker.ls.Persistence;
 
 import javafx.geometry.Pos;

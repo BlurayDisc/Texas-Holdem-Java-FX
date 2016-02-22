@@ -2,7 +2,7 @@ package com.run.poker.hand;
 
 import java.util.ArrayList;
 
-import com.run.poker.card.Card;
+import com.run.poker.entity.Card;
 
 /**
  * <p> The best five card poker hand is obtained by using the necessary 
@@ -23,46 +23,14 @@ import com.run.poker.card.Card;
  * @author RuN
  * @see https://en.wikipedia.org/wiki/List_of_poker_hands
  */
-public class Hand extends ArrayList<Card> implements Comparable<Hand> {
-	
-	private static final long serialVersionUID = 1284988029743194947L;
+public class ShowDownCards extends ArrayList<Card> implements Comparable<ShowDownCards> {
 
-	/**
-	 * The Ranking of Poker Hands.
-	 */
-	enum Rank {
-		StraightFlush(9),
-		FourOfaKind(8),
-		FullHouse(7),
-		Flush(6),
-		Straight(5),
-		ThreeOfaKind(4),
-		TwoPair(3),
-		OnePair(2),
-		HighCard(1);
-
-		private int order;
-		 
-		private Rank(int order) {
-			this.order = order;
-		}
-	}
+	private static final long serialVersionUID = -270924839715825415L;
 	
 	/**
 	 * Initial rank.
 	 */
 	private Rank rank = Rank.HighCard;
-	 
-	/**
-	 * Acquires one card.
-	 * @param card A card.
-	 */
-	public void acquire(Card card) {
-		if (this.size() >= 5) {
-			throw new IllegalArgumentException("Max cards per hand reached.");
-		}
-		this.add(card);
-	}
 	
 	public void setRank(Rank rank) {
 		this.rank = rank;
@@ -71,10 +39,10 @@ public class Hand extends ArrayList<Card> implements Comparable<Hand> {
 	public Rank getRank() {
 		return rank;
 	}
-
+	
 	@Override
-	public int compareTo(Hand hand) {
-		int result = this.rank.order - hand.rank.order;
+	public int compareTo(ShowDownCards that) {
+		int result = this.rank.order - that.rank.order;
 		if (result == 0) {
 			switch (rank) {
 			case StraightFlush:
@@ -94,8 +62,11 @@ public class Hand extends ArrayList<Card> implements Comparable<Hand> {
 			case OnePair:
 				break;
 			case HighCard:
-				for (int i = 0; i < 5; i++) {
-					int value = this.get(i).compareTo(hand.get(i));
+				if (this.size() <= 0 || that.size() <= 0) {
+					break;
+				}
+				for (int i = 0; i < this.size(); i++) {
+					int value = this.get(i).compareTo(that.get(i));
 					if (value == 0) continue;
 					return value;
 				}

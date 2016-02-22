@@ -1,3 +1,3 @@
 eclipse.preferences.version=1
-encoding//src/com/run/poker/card/Suit.java=UTF-8
-encoding//src/com/run/poker/deck/Deck.java=UTF-8
+encoding//src/com/run/poker/entity/Deck.java=UTF-8
+encoding//src/com/run/poker/entity/Suit.java=UTF-8

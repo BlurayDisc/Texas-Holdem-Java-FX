@@ -1,7 +1,4 @@
-package com.run.poker.player;
-
-import com.run.poker.card.Card;
-import com.run.poker.entity.BasePlayerEntity;
+package com.run.poker.entity;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -10,7 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
  * @author RuN
  *
  */
-public class Player extends BasePlayerEntity {
+public class Player extends PlayerEntity {
 	
 	public Player(String name) {
 		this.name.set(name);

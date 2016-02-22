@@ -1,6 +1,5 @@
-package com.run.poker.card;
+package com.run.poker.entity;
 
-import com.run.poker.entity.GameEntity;
 import com.run.poker.utils.FileUtils;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -68,6 +67,13 @@ public class Card extends GameEntity implements Comparable<Card> {
 			case 14: return "A";
 			default: return String.valueOf(value);
 		}
+	}
+	
+	public void drawBack(GraphicsContext gc) {
+		//Clear
+		gc.clearRect(x, y, WIDTH, HEIGHT);
+		//Draw image base
+		gc.drawImage(BACK, x, y);
 	}
 	
 	@Override

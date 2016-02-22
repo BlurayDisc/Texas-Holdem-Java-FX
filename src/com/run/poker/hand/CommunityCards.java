@@ -2,7 +2,7 @@ package com.run.poker.hand;
 
 import java.util.ArrayList;
 
-import com.run.poker.card.Card;
+import com.run.poker.entity.Card;
 
 /**
  * Consists of 5 cards being dealt facing up.
