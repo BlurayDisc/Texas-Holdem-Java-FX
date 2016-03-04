@@ -1,4 +1,4 @@
-package com.run.poker.entity;
+package com.run.poker.entity.player;
 
 import java.util.ArrayList;
 import java.util.Arrays;

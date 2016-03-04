@@ -7,20 +7,19 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+/**
+ * 
+ * @author RuN
+ *
+ */
 public class Card extends GameEntity implements Comparable<Card> {
 
-	public static final int GAP = 10;
-	public static final int WIDTH = 120;
-	public static final int HEIGHT = 160;
+	public static final double GAP = 10.0;
 	public static final Image FRONT = FileUtils.loadFromJar("images/card.jpg");
 	public static final Image BACK = FileUtils.loadFromJar("images/back.jpg");
 	
 	private Suit suit;
 	private int value;
-	
-	public Card() { 
-		this(null, 0);
-	}
 	
 	public Card(Suit suit, int value) {
 		this.suit = suit;
@@ -69,26 +68,35 @@ public class Card extends GameEntity implements Comparable<Card> {
 		}
 	}
 	
-	public void drawBack(GraphicsContext gc) {
-		//Clear
-		gc.clearRect(x, y, WIDTH, HEIGHT);
-		//Draw image base
-		gc.drawImage(BACK, x, y);
-	}
-	
 	@Override
 	public void draw(GraphicsContext gc) {
+		draw(gc, Card.FRONT, 1);
+	}
+	
+	/**
+	 * Draws the front or the back of the card with a chosen scaling.
+	 * @param gc The Graphics Context from the Canvas object.
+	 * @param i An Image object to be drawn.
+	 * @param s The scaling factor.
+	 */
+	public void draw(GraphicsContext gc, Image i, double s) {
 		//Clear
-		gc.clearRect(x, y, WIDTH, HEIGHT);
+		gc.clearRect(x, y, i.getWidth() * s, i.getHeight() * s);
+		
+		//System.out.println("Drawing: " + this + " Coords: (" + x + "," + y + ")");
+		
 		//Draw image base
-		gc.drawImage(FRONT, x, y);
+		gc.drawImage(i, x, y, i.getWidth() * s, i.getHeight() * s);
+		
 		//Draw suit and value
-        gc.setFont(new Font(40));
-		gc.setFill(suit == Suit.Heart || suit == Suit.Diamonds ? 
-				Color.RED : 
-				Color.BLACK);
-		//Draw text With offsets
-        gc.fillText(this.toString(), x + 5, y + 35);
+		if (i == Card.FRONT) {
+	        gc.setFont(new Font(40 * s));
+			gc.setFill(suit == Suit.Heart || suit == Suit.Diamonds ? 
+					Color.RED : 
+					Color.BLACK);
+			//Draw text With offsets
+	        gc.fillText("" + this, x + 5 * s, y + 35 * s);
+		}
 	}
 	
 	@Override

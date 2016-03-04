@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.run.poker.entity.player.PlayerEntity;
 import com.run.poker.hand.Analyser;
 import com.run.poker.hand.CommunityCards;
 import com.run.poker.hand.ShowDownCards;
+
+import javafx.scene.canvas.GraphicsContext;
 
 /**
  * A Dealer is associated with a table.
@@ -15,11 +18,11 @@ import com.run.poker.hand.ShowDownCards;
  * @author RuN
  *
  */
-public class Dealer {
+public class Dealer extends GameEntity {
 
 	private Table table;
 	
-	Dealer() { }
+	protected Dealer() { }
 
 	void setTable(Table table) {
 		this.table = table;
@@ -33,7 +36,11 @@ public class Dealer {
 	 * Puts a new deck on card (consisting of 52 cards) on the table.
 	 */
 	public void newDeck() {
-		table.newDeck();
+		Deck deck = new Deck();
+		deck.setOwner(table);
+		deck.fill();
+		deck.shuffle();
+		table.setDeck(deck);
 	}
 	
 	//**********************
@@ -91,7 +98,7 @@ public class Dealer {
 	
 	public void sort() {
 		for (PlayerEntity entity: table.playerList()) {
-			Collections.sort(entity.holdCards(), Collections.reverseOrder());
+			entity.holdCards().sort();
 		}
 	}
 	
@@ -105,18 +112,17 @@ public class Dealer {
 	 * descending order.
 	 */
 	public void analyse() {
-		List<ShowDownCards> showDownCards = new ArrayList<>();
 		for (PlayerEntity entity: table.playerList()) {
 			
 			List<Card> cards = new ArrayList<>();
-			cards.addAll(entity.holdCards());
-			cards.addAll(table.communityCards());
+			cards.addAll(entity.holdCards().list());
+			cards.addAll(table.communityCards().list());
 			
 			Collections.sort(cards, Collections.reverseOrder());
 			
 			Analyser analyser = new Analyser();
 			ShowDownCards showdown = analyser.analyse(cards);
-			showDownCards.add(showdown);
+			entity.setShowDown(showdown);
 		}
 		Collections.sort(table.playerList(), Collections.reverseOrder());
 	}
@@ -130,5 +136,11 @@ public class Dealer {
 			entity.holdCards().clear();
 			entity.showDownCards().clear();
 		}
+	}
+
+	@Override
+	public void draw(GraphicsContext gc) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -3,9 +3,9 @@ package com.run.poker.utils;
 import java.util.List;
 
 import com.run.poker.entity.Card;
-import com.run.poker.entity.Names;
 import com.run.poker.entity.Suit;
-import com.run.poker.entity.Title;
+import com.run.poker.entity.player.Names;
+import com.run.poker.entity.player.Title;
 
 /**
  * Utility class that manages common functions to the Card Entity, 

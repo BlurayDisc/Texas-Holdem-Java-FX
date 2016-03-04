@@ -1,5 +1,7 @@
-package com.run.poker.entity;
+package com.run.poker.entity.player;
 
+import com.run.poker.entity.Card;
+import com.run.poker.entity.GameEntity;
 import com.run.poker.hand.HoldCards;
 import com.run.poker.hand.ShowDownCards;
 
@@ -25,12 +27,12 @@ public abstract class PlayerEntity extends GameEntity implements Comparable<Play
 	/**
 	 * Current hold cards.
 	 */
-	protected HoldCards holdCards = new HoldCards();
+	protected HoldCards holdCards;
 	
 	/**
 	 * Final showdown cards.
 	 */
-	protected ShowDownCards showDown = new ShowDownCards();
+	protected ShowDownCards showDown;
 	
 	/**
 	 * Player name.
@@ -47,8 +49,13 @@ public abstract class PlayerEntity extends GameEntity implements Comparable<Play
 	 */
 	protected IntegerProperty gold = new SimpleIntegerProperty(1000);
 	
+	/**
+	 * 
+	 */
 	public PlayerEntity() {
-		
+		this.showDown = new ShowDownCards();
+		this.holdCards = new HoldCards();
+		this.holdCards.setOwner(this);
 	}
 	
 	/**
@@ -65,6 +72,10 @@ public abstract class PlayerEntity extends GameEntity implements Comparable<Play
 	
 	public ShowDownCards showDownCards() {
 		return showDown;
+	}
+	
+	public void setShowDown(ShowDownCards showDown) {
+		this.showDown = showDown;
 	}
 
 	public StringProperty getName() {

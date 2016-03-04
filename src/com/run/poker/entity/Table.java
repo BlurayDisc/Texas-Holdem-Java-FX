@@ -3,7 +3,13 @@ package com.run.poker.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.run.poker.entity.player.Enemy;
+import com.run.poker.entity.player.Player;
+import com.run.poker.entity.player.PlayerEntity;
 import com.run.poker.hand.CommunityCards;
+
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 
 /**
  * <p> Table entity that consist of a list of players, a dealer and a 
@@ -16,7 +22,7 @@ import com.run.poker.hand.CommunityCards;
  * @author RuN
  *
  */
-public class Table {
+public class Table extends GameEntity {
 
 	private List<PlayerEntity> playerList;
 	private List<Enemy> botList;
@@ -28,8 +34,10 @@ public class Table {
 		this.playerList = new ArrayList<>();
 		this.botList = new ArrayList<>();
 		this.communityCards = new CommunityCards();
+		this.communityCards.move(150, 20);
 		this.dealer = new Dealer();
 		this.dealer.setTable(this);
+		this.deck = null;
 	}
 	
 	/**
@@ -64,6 +72,10 @@ public class Table {
 		return deck;
 	}
 	
+	public void setDeck(Deck deck) {
+		this.deck = deck;
+	}
+	
 	/**
 	 * Adds a player to the table.
 	 * @param entity The player.
@@ -90,7 +102,7 @@ public class Table {
 	 */
 	private void sitDown(Player player) {
 		playerList.add(player);
-		player.move(80, 425);
+		player.move(275, 425);
 	}
 	
 	private void sitDown(Enemy enemy) {
@@ -99,13 +111,13 @@ public class Table {
 		int index = botList.indexOf(enemy);
 		switch (index) {
 			case 0:
-				enemy.move(80, 20);
+				enemy.move(20, 250);
 				break;
 			case 1:
-				enemy.move(80, 220);
+				enemy.move(300, 175);
 				break;
 			case 2:
-				enemy.move(80, 420);
+				enemy.move(575, 250);
 				break;
 			default:
 				break;
@@ -114,8 +126,35 @@ public class Table {
 	
 	protected void newDeck() {
 		this.deck = new Deck();
+		deck.setOwner(this);
 		deck.fill();
 		deck.shuffle();
+	}
+	
+	@Override
+	public void draw(GraphicsContext gc) {
+		
+		Canvas canvas = gc.getCanvas();
+		
+		//Clear Canvas
+		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		
+		//Draw Table
+		gc.strokeRect(1, 1, canvas.getWidth() - 2, canvas.getHeight() - 2);
+		gc.strokeRect(4, 4, canvas.getWidth() - 8, canvas.getHeight() - 8);
+		
+		//Draw Player and his Hold Cards.
+		//Draw Bots and their Hold Cards but only showing the back
+		for (PlayerEntity entity: playerList) {
+			entity.draw(gc);
+		}
+		
+		//Draw Dealer and Deck
+		dealer.draw(gc);
+		deck.draw(gc);
+		
+		//Draw Community Cards
+		communityCards.draw(gc);
 	}
 	
 	@Override

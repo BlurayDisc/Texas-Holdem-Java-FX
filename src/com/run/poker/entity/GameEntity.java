@@ -9,7 +9,12 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public abstract class GameEntity {
 
-	public int x, y;
+	public double x, y;
+	
+	public GameEntity() {
+		this.x = 0.0;
+		this.y = 0.0;
+	}
 	
 	/**
 	 * Draws this GameEntity with the passed in GraphicsContext.
@@ -22,7 +27,7 @@ public abstract class GameEntity {
 	 * @param x
 	 * @param y
 	 */
-	public void move(int x, int y) {
+	public void move(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}

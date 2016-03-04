@@ -1,45 +1,53 @@
 package com.run.poker.hand.condition;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import com.run.poker.entity.Card;
 import com.run.poker.hand.Rank;
 
+/**
+ * Two Pairs Condition.
+ * 
+ * @author RuN
+ *
+ * @TODO FIX wrong logics in the frequency algorithm
+ * @TODO It currently compares every pair TWICE.
+ */
 public class TwoPairs extends Condition {
 	
-	private List<Integer> values = new ArrayList<>();
-
 	public TwoPairs() {
 		this.rank = Rank.TwoPair;
 	}
 
 	@Override
 	public boolean check(List<Card> cards) {
-		boolean twoPairs = false;
 		for (Card card: cards) {
 			int frequency = Collections.frequency(cards, card);
-			if (frequency == 2) {
-				values.add(card.getValue());
-				twoPairs = true;
-				break;
+			if (frequency == TWO_OF_A_KIND_CONDITION) {
+				//Continue adding values as 7 cards may form 3 pairs.
+				showDown.add(card);
 			}
 		}
-		return twoPairs;
+		return showDown.size() >= TWO_OF_A_KIND_CONDITION * 2;
 	}
 
 	@Override
 	public void finalise(List<Card> cards) {
-		Collections.sort(values, Collections.reverseOrder());
-		for (int i = 0; i < 2; i++) {
-			for (Card card: cards) {
-				if (card.getValue() == values.get(i)) {
-					cards.remove(card);
-					showDown.add(card);
-				}
+		//Sorts the values list so that the first 2 largest values 
+		//are retained for the two pairs condition.
+		showDown.sort();
+		while (showDown.size() > 4) {
+			showDown.removeLast();
+		}
+		for (Card card: cards) {
+			//Fill in the last 1 missing card.
+			if (showDown.size() == 5) {
+				break;
+			} 
+			if (!showDown.contains(card)) {
+				showDown.add(card);
 			}
 		}
-		showDown.add(cards.get(0));
 	}
 }

@@ -1,9 +1,8 @@
 package com.run.poker.controller;
 
-import com.run.poker.entity.PlayerEntity;
 import com.run.poker.entity.Dealer;
-import com.run.poker.entity.Player;
 import com.run.poker.entity.Table;
+import com.run.poker.entity.player.Player;
 
 import javafx.beans.property.StringProperty;
 import javafx.scene.canvas.GraphicsContext;
@@ -39,6 +38,9 @@ public class GameController {
 		}
 	}
 	
+	/**
+	 * Creates a new Deck.
+	 */
 	public void newDeck() {
 		Dealer dealer = table.callDealer();
 		dealer.clear();
@@ -52,6 +54,9 @@ public class GameController {
 	public void deal() {
 		Dealer dealer = table.callDealer();
 		dealer.deal();
+		dealer.stageOne();
+		dealer.stageTwo();
+		dealer.stageThree();
 	}
 	
 	/**
@@ -90,8 +95,6 @@ public class GameController {
 	 * @param gc
 	 */
 	public void draw(GraphicsContext gc) {
-		for (PlayerEntity entity: table.playerList()) {
-			entity.draw(gc);
-		}
+		table.draw(gc);
 	}
 }

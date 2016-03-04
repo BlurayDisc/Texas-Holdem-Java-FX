@@ -30,8 +30,8 @@ public class Flush extends Condition {
 			counter[suit.ordinal()]++;
 		}
 		boolean flush = false;
-		for (int i: counter) {
-			if (i >= SUIT_CONDITION) {
+		for (int i = 0; i < counter.length; i ++) {
+			if (counter[i] >= FLUSH_CONDITION) {
 				suit = Suit.values()[i];
 				flush = true;
 				break;

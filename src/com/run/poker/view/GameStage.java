@@ -37,20 +37,11 @@ public class GameStage extends Stage {
 	 */
 	private GraphicsContext gc;
 	
-	private GameController controller;
-	
 	public GameStage() {
-		this.controller = new GameController();
-		init();
-	}
-
-	/**
-	 * Initializes the stage.
-	 */
-	private void init() {
 		
+		GameController controller = new GameController();
 		controller.createPlayer("Newb");
-		controller.addBots(2);
+		controller.addBots(3);
 		
 		// Stage&Scene Layouts.
 		BorderPane layout = new BorderPane();
@@ -81,7 +72,6 @@ public class GameStage extends Stage {
 		analyse.setPrefSize(150, 50);
 		analyse.setOnAction(event -> {
 			controller.analyse();
-			controller.draw(gc);
 		});
 		
         Button fullScreen = new Button("Full Screen");
@@ -102,7 +92,6 @@ public class GameStage extends Stage {
 		// Main Canvas for GC
 		Canvas canvas = new Canvas(800, 600);
 		this.gc = canvas.getGraphicsContext2D();
-		gc.strokeRect(0, 0, 800, 600);
 		layout.setCenter(canvas);
 		
 		// Player Tool bar
@@ -168,8 +157,9 @@ public class GameStage extends Stage {
 	 * Hides this Stages and shows it's owner.
 	 */
 	private void closeAndShowOwner() {
+		//this.manager.shutdown();
 		this.hide();
-		((Stage) this.getOwner()).show();
+		((Stage) getOwner()).show();
 	}
 	
 	/**

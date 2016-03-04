@@ -26,15 +26,15 @@ import com.run.poker.hand.ShowDownCards;
  */
 public abstract class Condition {
 	
-	public static final int FOUR_CONDITION = 4;
-	
 	/**
 	 * Number of consecutive number of cards that satisfies 
 	 * the flush and straight conditions.
 	 */
-	public static final int SUIT_CONDITION = 5;
-	
-	public static final int CONSECUTIVES_CONDITION = 4;
+	public static final int FLUSH_CONDITION = 5;
+	public static final int STRAIGHT_CONDITION = 4;
+	public static final int FOUR_OF_A_KIND_CONDITION = 4;
+	public static final int THREE_OF_A_KIND_CONDITION = 3;
+	public static final int TWO_OF_A_KIND_CONDITION = 2;
 	
 	protected ShowDownCards showDown;
 
@@ -43,23 +43,6 @@ public abstract class Condition {
 	public Condition() {
 		this.rank = Rank.HighCard;
 		this.showDown = new ShowDownCards();
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public static Condition[] all() {
-		return new Condition[] {
-			   new FourOfaKind(),
-			   new FullHouse(),
-			   new Flush(),
-			   new Straight(), 
-			   new ThreeOfaKind(),
-			   new TwoPairs(),
-			   new OnePair(),
-			   new HighCard()
-		};
 	}
 	
 	public ShowDownCards result() {

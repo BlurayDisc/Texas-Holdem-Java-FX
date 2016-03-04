@@ -6,6 +6,7 @@ package com.run.poker.entity;
  *
  */
 public enum Suit {
+	
 	Spades("♠", 4), 
 	Heart("♥", 3),  
 	Clubs("♣", 2), 

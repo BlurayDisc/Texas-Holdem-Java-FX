@@ -2,7 +2,6 @@ package com.run.poker.view;
 
 import com.run.poker.Poker;
 import com.run.poker.entity.Card;
-import com.run.poker.ls.Persistence;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -21,14 +20,11 @@ import javafx.stage.Stage;
  */
 public class PrimaryStage extends Stage {
 	
-	public PrimaryStage() {
-		init();
-	}
-
 	/**
 	 * Initializes the stage.
 	 */
-	public void init() {
+	public PrimaryStage() {
+		
 		VBox layout = new VBox(20);
 		Scene start = new Scene(layout);
 		layout.getStylesheets().add("com/run/poker/view/menuStyle.css");
@@ -44,30 +40,25 @@ public class PrimaryStage extends Stage {
 		newButton.getStyleClass().add("button2");
 		newButton.setPrefSize(150, 50);
 		newButton.setOnAction(event -> {
+			this.hide();
 			GameStage stage = new GameStage();
 			stage.initOwner(this);
-			this.hide();
 			stage.show();
 		});
 		
 		Button loadButton = new Button("Continue");
 		loadButton.getStyleClass().add("button1");
 		loadButton.setPrefSize(150, 50);
-		loadButton.setOnAction(event -> Persistence.load());
 		
 		Button exitButton = new Button("Exit");
 		exitButton.getStyleClass().add("button1");
 		exitButton.setPrefSize(150, 50);
-		exitButton.setOnAction(event -> {
-			Persistence.save();
-			System.exit(0);
-		});
+		exitButton.setOnAction(event -> System.exit(0));
 		
 		layout.getChildren().addAll(title, imageView, newButton, loadButton, exitButton);
 		
 		this.setTitle(Poker.APP_NAME);
 		this.getIcons().add(Card.BACK);
-		this.setOnCloseRequest(e -> Persistence.save());
 		this.setScene(start);
 	}
 	

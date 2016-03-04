@@ -1,6 +1,7 @@
 package com.run.poker.hand;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 
 import com.run.poker.entity.Card;
 
@@ -23,7 +24,7 @@ import com.run.poker.entity.Card;
  * @author RuN
  * @see https://en.wikipedia.org/wiki/List_of_poker_hands
  */
-public class ShowDownCards extends ArrayList<Card> implements Comparable<ShowDownCards> {
+public class ShowDownCards extends LinkedList<Card> implements Comparable<ShowDownCards> {
 
 	private static final long serialVersionUID = -270924839715825415L;
 	
@@ -38,6 +39,10 @@ public class ShowDownCards extends ArrayList<Card> implements Comparable<ShowDow
 	
 	public Rank getRank() {
 		return rank;
+	}
+	
+	public void sort() {
+		Collections.sort(this, Collections.reverseOrder());
 	}
 	
 	@Override

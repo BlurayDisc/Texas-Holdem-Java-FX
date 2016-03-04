@@ -1,4 +1,4 @@
-package com.run.poker.entity;
+package com.run.poker.entity.player;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -17,19 +17,8 @@ public class Player extends PlayerEntity {
 	
 	@Override
 	public void draw(GraphicsContext gc) {
-		//Displays all the cards in a player's hands.
-		
 		//Fully clears the canvas.
 		//gc.clearRect(0, 0, 800, 600); 
-		
-		int i = 0;
-		for (Card card: holdCards) {
-			int x = this.x + i * (Card.WIDTH + Card.GAP);
-			int y = this.y;
-			card.move(x, y);
-			card.draw(gc);
-			i++;
-			//gc.translate(i, i);
-		}
+		this.holdCards.draw(gc);
 	}
 }

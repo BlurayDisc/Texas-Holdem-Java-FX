@@ -1,4 +1,4 @@
-package com.run.poker.entity;
+package com.run.poker.entity.player;
 
 import com.run.poker.utils.GameUtils;
 
@@ -19,13 +19,8 @@ public class Enemy extends PlayerEntity {
 	
 	@Override
 	public void draw(GraphicsContext gc) {
-		int i = 0;
-		for (Card card: holdCards) {
-			int x = this.x + i * (Card.WIDTH + Card.GAP);
-			int y = this.y;
-			card.move(x, y);
-			card.drawBack(gc);
-			i++;
-		}
+		//Fully clears the canvas.
+		//gc.clearRect(0, 0, 800, 600); 
+		this.holdCards.draw(gc);
 	}
 }

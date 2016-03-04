@@ -1,4 +1,4 @@
-package com.run.poker.entity;
+package com.run.poker.entity.player;
 
 public enum Title {
 

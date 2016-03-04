@@ -18,8 +18,11 @@ public class HighCard extends Condition {
 
 	@Override
 	public void finalise(List<Card> cards) {
-		// TODO Auto-generated method stub
-		
+		for (Card card: cards) {
+			if (showDown.size() == 5) {
+				break;
+			}
+			showDown.add(card);
+		}
 	}
-
 }

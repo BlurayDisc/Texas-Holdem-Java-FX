@@ -3,21 +3,33 @@ package com.run.poker.entity;
 import java.util.Collections;
 import java.util.LinkedList;
 
+import javafx.scene.canvas.GraphicsContext;
+
 /**
  * A standard deck of 52 poker cards.
  * 
  * @author RuN
  *
  */
-public class Deck extends LinkedList<Card> {
+public class Deck extends GameEntity {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8637787243176194920L;
+	private Table owner;
+	private LinkedList<Card> list;
 
 	public Deck() {
-		
+		this.list = new LinkedList<>();
+	}
+	
+	public void setOwner(Table owner) {
+		this.owner = owner;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @return
+	 */
+	public Card poll() {
+		return list.poll();
 	}
 
 	/**
@@ -29,7 +41,7 @@ public class Deck extends LinkedList<Card> {
 		for (int value = 2; value < 15; value++) {
 			for (Suit suit: Suit.values()) {
 				Card card = new Card(suit, value);
-				add(card);
+				list.add(card);
 			}
 		}
 	}
@@ -38,6 +50,18 @@ public class Deck extends LinkedList<Card> {
 	 * Shuffles the deck
 	 */
 	public void shuffle() {
-		Collections.shuffle(this);
+		Collections.shuffle(list);
+	}
+
+	@Override
+	public void draw(GraphicsContext gc) {
+		double x = owner.x;
+		double y = owner.y;
+		move(x, y);
+	}
+	
+	@Override
+	public String toString() {
+		return list.toString();
 	}
 }

@@ -38,7 +38,7 @@ public class Straight extends Condition {
 			}
 			previous = current;
 		}
-		return consecutives >= CONSECUTIVES_CONDITION;
+		return consecutives >= STRAIGHT_CONDITION;
 	}
 
 	@Override
