@@ -5,6 +5,7 @@ import com.run.poker.entity.GameEntity;
 import com.run.poker.hand.HoldCards;
 import com.run.poker.hand.ShowDownCards;
 
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -30,32 +31,49 @@ public abstract class PlayerEntity extends GameEntity implements Comparable<Play
 	protected HoldCards holdCards;
 	
 	/**
-	 * Final showdown cards.
+	 * Final show down cards.
 	 */
 	protected ShowDownCards showDown;
 	
 	/**
-	 * Player name.
+	 * Player name binding.
 	 */
-	protected StringProperty name = new SimpleStringProperty("New Player");
+	protected StringProperty name;
 	
 	/**
-	 * Player title
+	 * Player title binding.
 	 */
-	protected StringProperty title = new SimpleStringProperty("Beginner");
+	protected StringProperty title;
 	
 	/**
 	 * Player gold
+	 */	
+	protected IntegerProperty money;
+	
+	/**
+	 * Player Gold Binding
 	 */
-	protected IntegerProperty gold = new SimpleIntegerProperty(1000);
+	private StringBinding moneyBinding;
 	
 	/**
 	 * 
 	 */
 	public PlayerEntity() {
+		this.name = new SimpleStringProperty("New Player");
+		this.title = new SimpleStringProperty("Beginner");
+		this.money = new SimpleIntegerProperty(1000);
 		this.showDown = new ShowDownCards();
 		this.holdCards = new HoldCards();
 		this.holdCards.setOwner(this);
+		this.moneyBinding = new StringBinding() {
+	        {
+	            bind(money);
+	        }
+			@Override
+			protected String computeValue() {
+				return "   $" + money.get();
+			}
+		};
 	}
 	
 	/**
@@ -93,13 +111,16 @@ public abstract class PlayerEntity extends GameEntity implements Comparable<Play
 	public void setTitle(String title) {
 		this.title.set(title);
 	}
-
-	public IntegerProperty getGold() {
-		return gold;
+	
+	public StringBinding getMoneyBinding() {
+		return moneyBinding;
 	}
 
-	public void setGold(int gold) {
-		this.gold.set(gold);
+	public void subtractMoney(int amount) {
+		if (amount > money.get()) {
+			throw new IllegalArgumentException("Out of Money.");
+		}
+		this.money.set(money.get() - amount);
 	}
 	
 	@Override
@@ -110,7 +131,7 @@ public abstract class PlayerEntity extends GameEntity implements Comparable<Play
 	@Override
 	public String toString() {
 		String str = name.get() + " The " + title.get() + 
-					 " with $" + gold.get() + "." +  
+					 " with $" + money.get() + "." +  
 					 "\n    Hands: " + showDown.getRank() + " ";
 		for (Card card: showDown) {
 			str += card + ", ";

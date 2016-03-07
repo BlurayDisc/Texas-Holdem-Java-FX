@@ -34,7 +34,7 @@ public class Table extends GameEntity {
 		this.playerList = new ArrayList<>();
 		this.botList = new ArrayList<>();
 		this.communityCards = new CommunityCards();
-		this.communityCards.move(150, 20);
+		this.communityCards.move(150, 15);
 		this.dealer = new Dealer();
 		this.dealer.setTable(this);
 		this.deck = null;

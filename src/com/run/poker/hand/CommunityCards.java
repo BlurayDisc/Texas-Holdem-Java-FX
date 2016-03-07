@@ -7,6 +7,8 @@ import com.run.poker.entity.Card;
 import com.run.poker.entity.GameEntity;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 /**
  * Consists of 5 cards being dealt facing up.
@@ -51,6 +53,9 @@ public class CommunityCards extends GameEntity {
 
 	@Override
 	public void draw(GraphicsContext gc) {
+		gc.setFill(Color.WHITE);
+		gc.setFont(new Font(15));
+		gc.fillText("Community Cards", x - 125, y + 50);
 		for (Card card: communityCards) {
 			card.draw(gc, Card.FRONT, SCALE_FACTOR);
 		}

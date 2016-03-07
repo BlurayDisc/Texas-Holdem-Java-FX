@@ -97,31 +97,37 @@ public class GameStage extends Stage {
 		// Player Tool bar
 		Text name = new Text();
 		name.setFont(new Font(32));
-		name.textProperty().bind(controller.getPlayerName());
+		name.textProperty().bind(controller.getPlayer().getName());
 		name.setOnMouseClicked(event -> {
 			TextInputDialog dialog = new TextInputDialog();
 			dialog.initOwner(this);
 			dialog.setTitle("New Name");
 			dialog.setHeaderText("");
 			dialog.setContentText("Please re-enter your name:");
-			// ImageView
+			//ImageView
 			ImageView iv = new ImageView(Card.BACK);
 			iv.setFitWidth(60);
 			iv.setFitHeight(80);
 			dialog.setGraphic(iv);
-			// Validation
+			//Validation
 			Node button = dialog.getDialogPane().lookupButton(ButtonType.OK);
 			button.setDisable(true);
 			dialog.getEditor().textProperty().addListener((observable, oldValue, newValue) -> 
 					button.setDisable(newValue.trim().isEmpty())
 			);
-			// Result
+			//Result
 			Optional<String> result = dialog.showAndWait();
-			result.ifPresent(value -> controller.setPlayerName(value));
+			result.ifPresent(value -> controller.getPlayer().setName(value));
+			//Repaint Player
+			controller.draw(gc);
 		});
 		
+		Text money = new Text();
+		money.setFont(new Font(32));
+		money.textProperty().bind(controller.getPlayer().getMoneyBinding());
+		
 		Pane spacing = new Pane();
-		spacing.setPrefSize(100, 100);
+		spacing.setPrefSize(50, 50);
 		
 		Button check = new Button("Check");
 		check.getStyleClass().add("button1");
@@ -130,6 +136,10 @@ public class GameStage extends Stage {
 		Button call = new Button("Call");
 		call.getStyleClass().add("button1");
 		call.setPrefSize(100, 50);
+		call.setOnAction(e -> {
+			controller.getPlayer().subtractMoney(50);
+			controller.draw(gc);
+		});
 		
 		Button raise = new Button("Raise");
 		raise.getStyleClass().add("button1");
@@ -143,7 +153,7 @@ public class GameStage extends Stage {
 		fold.getStyleClass().add("button2");
 		fold.setPrefSize(100, 50);
 		
-		ToolBar playerBar = new ToolBar(name, spacing, check, call, raise, all, fold);
+		ToolBar playerBar = new ToolBar(name, money, spacing, check, call, raise, all, fold);
         BorderPane.setAlignment(playerBar, Pos.CENTER);
         layout.setBottom(playerBar);
 		

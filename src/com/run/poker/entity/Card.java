@@ -81,7 +81,7 @@ public class Card extends GameEntity implements Comparable<Card> {
 	 */
 	public void draw(GraphicsContext gc, Image i, double s) {
 		//Clear
-		gc.clearRect(x, y, i.getWidth() * s, i.getHeight() * s);
+		//gc.clearRect(x, y, i.getWidth() * s, i.getHeight() * s);
 		
 		//System.out.println("Drawing: " + this + " Coords: (" + x + "," + y + ")");
 		

@@ -4,7 +4,6 @@ import com.run.poker.entity.Dealer;
 import com.run.poker.entity.Table;
 import com.run.poker.entity.player.Player;
 
-import javafx.beans.property.StringProperty;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -61,7 +60,7 @@ public class GameController {
 	
 	/**
 	 * Test method.
-	 * <p> Do a test sort and anaylyse of hands.
+	 * <p> Do a test sort and analyze of hands.
 	 */
 	public void sort() {
 		Dealer dealer = table.callDealer();
@@ -70,7 +69,7 @@ public class GameController {
 	
 	/**
 	 * Test method.
-	 * <p> Do a test sort and anaylyse of hands.
+	 * <p> Do a test sort and analyze of hands.
 	 */
 	public void analyse() {
 		Dealer dealer = table.callDealer();
@@ -82,16 +81,16 @@ public class GameController {
 	//*  GUI Controllers  *
 	//*********************
 	
-	public void setPlayerName(String name) {
-		player.setName(name);
-	}
-	
-	public StringProperty getPlayerName() {
-		return player.getName();
+	public Player getPlayer() {
+		return player;
 	}
 	
 	/**
 	 * Draws the game entity object on the canvas. 
+	 * <p> This method repaints the entire canvas.
+	 * 
+	 * @TODO Implement optimization which only repaints 
+	 * each game entity by itself.
 	 * @param gc
 	 */
 	public void draw(GraphicsContext gc) {
