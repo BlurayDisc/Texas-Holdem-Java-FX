@@ -1,11 +1,16 @@
 package com.run.poker.ai.decision;
 
-public class Fold extends Decision {
+/**
+ * 
+ * @author RuN
+ *
+ */
+public class CallCheck extends Decision {
 
 	@Override
 	public Decision process() {
 		// TODO Auto-generated method stub
-		System.out.println("Fold");
+		System.out.println("Call/Check");
 		return null;
 	}
 

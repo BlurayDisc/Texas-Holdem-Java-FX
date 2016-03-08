@@ -10,10 +10,13 @@ import javafx.scene.canvas.GraphicsContext;
 public abstract class GameEntity {
 
 	public double x, y;
+	protected double scale;
+	protected double width, height;
 	
 	public GameEntity() {
 		this.x = 0.0;
 		this.y = 0.0;
+		this.scale = 1.0;
 	}
 	
 	/**
@@ -30,5 +33,15 @@ public abstract class GameEntity {
 	public void move(double x, double y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	/**
+	 * Scaling.
+	 * <p> The Sub classes of the GameEntity object must provide 
+	 * the implementation of this field within it's draw(gc) method.
+	 * @param scale
+	 */
+	public void setScale(double scale) {
+		this.scale = scale;
 	}
 }

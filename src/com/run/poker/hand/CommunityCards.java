@@ -1,6 +1,6 @@
 package com.run.poker.hand;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.run.poker.entity.Card;
@@ -22,7 +22,7 @@ public class CommunityCards extends GameEntity {
 	private List<Card> communityCards;
 	
 	public CommunityCards() {
-		this.communityCards = new LinkedList<>();
+		this.communityCards = new ArrayList<>();
 	}
 
 	/**

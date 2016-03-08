@@ -1,4 +1,4 @@
-package com.run.poker.ai;
+package com.run.poker.ai.rt;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;

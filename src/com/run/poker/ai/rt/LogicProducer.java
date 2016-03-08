@@ -1,4 +1,4 @@
-package com.run.poker.ai;
+package com.run.poker.ai.rt;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -6,8 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.run.poker.ai.decision.Call;
-import com.run.poker.ai.decision.Check;
+import com.run.poker.ai.decision.CallCheck;
 import com.run.poker.ai.decision.Decision;
 import com.run.poker.ai.decision.Fold;
 import com.run.poker.ai.decision.Raise;
@@ -52,7 +51,7 @@ public class LogicProducer {
 	}
 	
 	static final Decision[] ITEMS = new Decision[] {
-			new Call(), new Fold(), new Raise(), new Check()};
+			new CallCheck(), new Fold(), new Raise()};
 	
 	/**
 	 * 

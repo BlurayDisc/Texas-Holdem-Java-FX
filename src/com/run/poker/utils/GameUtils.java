@@ -7,6 +7,9 @@ import com.run.poker.entity.Suit;
 import com.run.poker.entity.player.Names;
 import com.run.poker.entity.player.Title;
 
+import javafx.beans.binding.StringBinding;
+import javafx.beans.value.ObservableValue;
+
 /**
  * Utility class that manages common functions to the Card Entity, 
  * Math and Random.
@@ -62,5 +65,17 @@ public class GameUtils {
 	public static <T extends Enum<T>> T random(Class<T> enumeration) {
 		T[] constants = enumeration.getEnumConstants();
 		return constants[(int) Math.round(Math.random() * (constants.length - 1))];
+	}
+	
+	public static StringBinding createBinding(ObservableValue<?> money, String suffix) {
+		return new StringBinding() {
+	        {
+	            bind(money);
+	        }
+			@Override
+			protected String computeValue() {
+				return suffix + money.getValue();
+			}
+		};
 	}
 }

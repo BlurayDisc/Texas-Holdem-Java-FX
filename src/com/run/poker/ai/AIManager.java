@@ -1,10 +1,11 @@
 package com.run.poker.ai;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.List;
 
 import com.run.poker.ai.decision.Decision;
+import com.run.poker.ai.decision.StartPoint;
+import com.run.poker.controller.GameController;
+import com.run.poker.entity.player.Enemy;
 
 /**
  * AI Manager contains a back trace queue which holds on to a 
@@ -15,40 +16,24 @@ import com.run.poker.ai.decision.Decision;
  *
  */
 public class AIManager {
-	
-	private LogicProducer producer;
-	private LogicConsumer consumer;
-	
-	/**
-	 * Main queue holding decisions produced by the producer.
-	 */
-	private BlockingQueue<Decision> backtrace;
+
+	private List<Enemy> botList;
 	
 	public AIManager() {
-		this.backtrace = new LinkedBlockingQueue<>();
+		GameController gc = GameController.getInstance();
+		this.botList = gc.getBotList();
 	}
 	
 	/**
-	 * Starts up the AIManager.
-	 * @throws ExecutionException 
-	 * @throws InterruptedException 
+	 * 
 	 */
-	public void startup() {
-		
-		this.consumer = new LogicConsumer(backtrace);
-		consumer.startup();
-		
-		this.producer = new LogicProducer(backtrace);
-		producer.startup();
-	}
-	
-	public void shutdown() {
-		
-		producer.shutdown();
-		consumer.shutdown();
-		
-		backtrace.clear();
-		System.out.println("[Backtrace Queue][Cleared] " + backtrace.size() + " " + 
-				"more items in the consumer queue but execution is skipped.");
+	public void execute() {
+		for (Enemy bot: botList) {
+			Decision start = new StartPoint();
+			start.setEntity(bot);
+			start.execute();
+			System.out.println(Decision.result());
+			Decision.result().clear();
+		}
 	}
 }

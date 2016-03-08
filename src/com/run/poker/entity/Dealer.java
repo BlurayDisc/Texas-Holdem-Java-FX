@@ -113,17 +113,20 @@ public class Dealer extends GameEntity {
 	 */
 	public void analyse() {
 		for (PlayerEntity entity: table.playerList()) {
-			
+			//Joins the hold cards with the community cards 
+			//for each player.
 			List<Card> cards = new ArrayList<>();
 			cards.addAll(entity.holdCards().list());
 			cards.addAll(table.communityCards().list());
-			
+			//Sort cards by it's natural ordering.
 			Collections.sort(cards, Collections.reverseOrder());
-			
+			//Analyze of hands and produces show down cards for 
+			//each player.
 			Analyser analyser = new Analyser();
 			ShowDownCards showdown = analyser.analyse(cards);
 			entity.setShowDown(showdown);
 		}
+		//Sort players by their hand ranking.
 		Collections.sort(table.playerList(), Collections.reverseOrder());
 	}
 	

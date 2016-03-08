@@ -60,6 +60,14 @@ public class Table extends GameEntity {
 	 * 
 	 * @return
 	 */
+	public List<Enemy> botList() {
+		return botList;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public CommunityCards communityCards() {
 		return communityCards;
 	}
@@ -94,34 +102,32 @@ public class Table extends GameEntity {
 		sitDown(enemy);
 		return enemy;
 	}
-
+	
+	private static final double[][] POS = new double[][] {
+		{20, 250}, 
+		{300, 175}, 
+		{575, 250}
+	};
+	
 	/**
 	 * Sits down every players to the table.
 	 * <p> This method must be called after all players 
 	 * have been added to the table.
 	 */
-	private void sitDown(Player player) {
-		playerList.add(player);
-		player.move(275, 425);
-	}
-	
-	private void sitDown(Enemy enemy) {
-		playerList.add(enemy);
-		botList.add(enemy);
-		int index = botList.indexOf(enemy);
-		switch (index) {
-			case 0:
-				enemy.move(20, 250);
-				break;
-			case 1:
-				enemy.move(300, 175);
-				break;
-			case 2:
-				enemy.move(575, 250);
-				break;
-			default:
-				break;
+	private void sitDown(PlayerEntity entity) {
+		System.out.println("Player in table: " + playerList.size());
+		System.out.println("Sitting down " + entity.getName().get() + " to table");
+		playerList.add(entity);
+		if (entity instanceof Player) {
+			entity.move(275, 425);
+		} else if (entity instanceof Enemy) {
+			Enemy enemy = (Enemy) entity;
+			int n = botList.size();
+			enemy.move(POS[n][0], POS[n][1]);
+			botList.add(enemy);
 		}
+
+		System.out.println(entity.getName().get() + " " + entity.x + " " + entity.y); 
 	}
 	
 	protected void newDeck() {
@@ -143,15 +149,17 @@ public class Table extends GameEntity {
 		gc.strokeRect(1, 1, canvas.getWidth() - 2, canvas.getHeight() - 2);
 		gc.strokeRect(4, 4, canvas.getWidth() - 8, canvas.getHeight() - 8);
 		
-		//Draw Player and his Hold Cards.
-		//Draw Bots and their Hold Cards but only showing the back
+		//Draw Player + Bots and their Hold Cards.
 		for (PlayerEntity entity: playerList) {
 			entity.draw(gc);
 		}
 		
 		//Draw Dealer and Deck
 		dealer.draw(gc);
-		deck.draw(gc);
+		
+		if (deck != null) {
+			deck.draw(gc);
+		}
 		
 		//Draw Community Cards
 		communityCards.draw(gc);

@@ -1,8 +1,12 @@
 package com.run.poker.controller;
 
+import java.util.List;
+
 import com.run.poker.entity.Dealer;
 import com.run.poker.entity.Table;
+import com.run.poker.entity.player.Enemy;
 import com.run.poker.entity.player.Player;
+import com.run.poker.entity.player.PlayerEntity;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -16,8 +20,14 @@ public class GameController {
 	private Table table;
 	private Player player;
 	
-	public GameController() {
+	private static final GameController INSTANCE = new GameController();
+	
+	private GameController() {
 		this.table = new Table();
+	}
+	
+	public static GameController getInstance() {
+		return INSTANCE;
 	}
 	
 	/**
@@ -35,6 +45,12 @@ public class GameController {
 		for (int i = 0; i < n; i++) {
 			table.addBot();
 		}
+	}
+	
+	public void cleanUp() {
+		table.playerList().clear();
+		table.botList().clear();
+		table.communityCards().clear();
 	}
 	
 	/**
@@ -83,6 +99,24 @@ public class GameController {
 	
 	public Player getPlayer() {
 		return player;
+	}
+	
+	public List<Enemy> getBotList() {
+		return table.botList();
+	}
+	
+	public List<PlayerEntity> getPlayerList() {
+		return table.playerList();
+	}
+	
+	/**
+	 * Returns the current ranking of the passed in player 
+	 * entity amongst all other players.
+	 * @param entity
+	 * @return
+	 */
+	public int getCurrentRanking(PlayerEntity entity) {
+		return table.playerList().indexOf(entity) + 1;
 	}
 	
 	/**

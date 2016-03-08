@@ -39,7 +39,7 @@ public class GameStage extends Stage {
 	
 	public GameStage() {
 		
-		GameController controller = new GameController();
+		GameController controller = GameController.getInstance();
 		controller.createPlayer("Newb");
 		controller.addBots(3);
 		
@@ -72,6 +72,7 @@ public class GameStage extends Stage {
 		analyse.setPrefSize(150, 50);
 		analyse.setOnAction(event -> {
 			controller.analyse();
+			controller.draw(gc);
 		});
 		
         Button fullScreen = new Button("Full Screen");
@@ -84,7 +85,10 @@ public class GameStage extends Stage {
 		Button exit = new Button("Exit");
 		exit.getStyleClass().add("button1");
 		exit.setPrefSize(150, 50);
-		exit.setOnAction(event -> closeAndShowOwner());
+		exit.setOnAction(event -> {
+			controller.cleanUp();
+			closeAndShowOwner();
+		});
 
 		ToolBar toolbar = new ToolBar(deal, sort, analyse, fullScreen, exit);
 		layout.setTop(toolbar);
@@ -159,8 +163,13 @@ public class GameStage extends Stage {
 		
 		this.setTitle(Poker.APP_NAME);
 		this.getIcons().add(Card.BACK);
-		this.setOnCloseRequest(event -> closeAndShowOwner());
+		this.setOnCloseRequest(event -> {
+			controller.cleanUp();
+			closeAndShowOwner();
+		});
 		this.setScene(game);
+		
+		controller.draw(gc);
 	}
 	
 	/**

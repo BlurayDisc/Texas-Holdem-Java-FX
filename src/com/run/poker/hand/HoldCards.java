@@ -6,8 +6,6 @@ import java.util.List;
 
 import com.run.poker.entity.Card;
 import com.run.poker.entity.GameEntity;
-import com.run.poker.entity.player.Player;
-import com.run.poker.entity.player.PlayerEntity;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -25,38 +23,17 @@ public class HoldCards extends GameEntity {
 	public static final double ENEMY_SCALE_FACTOR = 0.75;
 	
 	private Image image;
-	private double scale;
-	private PlayerEntity owner;
 	private List<Card> holdCards;
 	
-	/**
-	 * Testing code, draws enemy hold cards.
-	 */
-	private boolean test = true;
-	
 	public HoldCards() {
-		this.scale = 0.0;
 		this.holdCards = new ArrayList<>();
-		this.owner = null;
 		this.image = null;
 	}
 	
-	public void setOwner(PlayerEntity owner) {
-		this.owner = owner;
-		this.scale = owner instanceof Player ? 
-					 PLAYER_SCALE_FACTOR : 
-					 ENEMY_SCALE_FACTOR;
-		this.image = owner instanceof Player ? 
-					Card.FRONT : test ? 
-					Card.FRONT : 
-					Card.BACK;
+	public void setImage(Image image) {
+		this.image = image;
 	}
 	
-	public void add(Card card) {
-		move(card);
-		holdCards.add(card);
-	}
-
 	public void clear() {
 		holdCards.clear();
 	}
@@ -65,26 +42,32 @@ public class HoldCards extends GameEntity {
 		return holdCards;
 	}
 	
+	public void add(Card card) {
+		moveCard(card, holdCards.size());
+		holdCards.add(card);
+	}
+
+	/**
+	 * Sorts and moves the cards based on their new indexes.
+	 */
 	public void sort() {
 		Collections.sort(holdCards, Collections.reverseOrder());
-		//Move the cards based on their new indexes.
-		for (int i = 0; i < holdCards.size(); i++) {
-			moveOnIndex(i);
+		int n = 0;
+		for (Card card: holdCards) {
+			moveCard(card, n);
+			n++;
 		}
 	}
 	
-	public void moveOnIndex(int n) {
+	/**
+	 * 
+	 * @param card
+	 * @param n
+	 */
+	public void moveCard(Card card, int n) {
 		double width = Card.FRONT.getWidth() + Card.GAP;
-		double x = this.owner.x + scale * n * width; 
-		double y = this.owner.y;
-		holdCards.get(n).move(x, y);
-	}
-	
-	public void move(Card card) {
-		double n = holdCards.size();
-		double width = Card.FRONT.getWidth() + Card.GAP;
-		double x = this.owner.x + scale * n * width; 
-		double y = this.owner.y;
+		double x = this.x + scale * n * width;
+		double y = this.y;
 		card.move(x, y);
 	}
 	
