@@ -3,6 +3,9 @@ package com.run.poker.entity;
 import java.util.Collections;
 import java.util.LinkedList;
 
+import com.run.poker.card.Card;
+import com.run.poker.card.Suit;
+
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -13,23 +16,18 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class Deck extends GameEntity {
 
-	private Table owner;
 	private LinkedList<Card> list;
 
 	public Deck() {
 		this.list = new LinkedList<>();
-	}
-	
-	public void setOwner(Table owner) {
-		this.owner = owner;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * @return
 	 */
-	public Card poll() {
-		return list.poll();
+	public Card removeFirst() {
+		return list.removeFirst();
 	}
 
 	/**
@@ -55,9 +53,7 @@ public class Deck extends GameEntity {
 
 	@Override
 	public void draw(GraphicsContext gc) {
-		double x = owner.x;
-		double y = owner.y;
-		move(x, y);
+		
 	}
 	
 	@Override

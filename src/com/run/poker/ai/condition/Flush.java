@@ -1,10 +1,10 @@
-package com.run.poker.hand.condition;
+package com.run.poker.ai.condition;
 
 import java.util.List;
 
-import com.run.poker.entity.Card;
-import com.run.poker.entity.Suit;
-import com.run.poker.hand.Rank;
+import com.run.poker.card.Card;
+import com.run.poker.card.Rank;
+import com.run.poker.card.Suit;
 
 /**
  * Iterates through the list of cards in the current hand.

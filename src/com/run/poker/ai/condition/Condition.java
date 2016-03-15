@@ -1,10 +1,10 @@
-package com.run.poker.hand.condition;
+package com.run.poker.ai.condition;
 
 import java.util.List;
 
-import com.run.poker.entity.Card;
-import com.run.poker.hand.Rank;
-import com.run.poker.hand.ShowDownCards;
+import com.run.poker.card.Card;
+import com.run.poker.card.Rank;
+import com.run.poker.card.ShowdownCards;
 
 /**
  * <p> Computes the ranks of each hands.
@@ -36,16 +36,16 @@ public abstract class Condition {
 	public static final int THREE_OF_A_KIND_CONDITION = 3;
 	public static final int TWO_OF_A_KIND_CONDITION = 2;
 	
-	protected ShowDownCards showDown;
+	protected ShowdownCards showDown;
 
 	protected Rank rank;
 	
 	public Condition() {
 		this.rank = Rank.HighCard;
-		this.showDown = new ShowDownCards();
+		this.showDown = new ShowdownCards();
 	}
 	
-	public ShowDownCards result() {
+	public ShowdownCards result() {
 		showDown.setRank(rank);
 		return showDown;
 	}

@@ -1,10 +1,10 @@
-package com.run.poker.hand.condition;
+package com.run.poker.ai.condition;
 
 import java.util.Collections;
 import java.util.List;
 
-import com.run.poker.entity.Card;
-import com.run.poker.hand.Rank;
+import com.run.poker.card.Card;
+import com.run.poker.card.Rank;
 
 public class FullHouse extends Condition {
 	
@@ -34,9 +34,9 @@ public class FullHouse extends Condition {
 		//Checks if the show down cards has 2 pairs.
 		if (showDown.size() > 5) {
 			//Sorts this collection from smallest -> largest.
-			Collections.sort(showDown);
+			showDown.sort();
 			Card first = showDown.getFirst();
-			int frequency = Collections.frequency(showDown, first);
+			int frequency = showDown.frequency(first);
 			if (frequency == TWO_OF_A_KIND_CONDITION) {
 				//remove first 2.
 				showDown.removeFirst();

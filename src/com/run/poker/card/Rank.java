@@ -1,4 +1,4 @@
-package com.run.poker.hand;
+package com.run.poker.card;
 
 
 /**

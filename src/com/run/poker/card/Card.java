@@ -1,5 +1,6 @@
-package com.run.poker.entity;
+package com.run.poker.card;
 
+import com.run.poker.entity.GameEntity;
 import com.run.poker.utils.FileUtils;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -8,6 +9,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 /**
+ * A Poker Card Model.
+ * <p> A Card has a suit and a value.
+ * <p> There are a total of 4 different suits and 13 different values.
+ * <p> In one deck there are 52 number of unique cards.
  * 
  * @author RuN
  *
@@ -17,25 +22,16 @@ public class Card extends GameEntity implements Comparable<Card> {
 	public static final double GAP = 10.0;
 	public static final Image FRONT = FileUtils.loadFromJar("images/card.jpg");
 	public static final Image BACK = FileUtils.loadFromJar("images/back.jpg");
-	
+	private Image image;
 	private Suit suit;
 	private int value;
 	
 	public Card(Suit suit, int value) {
 		this.suit = suit;
 		this.value = value;
-	}
-	
-	/**
-	 * Copy constructor.
-	 */
-	public Card(Card card) {
-		this.suit = card.suit;
-		this.value = card.value;
-	}
-	
-	public Card copy() {
-		return new Card(this);
+		this.image = FRONT;
+		this.width = image.getWidth();
+		this.height = image.getHeight();
 	}
 
 	public Suit getSuit() {
@@ -69,8 +65,9 @@ public class Card extends GameEntity implements Comparable<Card> {
 	}
 	
 	@Override
-	public void draw(GraphicsContext gc) {
-		draw(gc, Card.FRONT, 1);
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		this.image = visible ? FRONT : BACK;
 	}
 	
 	/**
@@ -79,23 +76,23 @@ public class Card extends GameEntity implements Comparable<Card> {
 	 * @param i An Image object to be drawn.
 	 * @param s The scaling factor.
 	 */
-	public void draw(GraphicsContext gc, Image i, double s) {
+	@Override
+	public void draw(GraphicsContext gc) {
 		//Clear
 		//gc.clearRect(x, y, i.getWidth() * s, i.getHeight() * s);
-		
-		//System.out.println("Drawing: " + this + " Coords: (" + x + "," + y + ")");
+		//System.out.println("Drawing: " + this + " Coordinates: (" + x + "," + y + ")");
 		
 		//Draw image base
-		gc.drawImage(i, x, y, i.getWidth() * s, i.getHeight() * s);
+		gc.drawImage(image, x, y, width * scale, height * scale);
 		
 		//Draw suit and value
-		if (i == Card.FRONT) {
-	        gc.setFont(new Font(40 * s));
+		if (visible) {
+	        gc.setFont(new Font(40 * scale));
 			gc.setFill(suit == Suit.Heart || suit == Suit.Diamonds ? 
 					Color.RED : 
 					Color.BLACK);
 			//Draw text With offsets
-	        gc.fillText("" + this, x + 5 * s, y + 35 * s);
+	        gc.fillText("" + this, x + 5 * scale, y + 35 * scale);
 		}
 	}
 	

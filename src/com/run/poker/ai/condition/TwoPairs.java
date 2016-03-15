@@ -1,10 +1,10 @@
-package com.run.poker.hand.condition;
+package com.run.poker.ai.condition;
 
 import java.util.Collections;
 import java.util.List;
 
-import com.run.poker.entity.Card;
-import com.run.poker.hand.Rank;
+import com.run.poker.card.Card;
+import com.run.poker.card.Rank;
 
 /**
  * Two Pairs Condition.
@@ -36,7 +36,7 @@ public class TwoPairs extends Condition {
 	public void finalise(List<Card> cards) {
 		//Sorts the values list so that the first 2 largest values 
 		//are retained for the two pairs condition.
-		showDown.sort();
+		showDown.reverseSort();
 		while (showDown.size() > 4) {
 			showDown.removeLast();
 		}

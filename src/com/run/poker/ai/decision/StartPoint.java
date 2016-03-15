@@ -4,8 +4,7 @@ public class StartPoint extends Decision {
 
 	@Override
 	public Decision process() {
-		controller.analyse();
-		int rank = controller.getCurrentRanking(entity);
+		int rank = this.table.getCurrentRanking(entity);
 		return rank == 1 ? new Winning() : new Losing();
 	}
 }

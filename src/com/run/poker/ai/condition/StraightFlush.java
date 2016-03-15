@@ -1,8 +1,8 @@
-package com.run.poker.hand.condition;
+package com.run.poker.ai.condition;
 
 import java.util.List;
 
-import com.run.poker.entity.Card;
+import com.run.poker.card.Card;
 
 public class StraightFlush extends Condition {
 

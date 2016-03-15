@@ -1,10 +1,22 @@
 package com.run.poker.entity.player;
 
-import com.run.poker.entity.Card;
-import com.run.poker.hand.HoldCards;
-import com.run.poker.hand.ShowDownCards;
+import java.util.Observable;
+import java.util.Observer;
 
+import com.run.poker.card.Card;
+import com.run.poker.card.HoldCards;
+import com.run.poker.card.ShowdownCards;
+import com.run.poker.entity.FreeEntityGroup;
+import com.run.poker.utils.GameUtils;
+
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 /**
  * <p> Base entity for player/enemy objects.
@@ -18,7 +30,34 @@ import javafx.scene.canvas.GraphicsContext;
  * @author RuN
  *
  */
-public abstract class PlayerEntity extends PlayerBaseEntity {
+public class PlayerEntity extends FreeEntityGroup 
+		implements Observer, Comparable<PlayerEntity> {
+	
+	/**
+	 * Player name binding
+	 */
+	protected StringProperty name;
+	
+	/**
+	 * Player title binding
+	 */
+	protected StringProperty title;
+	
+	/**
+	 * Player state
+	 */
+	protected State state;
+	
+	/**
+	 * Player gold
+	 */	
+	protected IntegerProperty money;
+	
+	/**
+	 * Player gold binding
+	 */
+	private StringBinding moneyBinding;
+	
 	
 	/**
 	 * Current hold cards.
@@ -28,12 +67,50 @@ public abstract class PlayerEntity extends PlayerBaseEntity {
 	/**
 	 * Final show down cards.
 	 */
-	protected ShowDownCards showDown;
+	private ShowdownCards showDown;
 	
 	public PlayerEntity() {
-		this.showDown = new ShowDownCards();
+		
+		this.name = new SimpleStringProperty("New Player");
+		this.title = new SimpleStringProperty("Beginner");
+		this.money = new SimpleIntegerProperty(1000);
+		this.moneyBinding = GameUtils.createBinding(money, "   $");
+		this.state = State.None;
+		
 		this.holdCards = new HoldCards();
-		this.holdCards.move(x, y);
+		this.showDown = new ShowdownCards();
+
+		add(holdCards);
+		
+		//TODO add show down cards to the GUI, 
+		//it currently only appears in console.
+		//this.attach(showDown);
+	}
+	
+	public void check() {
+		this.state = State.Checked;
+	}
+	
+	public void call(int amount) {
+		this.state = State.Called;
+		subtractMoney(amount);
+	}
+	
+	public void raise(int amount) {
+		this.state = State.Raising;
+		subtractMoney(amount);
+	}
+	
+	public void fold() {
+		this.state = State.Folded;
+	}
+	
+	public void allIn() {
+		raise(money.get());
+	}
+	
+	public void reset() {
+		this.state = State.None;
 	}
 	
 	/**
@@ -41,7 +118,7 @@ public abstract class PlayerEntity extends PlayerBaseEntity {
 	 * @param card A card.
 	 */
 	public void acquire(Card card) {
-		holdCards.add(card);
+		this.holdCards.add(card);
 	}
 	
 	/**
@@ -63,46 +140,89 @@ public abstract class PlayerEntity extends PlayerBaseEntity {
 		this.money.set(money.get() - amount);
 	}
 	
-	@Override
-	public void move(double x, double y) {
-		super.move(x, y);
-		this.holdCards.move(x, y);
+	public void clearHands() {
+		this.holdCards.clear();
+		this.showDown.clear();
+	}
+	
+	public StringProperty getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name.set(name);
+	}
+
+	public StringProperty getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title.set(title);
+	}
+	
+	public void setState(State state) {
+		this.state = state;
+	}
+	
+	public State getState() {
+		return state;
+	}
+	
+	public IntegerProperty getMoney() {
+		return money;
+	}
+	
+	public StringBinding getMoneyBinding() {
+		return moneyBinding;
 	}
 	
 	public HoldCards holdCards() {
 		return holdCards;
 	}
 	
-	public ShowDownCards showDownCards() {
-		return showDown;
-	}
-	
-	public void setShowDown(ShowDownCards showDown) {
+	public void setShowDown(ShowdownCards showDown) {
 		this.showDown = showDown;
 	}
 	
 	@Override
-	public void draw(GraphicsContext gc) {
-		super.draw(gc);
-        
-		//Draw Betting
-        
-		//Draw Cards
-		this.holdCards.draw(gc);
-	}
-	
-	@Override
 	public int compareTo(PlayerEntity that) {
-		return this.showDown.compareTo(showDown);
+		return this.showDown.compareTo(that.showDown);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		System.out.println(name.get() + ": " + arg);
+	}
+
+	@Override
+	public void draw(GraphicsContext gc) {
+        
+		//Set Fill
+		gc.setFill(Color.WHITE);
+		
+		//Draw Name
+        gc.setFont(new Font(25 * scale));
+        gc.fillText(name.get(), x, y - 25);
+        
+		//Draw Money
+        gc.setFont(new Font(18 * scale));
+        gc.fillText("$" + money.get(), x + 125  * scale, y - 25  * scale);
+        
+        //Draw Title
+        gc.setFont(new Font(18 * scale));
+        gc.fillText("The " + title.get(), x, y - 5);
+        
+        //Draw Status
+        
+        super.draw(gc);
 	}
 	
 	@Override
 	public String toString() {
-		String str = super.toString() + "\n" + 
-				"    " + "Hands: " + showDown.getRank() + " ";
-		for (Card card: showDown) {
-			str += card + ", ";
-		}
-		return str;
+		return name.get() + 
+				" The " + title.get() + 
+				" with $" + money.get() + 
+				"\n    " + showDown;
 	}
 }

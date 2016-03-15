@@ -2,7 +2,7 @@ package com.run.poker.ai.decision;
 
 import java.util.Stack;
 
-import com.run.poker.controller.GameController;
+import com.run.poker.entity.Table;
 import com.run.poker.entity.player.Enemy;
 
 /**
@@ -12,14 +12,20 @@ import com.run.poker.entity.player.Enemy;
  */
 public abstract class Decision {
 
-	private static Stack<Decision> backTrack;
-	protected static GameController controller;
+	/**
+	 * Stack for back tracing the decision tree.
+	 */
+	private static Stack<Decision> backTrace = new Stack<>();
+	
+	/**
+	 * Entity.
+	 */
 	protected Enemy entity;
 	
-	public Decision() {
-		Decision.controller = GameController.getInstance();
-		Decision.backTrack = new Stack<>();	
-	}
+	/**
+	 * Model.
+	 */
+	protected Table table;
 	
 	/**
 	 * Main method for the generating and routing of bot logical 
@@ -27,13 +33,13 @@ public abstract class Decision {
 	 * in a loop, provides back tracking feature.
 	 */
 	public void execute() {
-		backTrack.push(this);
-		Decision decision;
-		do {
-			decision = process();
+		backTrace.push(this);
+		Decision decision = process();
+		if (decision != null) {
+			decision.setTable(table);
 			decision.setEntity(entity);
-			decision = decision.process();
-		} while (decision != null);
+			decision.execute();
+		}
 	}
 	
 	/**
@@ -42,11 +48,15 @@ public abstract class Decision {
 	protected abstract Decision process();
 	
 	public static Stack<Decision> result() {
-		return backTrack;
+		return backTrace;
 	}
 	
 	public void setEntity(Enemy entity) {
 		this.entity = entity;
+	}
+	
+	public void setTable(Table table) {
+		this.table = table;
 	}
 	
 	@Override

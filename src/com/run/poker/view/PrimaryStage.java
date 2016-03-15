@@ -1,7 +1,8 @@
 package com.run.poker.view;
 
 import com.run.poker.Poker;
-import com.run.poker.entity.Card;
+import com.run.poker.card.Card;
+import com.run.poker.entity.Table;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -41,7 +42,11 @@ public class PrimaryStage extends Stage {
 		newButton.setPrefSize(150, 50);
 		newButton.setOnAction(event -> {
 			this.hide();
-			GameStage stage = new GameStage();
+			Table table = new Table();
+			GameStage stage = new GameStage(table);
+			table.setGameStage(stage);
+			table.createPlayer("Newb");
+			table.addBots(3);
 			stage.initOwner(this);
 			stage.show();
 		});
