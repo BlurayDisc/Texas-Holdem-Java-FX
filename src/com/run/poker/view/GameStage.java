@@ -4,8 +4,9 @@ import java.util.Optional;
 
 import com.run.poker.Poker;
 import com.run.poker.card.Card;
-import com.run.poker.entity.Dealer;
-import com.run.poker.entity.Table;
+import com.run.poker.entity.table.Table;
+import com.run.poker.view.task.DealTask;
+import com.run.poker.view.task.StageOne;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
@@ -75,10 +76,7 @@ public class GameStage extends Stage {
 		deal.getStyleClass().add("button1");
 		deal.setPrefSize(150, 50);
 		deal.setOnAction(event -> {
-			Dealer dealer = table.callDealer();
-			dealer.newDeck();
-			dealer.deal();
-			table.draw(gc);
+			new Thread(new DealTask(model, gc)).start();
 			//table.startBetting();
 		});
 		
@@ -86,11 +84,7 @@ public class GameStage extends Stage {
 		oneTwoThree.getStyleClass().add("button1");
 		oneTwoThree.setPrefSize(150, 50);
 		oneTwoThree.setOnAction(event -> {
-			Dealer dealer = table.callDealer();
-			dealer.stageOne();
-			dealer.stageTwo();
-			dealer.stageThree();
-			table.draw(gc);
+			new Thread(new StageOne(model, gc)).start();
 			//table.startBetting();
 		});
 		
@@ -226,7 +220,6 @@ public class GameStage extends Stage {
 			closeAndShowOwner();
 		});
 		this.setScene(game);
-		
 		table.draw(gc);
 	}
 	

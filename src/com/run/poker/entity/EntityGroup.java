@@ -28,11 +28,11 @@ public abstract class EntityGroup<E extends GameEntity> extends GameEntity {
 	/**
 	 * Adds a new entity to this object, the newly attached entity will 
 	 * inherit game 2d coordinates values from this object.
-	 * @param entity
+	 * @param e
 	 */
-	public boolean add(E e) {
-		update(e);
-		return this.list.add(e);
+	public void add(E e) {
+		list.add(e);
+		//update(e);
 	}
 
 	/**
@@ -40,7 +40,9 @@ public abstract class EntityGroup<E extends GameEntity> extends GameEntity {
 	 */
 	@Override
 	public void move(double x, double y) {
+		//Move
 		super.move(x, y);
+		//Notify attachments
 		for (E entity: list) {
 			entity.move(x, y);
 		}
@@ -124,14 +126,5 @@ public abstract class EntityGroup<E extends GameEntity> extends GameEntity {
 		for (E e: list) {
 			e.draw(gc);
 		}
-	}
-	
-	@Override
-	public String toString() {
-		String str = this.getClass().getSimpleName() + " Hands: ";
-		for (E e: list) {
-			str += e + ", ";
-		}
-		return str;
 	}
 }

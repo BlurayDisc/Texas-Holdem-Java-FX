@@ -2,8 +2,8 @@ package com.run.poker.ai.decision;
 
 import java.util.Stack;
 
-import com.run.poker.entity.Table;
 import com.run.poker.entity.player.Enemy;
+import com.run.poker.entity.table.Table;
 
 /**
  * 

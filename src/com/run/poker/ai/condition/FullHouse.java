@@ -19,10 +19,10 @@ public class FullHouse extends Condition {
 		for (Card card: cards) {
 			int frequency = Collections.frequency(cards, card);
 			if (frequency == THREE_OF_A_KIND_CONDITION) {
-				showDown.add(card);
+				tempList.add(card);
 				three = true;
 			} else if (frequency == TWO_OF_A_KIND_CONDITION) {
-				showDown.add(card);
+				tempList.add(card);
 				pair = true;
 			}
 		}
@@ -32,19 +32,19 @@ public class FullHouse extends Condition {
 	@Override
 	public void finalise(List<Card> cards) {
 		//Checks if the show down cards has 2 pairs.
-		if (showDown.size() > 5) {
+		if (tempList.size() > 5) {
 			//Sorts this collection from smallest -> largest.
-			showDown.sort();
-			Card first = showDown.getFirst();
-			int frequency = showDown.frequency(first);
+			tempList.sort(null);
+			Card first = tempList.getFirst();
+			int frequency = Collections.frequency(tempList, first);
 			if (frequency == TWO_OF_A_KIND_CONDITION) {
 				//remove first 2.
-				showDown.removeFirst();
-				showDown.removeFirst();
+				tempList.removeFirst();
+				tempList.removeFirst();
 			} else {
 				//remove 4th and 5th cards.
-				showDown.remove(3);
-				showDown.remove(4);
+				tempList.remove(3);
+				tempList.remove(4);
 			}
 		}
 	}

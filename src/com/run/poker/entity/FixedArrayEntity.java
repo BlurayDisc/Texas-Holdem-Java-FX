@@ -1,7 +1,10 @@
 package com.run.poker.entity;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import javafx.scene.canvas.GraphicsContext;
 
 /**
  * <p> Representing an array of GameEntity objects.
@@ -13,32 +16,35 @@ import java.util.List;
  * @param <E> the type of elements in this list
  * 
  */
-public abstract class FixedEntityGroup<E extends GameEntity> extends EntityGroup<E> {
+public abstract class FixedArrayEntity<E extends GameEntity> extends EntityGroup<E> {
 	
 	protected double gap;
 	
-	public FixedEntityGroup() {
+	public FixedArrayEntity() {
 		this.gap = 10.0;
 	}
 	
 	//*****************************
-	//* Game Entity Group Methods *
+	//* Fixed Array Entity Methods *
 	//*****************************
 	
 	/**
 	 * Adds a new entity to this object, the newly attached entity will 
 	 * inherit game 2d coordinates values from this object.
-	 * @param entity
+	 * @param e
 	 */
 	@Override
-	public boolean add(E e) {
+	public void add(E e) {
+		list.add(e);
 		update(e);
-		pushBack(e, list.size());
-		return this.list.add(e);
 	}
 	
 	public int frequency(GameEntity e) {
 		return Collections.frequency(list, e);
+	}
+	
+	public void addAll(Collection<? extends E> list) {
+		this.list.addAll(list);
 	}
 	
 	/**
@@ -46,7 +52,6 @@ public abstract class FixedEntityGroup<E extends GameEntity> extends EntityGroup
 	 */
 	public void sort() {
 		list.sort(null);
-		rearrange();
 	}
 	
 	/**
@@ -54,22 +59,10 @@ public abstract class FixedEntityGroup<E extends GameEntity> extends EntityGroup
 	 */
 	public void reverseSort() {
 		list.sort(Collections.reverseOrder());
-		rearrange();
 	}
 	
 	public List<E> list() {
 		return list;
-	}
-	
-	/**
-	 * Sorts and moves the objects based on their new positions in the 
-	 * array.
-	 */
-	private void rearrange() {
-		for (int i = 0; i < list.size(); i++) {
-			E e = list.get(i);
-			pushBack(e, i);
-		}
 	}
 	
 	/**
@@ -81,5 +74,27 @@ public abstract class FixedEntityGroup<E extends GameEntity> extends EntityGroup
 		double x = this.x + scale * n * (e.width + gap);
 		double y = this.y;
 		e.move(x, y);
+	}
+	
+	/**
+	 * Sorts and moves the objects based on their new positions in the 
+	 * array.
+	 */
+	@Override
+	public void draw(GraphicsContext gc) {
+		for (int i = 0; i < list.size(); i++) {
+			E e = list.get(i);
+			pushBack(e, i);
+			e.draw(gc);
+		}
+	}
+	
+	@Override
+	public String toString() {
+		String str = this.getClass().getSimpleName() + " Hands: ";
+		for (E e: list) {
+			str += e + ", ";
+		}
+		return str;
 	}
 }

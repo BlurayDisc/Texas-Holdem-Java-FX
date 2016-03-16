@@ -45,7 +45,7 @@ public class Straight extends Condition {
 	public void finalise(List<Card> cards) {
 		int index = cards.indexOf(card);
 		for (int i = index; i < index + 5; i++) {
-			showDown.add(cards.get(i));
+			tempList.add(cards.get(i));
 		}
 	}
 }

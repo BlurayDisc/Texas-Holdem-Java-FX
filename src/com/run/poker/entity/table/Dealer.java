@@ -1,7 +1,8 @@
-package com.run.poker.entity;
+package com.run.poker.entity.table;
 
 import com.run.poker.card.CommunityCards;
 import com.run.poker.card.HoldCards;
+import com.run.poker.entity.GameEntity;
 import com.run.poker.entity.player.PlayerEntity;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -39,22 +40,29 @@ public class Dealer extends GameEntity {
 	//*  Play of the hand  *
 	//**********************
 	
+	public void clearHands() {
+		for (PlayerEntity entity: table.playerList()) {
+			entity.clearHands();
+		}
+	}
+	
 	/**
-	 * <p> Fills the player's hand with 2 random cards.
-	 * <p> Deal 2 number of cards for every player in this table.
-	 * Re-arranges hold cards in each player's hand. This is used for visual effects 
-	 * and has no impact on game logics.
+	 * <p> Fills each of the player's hand with 1 card.
+	 * <p> Deal 1 card for every player in this table.
 	 */
 	public void deal() {
 		Deck deck = table.deck();
 		for (PlayerEntity entity: table.playerList()) {
-			entity.clearHands();
+			entity.acquire(deck.removeFirst());
 		}
-		for (int i = 0; i < 2; i++) {
-			for (PlayerEntity entity: table.playerList()) {
-				entity.acquire(deck.removeFirst());
-			}
-		}
+	}
+	
+	/**
+	 * Re-arranges hold cards in each player's hand. 
+	 * <p> This is used for visual effects and has no impact 
+	 * on game logics.
+	 */
+	public void sortHoldCards() {
 		for (PlayerEntity entity: table.playerList()) {
 			HoldCards holdCards = entity.holdCards();
 			holdCards.reverseSort();
@@ -65,16 +73,18 @@ public class Dealer extends GameEntity {
 	//*  The show down  *
 	//*******************
 	
-	/**
-	 * The flop.
-	 */
-	public void stageOne() {
+	public void clearCommunityCards() {
 		CommunityCards cc = table.communityCards();
 		cc.clear();
+	}
+	
+	/**
+	 * Draws one card to the community card stack.
+	 */
+	public void draw() {
+		CommunityCards cc = table.communityCards();
 		Deck deck = table.deck();
-		for (int i = 0; i < 3; i++) {
-			cc.add(deck.removeFirst());
-		}
+		cc.add(deck.removeFirst());
 	}
 	
 	/**

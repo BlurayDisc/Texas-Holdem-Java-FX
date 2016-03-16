@@ -19,10 +19,10 @@ public class HighCard extends Condition {
 	@Override
 	public void finalise(List<Card> cards) {
 		for (Card card: cards) {
-			if (showDown.size() == 5) {
+			if (tempList.size() == 5) {
 				break;
 			}
-			showDown.add(card);
+			tempList.add(card);
 		}
 	}
 }

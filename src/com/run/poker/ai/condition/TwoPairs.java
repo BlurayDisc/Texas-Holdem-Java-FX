@@ -26,27 +26,27 @@ public class TwoPairs extends Condition {
 			int frequency = Collections.frequency(cards, card);
 			if (frequency == TWO_OF_A_KIND_CONDITION) {
 				//Continue adding values as 7 cards may form 3 pairs.
-				showDown.add(card);
+				tempList.add(card);
 			}
 		}
-		return showDown.size() >= TWO_OF_A_KIND_CONDITION * 2;
+		return tempList.size() >= TWO_OF_A_KIND_CONDITION * 2;
 	}
 
 	@Override
 	public void finalise(List<Card> cards) {
 		//Sorts the values list so that the first 2 largest values 
 		//are retained for the two pairs condition.
-		showDown.reverseSort();
-		while (showDown.size() > 4) {
-			showDown.removeLast();
+		tempList.sort(Collections.reverseOrder());
+		while (tempList.size() > 4) {
+			tempList.removeLast();
 		}
 		for (Card card: cards) {
 			//Fill in the last 1 missing card.
-			if (showDown.size() == 5) {
+			if (tempList.size() == 5) {
 				break;
 			} 
-			if (!showDown.contains(card)) {
-				showDown.add(card);
+			if (!tempList.contains(card)) {
+				tempList.add(card);
 			}
 		}
 	}

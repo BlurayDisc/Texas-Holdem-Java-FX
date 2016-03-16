@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.run.poker.card.Card;
 import com.run.poker.card.Suit;
-import com.run.poker.entity.FixedEntityGroup;
+import com.run.poker.entity.FixedArrayEntity;
 import com.run.poker.entity.GameEntity;
 import com.run.poker.entity.player.Names;
 import com.run.poker.entity.player.Title;
@@ -77,10 +77,15 @@ public class GameUtils {
 		return constants[(int) Math.round(Math.random() * (constants.length - 1))];
 	}
 
+	/**
+	 * Produces a new list of E objects.
+	 * @param groups
+	 * @return
+	 */
 	@SafeVarargs
-	public static <E extends GameEntity> List<E> join(FixedEntityGroup<E>... groups) {
+	public static <E extends GameEntity> List<E> join(FixedArrayEntity<E>... groups) {
 		List<E> result = new ArrayList<>();
-		for (FixedEntityGroup<E> group: groups) {
+		for (FixedArrayEntity<E> group: groups) {
 			result.addAll(group.list());
 		}
 		return result;

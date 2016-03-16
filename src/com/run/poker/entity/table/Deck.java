@@ -1,10 +1,11 @@
-package com.run.poker.entity;
+package com.run.poker.entity.table;
 
 import java.util.Collections;
 import java.util.LinkedList;
 
 import com.run.poker.card.Card;
 import com.run.poker.card.Suit;
+import com.run.poker.entity.GameEntity;
 
 import javafx.scene.canvas.GraphicsContext;
 

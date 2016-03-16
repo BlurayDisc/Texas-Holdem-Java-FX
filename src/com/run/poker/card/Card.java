@@ -33,6 +33,11 @@ public class Card extends GameEntity implements Comparable<Card> {
 		this.width = image.getWidth();
 		this.height = image.getHeight();
 	}
+	
+	public Card(Card card) {
+		this.suit = card.suit;
+		this.value = card.value;
+	}
 
 	public Suit getSuit() {
 		return suit;
@@ -64,12 +69,6 @@ public class Card extends GameEntity implements Comparable<Card> {
 		}
 	}
 	
-	@Override
-	public void setVisible(boolean visible) {
-		super.setVisible(visible);
-		this.image = visible ? FRONT : BACK;
-	}
-	
 	/**
 	 * Draws the front or the back of the card with a chosen scaling.
 	 * @param gc The Graphics Context from the Canvas object.
@@ -83,6 +82,7 @@ public class Card extends GameEntity implements Comparable<Card> {
 		//System.out.println("Drawing: " + this + " Coordinates: (" + x + "," + y + ")");
 		
 		//Draw image base
+		this.image = visible ? FRONT : BACK;
 		gc.drawImage(image, x, y, width * scale, height * scale);
 		
 		//Draw suit and value

@@ -45,7 +45,7 @@ public class Flush extends Condition {
 		int counter = 0;
 		for (Card card: cards) {
 			if (card.getSuit() == suit) {
-				showDown.add(card);
+				tempList.add(card);
 				counter++;
 				if (counter >= 5) {
 					break;

@@ -1,4 +1,4 @@
-package com.run.poker.entity;
+package com.run.poker.entity.table;
 
 import java.util.LinkedList;
 
@@ -6,6 +6,7 @@ import com.run.poker.ai.AIManager;
 import com.run.poker.ai.Analyser;
 import com.run.poker.card.CommunityCards;
 import com.run.poker.chips.ChipsManager;
+import com.run.poker.entity.ArrayEntity;
 import com.run.poker.entity.player.Enemy;
 import com.run.poker.entity.player.Player;
 import com.run.poker.entity.player.PlayerEntity;
@@ -28,7 +29,7 @@ import javafx.scene.canvas.GraphicsContext;
  * @author RuN
  *
  */
-public class Table extends FreeEntityGroup {
+public class Table extends ArrayEntity {
 
 	private LinkedList<PlayerEntity> playerList;
 	private Player player;
@@ -50,6 +51,8 @@ public class Table extends FreeEntityGroup {
 		this.smallIndex = bigIndex + 1;
 		this.playerList = new LinkedList<>();
 		this.communityCards = new CommunityCards();
+		this.communityCards.move(150, 10);
+		this.communityCards.setScale(0.75);
 		this.dealer = new Dealer(this);
 		this.manager = new ChipsManager();
 		this.deck = null;
@@ -58,9 +61,6 @@ public class Table extends FreeEntityGroup {
 
 		add(communityCards);
 		add(dealer);
-		
-		this.communityCards.move(150, 15);
-		this.communityCards.setScale(0.75);
 	}
 	
 	/**
@@ -69,8 +69,8 @@ public class Table extends FreeEntityGroup {
 	 */
 	public void createPlayer(String name) {
 		this.player = new Player(name);
-		sitDown(player);
 		gs.bindPlayerProperties();
+		sitDown(player);
 	}
 	
 	/**
@@ -116,6 +116,29 @@ public class Table extends FreeEntityGroup {
 		GameUtils.inc(smallIndex, max);
 		
 		playerList.offer(playerList.poll());
+	}
+	
+	private static final double[][] POS = new double[][] {
+		{20, 250}, 
+		{300, 180}, 
+		{575, 250}
+	};
+	
+	/**
+	 * Sits down every players to the table.
+	 * <p> This method must be called after all players 
+	 * have been added to the table.
+	 */
+	private void sitDown(PlayerEntity entity) {
+		add(entity);
+		if (entity instanceof Player) {
+			entity.move(275, 425);
+		} else if (entity instanceof Enemy) {
+			Enemy enemy = (Enemy) entity;
+			int n = playerList.size() - 1;
+			enemy.move(POS[n][0], POS[n][1]);
+		}
+		playerList.add(entity);
 	}
 	
 	//*********************
@@ -181,34 +204,8 @@ public class Table extends FreeEntityGroup {
 	 * 
 	 * @return
 	 */
-	Deck deck() {
+	public Deck deck() {
 		return deck;
-	}
-	
-	private static final double[][] POS = new double[][] {
-		{20, 250}, 
-		{300, 175}, 
-		{575, 250}
-	};
-	
-	/**
-	 * Sits down every players to the table.
-	 * <p> This method must be called after all players 
-	 * have been added to the table.
-	 */
-	private void sitDown(PlayerEntity entity) {
-//		System.out.println("Player in table: " + playerList.size());
-//		System.out.println("Sitting down " + entity.getName().get() + " to table");
-		if (entity instanceof Player) {
-			entity.move(275, 425);
-		} else if (entity instanceof Enemy) {
-			Enemy enemy = (Enemy) entity;
-			int n = playerList.size() - 1;
-			enemy.move(POS[n][0], POS[n][1]);
-		}
-		add(entity);
-		playerList.add(entity);
-//		System.out.println(entity.getName().get() + " " + entity.x + " " + entity.y); 
 	}
 	
 	/**

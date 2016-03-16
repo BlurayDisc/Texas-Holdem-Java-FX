@@ -14,9 +14,8 @@ import com.run.poker.ai.condition.Straight;
 import com.run.poker.ai.condition.ThreeOfaKind;
 import com.run.poker.ai.condition.TwoPairs;
 import com.run.poker.card.Card;
-import com.run.poker.card.ShowdownCards;
-import com.run.poker.entity.Table;
 import com.run.poker.entity.player.PlayerEntity;
+import com.run.poker.entity.table.Table;
 import com.run.poker.utils.GameUtils;
 
 /**
@@ -65,7 +64,7 @@ public class Analyser {
 			//Sort cards by it's natural ordering.
 			Collections.sort(cards, Collections.reverseOrder());
 			
-			//Analyze of hands and produces show down cards for 
+			//Analyze of hands and produces showdown cards for 
 			//each player.
 			analyse(entity, cards);
 		}
@@ -84,8 +83,8 @@ public class Analyser {
 				if (finalise) {
 					condition.finalise(hand);
 				}
-				ShowdownCards showdown = condition.result();
-				entity.setShowDown(showdown);
+				entity.showDown().setRank(condition.result());
+				entity.showDown().addAll(condition.cards());
 				break;
 			}
 		}

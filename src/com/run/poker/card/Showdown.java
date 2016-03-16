@@ -1,6 +1,8 @@
 package com.run.poker.card;
 
-import com.run.poker.entity.FixedEntityGroup;
+import com.run.poker.entity.FixedArrayEntity;
+
+import javafx.scene.canvas.GraphicsContext;
 
 /**
  * <p> The best five card poker hand is obtained by using the necessary 
@@ -21,8 +23,7 @@ import com.run.poker.entity.FixedEntityGroup;
  * @author RuN
  * @see https://en.wikipedia.org/wiki/List_of_poker_hands
  */
-public class ShowdownCards extends FixedEntityGroup<Card> 
-		implements Comparable<ShowdownCards> {
+public class Showdown extends FixedArrayEntity<Card> implements Comparable<Showdown> {
 	
 	/**
 	 * Initial rank.
@@ -38,7 +39,7 @@ public class ShowdownCards extends FixedEntityGroup<Card>
 	}
 	
 	@Override
-	public int compareTo(ShowdownCards that) {
+	public int compareTo(Showdown that) {
 		int result = this.rank.order - that.rank.order;
 		if (result == 0) {
 			switch (rank) {
@@ -59,6 +60,10 @@ public class ShowdownCards extends FixedEntityGroup<Card>
 			}
 		}
 		return result > 0 ? 1 : -1;
+	}
+	
+	public void draw(GraphicsContext gc) {
+		
 	}
 
 	@Override

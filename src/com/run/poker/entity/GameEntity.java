@@ -77,4 +77,11 @@ public abstract class GameEntity {
 	 * @param gc The GC of an initialized Canvas.
 	 */
 	public abstract void draw(GraphicsContext gc);
+	
+	@Override
+	public String toString() {
+		return "(" + x + ", " + y + ")" + 
+				" h:" + height + " w:" + width + 
+				" scale: " + scale + "visible: " + visible;
+	}
 }

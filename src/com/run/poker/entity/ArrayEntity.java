@@ -5,6 +5,6 @@ package com.run.poker.entity;
  * @author RuN
  *
  */
-public class FreeEntityGroup extends EntityGroup<GameEntity> {
+public class ArrayEntity extends EntityGroup<GameEntity> {
 
 }

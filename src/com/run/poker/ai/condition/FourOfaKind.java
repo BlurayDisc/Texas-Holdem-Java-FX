@@ -18,7 +18,7 @@ public class FourOfaKind extends Condition {
 		for (Card card: cards) {
 			int frequency = Collections.frequency(cards, card);
 			if (frequency == FOUR_OF_A_KIND_CONDITION) {
-				showDown.add(card);
+				tempList.add(card);
 				fourOfaKind = true;
 			}
 		}
@@ -28,11 +28,11 @@ public class FourOfaKind extends Condition {
 	@Override
 	public void finalise(List<Card> cards) {
 		for (Card card: cards) {
-			if (showDown.size() == 5) {
+			if (tempList.size() == 5) {
 				break;
 			}
-			if (!showDown.contains(card)) {
-				showDown.add(card);
+			if (!tempList.contains(card)) {
+				tempList.add(card);
 			}
 		}
 	}

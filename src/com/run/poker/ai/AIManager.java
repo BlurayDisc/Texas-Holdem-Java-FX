@@ -2,8 +2,8 @@ package com.run.poker.ai;
 
 import com.run.poker.ai.decision.Decision;
 import com.run.poker.ai.decision.StartPoint;
-import com.run.poker.entity.Table;
 import com.run.poker.entity.player.Enemy;
+import com.run.poker.entity.table.Table;
 
 /**
  * AI Manager contains a back trace queue which holds on to a 

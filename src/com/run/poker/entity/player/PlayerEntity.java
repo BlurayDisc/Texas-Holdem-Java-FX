@@ -5,8 +5,8 @@ import java.util.Observer;
 
 import com.run.poker.card.Card;
 import com.run.poker.card.HoldCards;
-import com.run.poker.card.ShowdownCards;
-import com.run.poker.entity.FreeEntityGroup;
+import com.run.poker.card.Showdown;
+import com.run.poker.entity.ArrayEntity;
 import com.run.poker.utils.GameUtils;
 
 import javafx.beans.binding.StringBinding;
@@ -30,7 +30,7 @@ import javafx.scene.text.Font;
  * @author RuN
  *
  */
-public class PlayerEntity extends FreeEntityGroup 
+public class PlayerEntity extends ArrayEntity 
 		implements Observer, Comparable<PlayerEntity> {
 	
 	/**
@@ -67,7 +67,7 @@ public class PlayerEntity extends FreeEntityGroup
 	/**
 	 * Final show down cards.
 	 */
-	private ShowdownCards showDown;
+	private Showdown showDown;
 	
 	public PlayerEntity() {
 		
@@ -78,13 +78,13 @@ public class PlayerEntity extends FreeEntityGroup
 		this.state = State.None;
 		
 		this.holdCards = new HoldCards();
-		this.showDown = new ShowdownCards();
+		this.showDown = new Showdown();
 
 		add(holdCards);
+		add(showDown);
 		
 		//TODO add show down cards to the GUI, 
 		//it currently only appears in console.
-		//this.attach(showDown);
 	}
 	
 	public void check() {
@@ -177,12 +177,12 @@ public class PlayerEntity extends FreeEntityGroup
 		return moneyBinding;
 	}
 	
-	public HoldCards holdCards() {
-		return holdCards;
+	public Showdown showDown() {
+		return showDown;
 	}
 	
-	public void setShowDown(ShowdownCards showDown) {
-		this.showDown = showDown;
+	public HoldCards holdCards() {
+		return holdCards;
 	}
 	
 	@Override

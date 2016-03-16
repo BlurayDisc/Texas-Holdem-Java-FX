@@ -1,6 +1,6 @@
 package com.run.poker.card;
 
-import com.run.poker.entity.FixedEntityGroup;
+import com.run.poker.entity.FixedArrayEntity;
 
 /**
  * Consists of 2 cards being dealt facing down.
@@ -9,6 +9,6 @@ import com.run.poker.entity.FixedEntityGroup;
  * 
  * @author RuN
  */
-public class HoldCards extends FixedEntityGroup<Card> {
+public class HoldCards extends FixedArrayEntity<Card> {
 	
 }
