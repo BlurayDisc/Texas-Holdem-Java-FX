@@ -3,20 +3,18 @@ package com.run.poker.entity.player;
 import java.util.Observable;
 import java.util.Observer;
 
-import com.run.poker.card.Card;
-import com.run.poker.card.HoldCards;
-import com.run.poker.card.Showdown;
-import com.run.poker.entity.ArrayEntity;
+import com.run.poker.entity.card.CardList;
+import com.run.poker.entity.card.Showdown;
 import com.run.poker.utils.GameUtils;
 
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 /**
  * <p> Base entity for player/enemy objects.
@@ -30,7 +28,7 @@ import javafx.scene.text.Font;
  * @author RuN
  *
  */
-public class PlayerEntity extends ArrayEntity 
+public class PlayerEntity extends Pane
 		implements Observer, Comparable<PlayerEntity> {
 	
 	/**
@@ -54,15 +52,11 @@ public class PlayerEntity extends ArrayEntity
 	protected IntegerProperty money;
 	
 	/**
-	 * Player gold binding
+	 * Consists of 2 cards being dealt facing down.
+	 * <p> The best five card poker hand is obtained by using the necessary 
+	 * cards from the community and/or a particular player's hold cards.
 	 */
-	private StringBinding moneyBinding;
-	
-	
-	/**
-	 * Current hold cards.
-	 */
-	protected HoldCards holdCards;
+	protected CardList holdCards;
 	
 	/**
 	 * Final show down cards.
@@ -74,17 +68,37 @@ public class PlayerEntity extends ArrayEntity
 		this.name = new SimpleStringProperty("New Player");
 		this.title = new SimpleStringProperty("Beginner");
 		this.money = new SimpleIntegerProperty(1000);
-		this.moneyBinding = GameUtils.createBinding(money, "   $");
 		this.state = State.None;
 		
-		this.holdCards = new HoldCards();
-		this.showDown = new Showdown();
-
-		add(holdCards);
-		add(showDown);
+		//Draw Name
+		Text name = new Text();
+		name.textProperty().bind(this.name);
+		name.setFont(new Font(18));
+		name.setFill(Color.WHITE);
+		name.relocate(0, 0);
+        
+		//Draw Money
+		Text money = new Text();
+		money.textProperty().bind(GameUtils.createBinding(this.money));
+		money.setFont(new Font(14));
+		money.setFill(Color.WHITE);
+		money.relocate(100, 0);
+        
+        //Draw Title
+		Text title = new Text();
+		title.textProperty().bind(this.title);
+		title.setFont(new Font(14));
+		title.setFill(Color.WHITE);
+		title.relocate(0, 25);
 		
-		//TODO add show down cards to the GUI, 
-		//it currently only appears in console.
+		//Hold Cards
+		holdCards = new CardList();
+		holdCards.relocate(0, 45);
+		
+		//TODO add show down cards to the GUI, it currently only appears in console.
+		showDown = new Showdown();
+		
+		getChildren().addAll(name, money, title, holdCards);
 	}
 	
 	public void check() {
@@ -111,14 +125,6 @@ public class PlayerEntity extends ArrayEntity
 	
 	public void reset() {
 		this.state = State.None;
-	}
-	
-	/**
-	 * Acquires one card.
-	 * @param card A card.
-	 */
-	public void acquire(Card card) {
-		this.holdCards.add(card);
 	}
 	
 	/**
@@ -173,15 +179,11 @@ public class PlayerEntity extends ArrayEntity
 		return money;
 	}
 	
-	public StringBinding getMoneyBinding() {
-		return moneyBinding;
-	}
-	
 	public Showdown showDown() {
 		return showDown;
 	}
 	
-	public HoldCards holdCards() {
+	public CardList holdCards() {
 		return holdCards;
 	}
 	
@@ -193,29 +195,6 @@ public class PlayerEntity extends ArrayEntity
 	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println(name.get() + ": " + arg);
-	}
-
-	@Override
-	public void draw(GraphicsContext gc) {
-        
-		//Set Fill
-		gc.setFill(Color.WHITE);
-		
-		//Draw Name
-        gc.setFont(new Font(25 * scale));
-        gc.fillText(name.get(), x, y - 25);
-        
-		//Draw Money
-        gc.setFont(new Font(18 * scale));
-        gc.fillText("$" + money.get(), x + 125  * scale, y - 25  * scale);
-        
-        //Draw Title
-        gc.setFont(new Font(18 * scale));
-        gc.fillText("The " + title.get(), x, y - 5);
-        
-        //Draw Status
-        
-        super.draw(gc);
 	}
 	
 	@Override

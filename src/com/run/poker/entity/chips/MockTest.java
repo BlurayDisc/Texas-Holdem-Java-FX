@@ -1,4 +1,4 @@
-package com.run.poker.chips;
+package com.run.poker.entity.chips;
 
 import com.run.poker.entity.player.Player;
 

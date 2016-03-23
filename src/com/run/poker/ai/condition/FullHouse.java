@@ -1,10 +1,10 @@
 package com.run.poker.ai.condition;
 
-import java.util.Collections;
 import java.util.List;
 
-import com.run.poker.card.Card;
-import com.run.poker.card.Rank;
+import com.run.poker.entity.card.Card;
+import com.run.poker.entity.card.Rank;
+import com.run.poker.utils.GameUtils;
 
 public class FullHouse extends Condition {
 	
@@ -17,7 +17,7 @@ public class FullHouse extends Condition {
 		boolean three = false;
 		boolean pair = false;
 		for (Card card: cards) {
-			int frequency = Collections.frequency(cards, card);
+			int frequency = GameUtils.frequency(cards, card);
 			if (frequency == THREE_OF_A_KIND_CONDITION) {
 				tempList.add(card);
 				three = true;
@@ -36,7 +36,7 @@ public class FullHouse extends Condition {
 			//Sorts this collection from smallest -> largest.
 			tempList.sort(null);
 			Card first = tempList.getFirst();
-			int frequency = Collections.frequency(tempList, first);
+			int frequency = GameUtils.frequency(tempList, first);
 			if (frequency == TWO_OF_A_KIND_CONDITION) {
 				//remove first 2.
 				tempList.removeFirst();

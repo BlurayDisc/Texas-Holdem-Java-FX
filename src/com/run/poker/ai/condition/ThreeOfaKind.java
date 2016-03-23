@@ -1,10 +1,10 @@
 package com.run.poker.ai.condition;
 
-import java.util.Collections;
 import java.util.List;
 
-import com.run.poker.card.Card;
-import com.run.poker.card.Rank;
+import com.run.poker.entity.card.Card;
+import com.run.poker.entity.card.Rank;
+import com.run.poker.utils.GameUtils;
 
 public class ThreeOfaKind extends Condition {
 	
@@ -15,7 +15,7 @@ public class ThreeOfaKind extends Condition {
 	@Override
 	public boolean check(List<Card> cards) {
 		for (Card card: cards) {
-			int frequency = Collections.frequency(cards, card);
+			int frequency = GameUtils.frequency(cards, card);
 			if (frequency >= THREE_OF_A_KIND_CONDITION) {
 				//Continue adding values as 7 cards may form two 3s.
 				tempList.add(card);

@@ -7,9 +7,9 @@ package com.run.poker.entity.player;
  */
 public class Player extends PlayerEntity {
 	
-	public Player(String name) {
-		this.name.set(name);
-		this.title.set("Beginner");
-		this.money.set(1000);
+	public Player(String newName) {
+		name.set(newName);
+		title.set("Beginner");
+		money.set(1000);
 	}
 }

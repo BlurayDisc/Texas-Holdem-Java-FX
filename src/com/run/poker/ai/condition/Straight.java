@@ -2,8 +2,8 @@ package com.run.poker.ai.condition;
 
 import java.util.List;
 
-import com.run.poker.card.Card;
-import com.run.poker.card.Rank;
+import com.run.poker.entity.card.Card;
+import com.run.poker.entity.card.Rank;
 
 /**
  * <p> Similar to flush comparison, instead of using the suit 
@@ -29,9 +29,8 @@ public class Straight extends Condition {
 		Card previous = null;
 		for (Card current: cards) {
 			if (previous != null) {
-				int p = previous.getValue();
-				int c = current.getValue();
-				consecutives = (p == c + 1) ? consecutives + 1 : 0;
+				consecutives = previous.value == current.value + 1 ? 
+							   consecutives + 1 : 0;
 				if (consecutives == 1) {
 					card = previous;
 				}

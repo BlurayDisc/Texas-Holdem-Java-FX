@@ -3,8 +3,9 @@ package com.run.poker.ai.condition;
 import java.util.Collections;
 import java.util.List;
 
-import com.run.poker.card.Card;
-import com.run.poker.card.Rank;
+import com.run.poker.entity.card.Card;
+import com.run.poker.entity.card.Rank;
+import com.run.poker.utils.GameUtils;
 
 /**
  * Two Pairs Condition.
@@ -23,7 +24,7 @@ public class TwoPairs extends Condition {
 	@Override
 	public boolean check(List<Card> cards) {
 		for (Card card: cards) {
-			int frequency = Collections.frequency(cards, card);
+			int frequency = GameUtils.frequency(cards, card);
 			if (frequency == TWO_OF_A_KIND_CONDITION) {
 				//Continue adding values as 7 cards may form 3 pairs.
 				tempList.add(card);

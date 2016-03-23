@@ -1,17 +1,19 @@
 package com.run.poker.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
-import com.run.poker.card.Card;
-import com.run.poker.card.Suit;
-import com.run.poker.entity.FixedArrayEntity;
-import com.run.poker.entity.GameEntity;
+import com.run.poker.entity.card.Card;
+import com.run.poker.entity.card.CardList;
+import com.run.poker.entity.card.Suit;
 import com.run.poker.entity.player.Names;
 import com.run.poker.entity.player.Title;
 
 import javafx.beans.binding.StringBinding;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Node;
 
 /**
  * Utility class that manages common functions to the Card Entity, 
@@ -30,7 +32,7 @@ public class GameUtils {
     }
 	
 	public static String randomName() {
-		return random(Names.list(), true).toString();
+		return random(Names.list, true).toString();
 	}
 	
 	public static String randomTitle() {
@@ -79,27 +81,51 @@ public class GameUtils {
 
 	/**
 	 * Produces a new list of E objects.
-	 * @param groups
+	 * @param lists
 	 * @return
 	 */
 	@SafeVarargs
-	public static <E extends GameEntity> List<E> join(FixedArrayEntity<E>... groups) {
-		List<E> result = new ArrayList<>();
-		for (FixedArrayEntity<E> group: groups) {
-			result.addAll(group.list());
+	public static List<Card> join(CardList... lists) {
+		List<Card> result = new ArrayList<>();
+		for (CardList list: lists) {
+			Iterator<Node> it = list.getChildren().iterator();
+			while (it.hasNext()) {
+				Node node = it.next();
+				if (node instanceof Card) {
+					result.add((Card) node);
+				}
+			}
 		}
 		return result;
 		
 	}
 	
-	public static StringBinding createBinding(ObservableValue<?> money, String suffix) {
+    /**
+     * Returns the number of cards in the specified collection equal to the
+     * value of the specified card.  More formally, returns the number of elements
+     * <tt>e</tt> in the collection such that
+     * <tt>(o == null ? e == null : card.getValue() == e.getValue())</tt>.
+     *
+     * @param c the collection in which to determine the frequency
+     *     of <tt>card</tt>
+     * @param card the card whose frequency is to be determined
+     * @return the number of elements in {@code c} with values equal to the value of 
+     * {@code card}
+     */
+    public static int frequency(Collection<Card> c, Card card) {
+        int result = 0;
+        for (Card e : c)
+            if (card.value == e.value)
+                result++;
+        return result;
+    }
+	
+	public static StringBinding createBinding(ObservableValue<?> money) {
 		return new StringBinding() {
-	        {
-	            bind(money);
-	        }
+	        {bind(money);}
 			@Override
 			protected String computeValue() {
-				return suffix + money.getValue();
+				return "$" + money.getValue();
 			}
 		};
 	}

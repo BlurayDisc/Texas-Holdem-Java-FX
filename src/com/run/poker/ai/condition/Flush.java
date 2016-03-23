@@ -2,9 +2,9 @@ package com.run.poker.ai.condition;
 
 import java.util.List;
 
-import com.run.poker.card.Card;
-import com.run.poker.card.Rank;
-import com.run.poker.card.Suit;
+import com.run.poker.entity.card.Card;
+import com.run.poker.entity.card.Rank;
+import com.run.poker.entity.card.Suit;
 
 /**
  * Iterates through the list of cards in the current hand.
@@ -26,8 +26,7 @@ public class Flush extends Condition {
 	public boolean check(List<Card> cards) {
 		int counter[] = new int[4];
 		for (Card card: cards) {
-			Suit suit = card.getSuit();
-			counter[suit.ordinal()]++;
+			counter[card.suit.ordinal()]++;
 		}
 		boolean flush = false;
 		for (int i = 0; i < counter.length; i ++) {
@@ -44,7 +43,7 @@ public class Flush extends Condition {
 	public void finalise(List<Card> cards) {
 		int counter = 0;
 		for (Card card: cards) {
-			if (card.getSuit() == suit) {
+			if (card.suit == suit) {
 				tempList.add(card);
 				counter++;
 				if (counter >= 5) {

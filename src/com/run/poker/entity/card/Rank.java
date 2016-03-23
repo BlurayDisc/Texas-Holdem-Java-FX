@@ -1,4 +1,4 @@
-package com.run.poker.card;
+package com.run.poker.entity.card;
 
 
 /**
@@ -15,7 +15,7 @@ public enum Rank {
 	OnePair(2),
 	HighCard(1);
 
-	int order;
+	public int order;
 	 
 	private Rank(int order) {
 		this.order = order;

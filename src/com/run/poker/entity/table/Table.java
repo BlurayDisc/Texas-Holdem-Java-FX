@@ -4,17 +4,20 @@ import java.util.LinkedList;
 
 import com.run.poker.ai.AIManager;
 import com.run.poker.ai.Analyser;
-import com.run.poker.card.CommunityCards;
-import com.run.poker.chips.ChipsManager;
-import com.run.poker.entity.ArrayEntity;
+import com.run.poker.entity.card.CardList;
+import com.run.poker.entity.card.Deck;
+import com.run.poker.entity.chips.ChipsManager;
 import com.run.poker.entity.player.Enemy;
 import com.run.poker.entity.player.Player;
 import com.run.poker.entity.player.PlayerEntity;
 import com.run.poker.utils.GameUtils;
 import com.run.poker.view.GameStage;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 /**
  * <p> Main Model.
@@ -29,7 +32,7 @@ import javafx.scene.canvas.GraphicsContext;
  * @author RuN
  *
  */
-public class Table extends ArrayEntity {
+public class Table extends Pane {
 
 	private LinkedList<PlayerEntity> playerList;
 	private Player player;
@@ -37,7 +40,10 @@ public class Table extends ArrayEntity {
 	private Dealer dealer;
 	private Deck deck;
 	
-	private CommunityCards communityCards;
+	/**
+	 * Consists of 5 cards being dealt facing up.
+	 */
+	private CardList communityCards;
 	
 	private ChipsManager manager;
 	
@@ -46,21 +52,48 @@ public class Table extends ArrayEntity {
 	private int bigIndex;
 	private int smallIndex;
 	
+	/**
+	 * Draws the game entity object on the canvas. 
+	 * <p> This method repaints the entire canvas.
+	 * 
+	 * @TODO Implement optimization which only repaints 
+	 * each game entity by itself.
+	 * @param gc
+	 */
 	public Table() {
+		
+		//Components
 		this.bigIndex = 0;
 		this.smallIndex = bigIndex + 1;
 		this.playerList = new LinkedList<>();
-		this.communityCards = new CommunityCards();
-		this.communityCards.move(150, 10);
-		this.communityCards.setScale(0.75);
 		this.dealer = new Dealer(this);
 		this.manager = new ChipsManager();
-		this.deck = null;
 		this.player = null;
 		this.gs = null;
-
-		add(communityCards);
-		add(dealer);
+		
+		//Draw Table		
+		Rectangle edge = new Rectangle(800, 600);
+		edge.setStroke(Color.BLACK);
+		edge.setStrokeWidth(5);
+		edge.setFill(Color.web("#A78732"));
+		
+		Text ccText = new Text("Community Cards");
+		ccText.setFont(new Font(13));
+		ccText.setFill(Color.WHITE);
+		ccText.relocate(80, 2);
+		
+		communityCards = new CardList();
+		communityCards.relocate(80, 18);
+		
+		Text dealerText = new Text("Dealer");
+		dealerText.setFont(new Font(13));
+		dealerText.setFill(Color.WHITE);
+		dealerText.relocate(650, 10);
+		
+		deck = new Deck();
+		deck.relocate(600, 30);
+		
+		getChildren().addAll(edge, ccText, communityCards, dealerText, deck);
 	}
 	
 	/**
@@ -69,7 +102,6 @@ public class Table extends ArrayEntity {
 	 */
 	public void createPlayer(String name) {
 		this.player = new Player(name);
-		gs.bindPlayerProperties();
 		sitDown(player);
 	}
 	
@@ -117,12 +149,7 @@ public class Table extends ArrayEntity {
 		
 		playerList.offer(playerList.poll());
 	}
-	
-	private static final double[][] POS = new double[][] {
-		{20, 250}, 
-		{300, 180}, 
-		{575, 250}
-	};
+
 	
 	/**
 	 * Sits down every players to the table.
@@ -130,15 +157,31 @@ public class Table extends ArrayEntity {
 	 * have been added to the table.
 	 */
 	private void sitDown(PlayerEntity entity) {
-		add(entity);
+		applyTranslation(entity);
+		getChildren().add(entity);
+		playerList.add(entity);
+		//System.out.println("Entity: " + entity.getLayoutX() + ", " + entity.getLayoutY());
+	}
+	
+	/**
+	 * A two-dimensional array holding a list of coordinates.
+	 * The first coord is the player and the rest are enemies. 
+	 */
+	public static final double[][] POS = new double[][] {
+		{300, 400},
+		{20, 200}, 
+		{300, 150}, 
+		{600, 200}
+	};
+	
+	private void applyTranslation(PlayerEntity entity) {
 		if (entity instanceof Player) {
-			entity.move(275, 425);
+			entity.relocate(POS[0][0], POS[0][1]);
 		} else if (entity instanceof Enemy) {
 			Enemy enemy = (Enemy) entity;
-			int n = playerList.size() - 1;
-			enemy.move(POS[n][0], POS[n][1]);
+			int n = playerList.size();
+			enemy.relocate(POS[n][0], POS[n][1]);
 		}
-		playerList.add(entity);
 	}
 	
 	//*********************
@@ -192,12 +235,8 @@ public class Table extends ArrayEntity {
 	 * 
 	 * @return
 	 */
-	public CommunityCards communityCards() {
+	public CardList communityCards() {
 		return communityCards;
-	}
-	
-	public void setDeck(Deck deck) {
-		this.deck = deck;
 	}
 	
 	/**
@@ -206,29 +245,6 @@ public class Table extends ArrayEntity {
 	 */
 	public Deck deck() {
 		return deck;
-	}
-	
-	/**
-	 * Draws the game entity object on the canvas. 
-	 * <p> This method repaints the entire canvas.
-	 * 
-	 * @TODO Implement optimization which only repaints 
-	 * each game entity by itself.
-	 * @param gc
-	 */
-	@Override
-	public void draw(GraphicsContext gc) {
-		
-		Canvas canvas = gc.getCanvas();
-		
-		//Clear Canvas
-		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		
-		//Draw Table
-		gc.strokeRect(1, 1, canvas.getWidth() - 2, canvas.getHeight() - 2);
-		gc.strokeRect(4, 4, canvas.getWidth() - 8, canvas.getHeight() - 8);
-		
-		super.draw(gc);
 	}
 	
 	@Override

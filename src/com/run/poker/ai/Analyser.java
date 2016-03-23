@@ -13,7 +13,7 @@ import com.run.poker.ai.condition.OnePair;
 import com.run.poker.ai.condition.Straight;
 import com.run.poker.ai.condition.ThreeOfaKind;
 import com.run.poker.ai.condition.TwoPairs;
-import com.run.poker.card.Card;
+import com.run.poker.entity.card.Card;
 import com.run.poker.entity.player.PlayerEntity;
 import com.run.poker.entity.table.Table;
 import com.run.poker.utils.GameUtils;
@@ -59,7 +59,9 @@ public class Analyser {
 			
 			//Joins the hold cards with the community cards 
 			//for each player.
-			List<Card> cards = GameUtils.join(entity.holdCards(), table.communityCards());
+			List<Card> cards = GameUtils.join(
+					entity.holdCards(), 
+					table.communityCards());
 			
 			//Sort cards by it's natural ordering.
 			Collections.sort(cards, Collections.reverseOrder());

@@ -2,7 +2,8 @@ package com.run.poker.ai.condition;
 
 import java.util.List;
 
-import com.run.poker.card.Card;
+import com.run.poker.entity.card.Card;
+
 
 public class StraightFlush extends Condition {
 
@@ -12,8 +13,8 @@ public class StraightFlush extends Condition {
 		Card previous = null;
 		for (Card current: cards) {
 			if (previous != null) {
-				if (current.getValue() <= previous.getValue() || 
-					current.getSuit() != previous.getSuit()) {
+				if (current.value <= previous.value || 
+					current.suit != previous.suit) {
 					sf = false;
 					break;
 				}

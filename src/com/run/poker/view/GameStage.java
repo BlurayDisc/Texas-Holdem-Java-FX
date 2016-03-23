@@ -3,18 +3,17 @@ package com.run.poker.view;
 import java.util.Optional;
 
 import com.run.poker.Poker;
-import com.run.poker.card.Card;
+import com.run.poker.entity.card.Card;
+import com.run.poker.entity.player.Names;
+import com.run.poker.entity.table.Dealer;
 import com.run.poker.entity.table.Table;
-import com.run.poker.view.task.DealTask;
-import com.run.poker.view.task.StageOne;
+import com.run.poker.utils.GameUtils;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Slider;
@@ -22,7 +21,6 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -39,16 +37,6 @@ import javafx.stage.Stage;
 public class GameStage extends Stage {
 	
 	/**
-	 * Main Model.
-	 */
-	private Table table;
-	
-	/**
-	 * The gc of the GameStage.
-	 */
-	private GraphicsContext gc;
-	
-	/**
 	 * GUI Components.
 	 */
 	private ToolBar playerBar;
@@ -58,33 +46,41 @@ public class GameStage extends Stage {
 	private Button check;
 	private Button call;
 	
-	public GameStage(Table model) {
-		//Register model
-		this.table = model;
-		
-		// Stage&Scene Layouts.
+	public GameStage() {
+
+		//Scene Layouts.
 		BorderPane layout = new BorderPane();
-		//TODO port the layout to grid pane
-		@SuppressWarnings("unused")
-		GridPane grid = new GridPane();
 		Scene game = new Scene(layout);
-		layout.setPrefSize(500, 500);
 		layout.getStylesheets().add("com/run/poker/view/menuStyle.css");
+		
+		//Main Model.
+		Table table = new Table();
+		table.createPlayer("Newb");
+		table.addBots(3);
+		table.setGameStage(this);
+		table.setPrefSize(800, 600);
+		layout.setCenter(table);
 		
 		// Game Tool Bar
 		Button deal = new Button("Deal");
 		deal.getStyleClass().add("button1");
 		deal.setPrefSize(150, 50);
 		deal.setOnAction(event -> {
-			new Thread(new DealTask(model, gc)).start();
+			Dealer dealer = table.callDealer();
+			dealer.clearCC();
+			dealer.clearHands();
+			dealer.newDeck();
+			dealer.deal();
 			//table.startBetting();
 		});
 		
-		Button oneTwoThree = new Button("Draw");
-		oneTwoThree.getStyleClass().add("button1");
-		oneTwoThree.setPrefSize(150, 50);
-		oneTwoThree.setOnAction(event -> {
-			new Thread(new StageOne(model, gc)).start();
+		Button draw = new Button("Draw");
+		draw.getStyleClass().add("button1");
+		draw.setPrefSize(150, 50);
+		draw.setOnAction(event -> {
+			Dealer dealer = table.callDealer();
+			dealer.clearCC();
+			dealer.stageOne();
 			//table.startBetting();
 		});
 		
@@ -93,7 +89,6 @@ public class GameStage extends Stage {
 		analyse.setPrefSize(150, 50);
 		analyse.setOnAction(event -> {
 			table.analyse();
-			table.draw(gc);
 		});
 		
         Button fullScreen = new Button("Full Screen");
@@ -110,17 +105,13 @@ public class GameStage extends Stage {
 			closeAndShowOwner();
 		});
 
-		ToolBar toolbar = new ToolBar(deal, oneTwoThree, analyse, fullScreen, exit);
+		ToolBar toolbar = new ToolBar(deal, draw, analyse, fullScreen, exit);
 		layout.setTop(toolbar);
-		
-		// Main Canvas for GC
-		Canvas canvas = new Canvas(800, 600);
-		this.gc = canvas.getGraphicsContext2D();
-		layout.setCenter(canvas);
 		
 		// Player Tool bar
 		name = new Text();
 		name.setFont(new Font(32));
+		name.textProperty().bind(table.getPlayer().getName());
 		name.setOnMouseClicked(event -> {
 			TextInputDialog dialog = new TextInputDialog();
 			dialog.initOwner(this);
@@ -141,15 +132,19 @@ public class GameStage extends Stage {
 			//Result
 			Optional<String> result = dialog.showAndWait();
 			result.ifPresent(value -> table.getPlayer().setName(value));
+			
 			//Repaint Player
-			table.draw(gc);
 		});
+		
+		Pane s1 = new Pane();
+		s1.setPrefSize(50, 50);
 
 		money = new Text();
 		money.setFont(new Font(32));
+		money.textProperty().bind(GameUtils.createBinding(table.getPlayer().getMoney()));
 		
-		Pane spacing = new Pane();
-		spacing.setPrefSize(50, 50);
+		Pane s2 = new Pane();
+		s2.setPrefSize(50, 50);
 		
 		check = new Button("Check");
 		check.getStyleClass().add("button1");
@@ -157,7 +152,6 @@ public class GameStage extends Stage {
 		check.setOnAction(e -> {
 			swap(0);
 			table.getPlayer().check();
-			table.draw(gc);
 			table.callManager().set(0);
 		});
 		
@@ -166,7 +160,6 @@ public class GameStage extends Stage {
 		call.setPrefSize(100, 50);
 		call.setOnAction(e -> {
 			table.getPlayer().call(50);
-			table.draw(gc);
 			table.callManager().set(50);
 		});
 		
@@ -194,11 +187,12 @@ public class GameStage extends Stage {
 			table.callManager().set(0);
 		});
 		
-		playerBar = new ToolBar(name, money, spacing, check, raise, all, fold);
+		playerBar = new ToolBar(name, s1, money, s2, check, raise, all, fold);
         BorderPane.setAlignment(playerBar, Pos.CENTER);
         layout.setBottom(playerBar);
         playerBar.setDisable(true);
         
+        //TODO move slider to Player
         slider = new Slider();
         slider.setPrefSize(100, 100);
         slider.setBlockIncrement(25);
@@ -206,27 +200,21 @@ public class GameStage extends Stage {
         slider.setMajorTickUnit(25);
         //slider.minorTickCountProperty().bind(table.getPlayer().getMoney().divide(25));
         //slider.majorTickUnitProperty().bind(table.getPlayer().getMoney().divide(10));
+        //slider.maxProperty().bind(table.getPlayer().getMoney());
         slider.setShowTickLabels(true);
         slider.setShowTickMarks(true);
         slider.setSnapToTicks(true);
         slider.setOrientation(Orientation.VERTICAL);
         slider.setOnMouseClicked(e -> System.out.println(slider.getValue()));
-        layout.setRight(slider);
-        BorderPane.setAlignment(slider, Pos.CENTER);
+        //layout.setRight(slider);
+        //BorderPane.setAlignment(slider, Pos.CENTER);
 		
-		this.setTitle(Poker.APP_NAME);
-		this.getIcons().add(Card.BACK);
-		this.setOnCloseRequest(event -> {
+		setTitle(Poker.APP_NAME);
+		getIcons().add(Card.BACK);
+		setOnCloseRequest(event -> {
 			closeAndShowOwner();
 		});
-		this.setScene(game);
-		table.draw(gc);
-	}
-	
-	public void bindPlayerProperties() {
-		name.textProperty().bind(table.getPlayer().getName());
-		money.textProperty().bind(table.getPlayer().getMoneyBinding());
-        slider.maxProperty().bind(table.getPlayer().getMoney());
+		setScene(game);
 	}
 	
 	public void swap(int option) {
@@ -250,6 +238,7 @@ public class GameStage extends Stage {
 		//this.manager.shutdown();
 		this.hide();
 		((Stage) getOwner()).show();
+		Names.reset();
 	}
 	
 	/**

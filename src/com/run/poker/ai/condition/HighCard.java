@@ -2,8 +2,8 @@ package com.run.poker.ai.condition;
 
 import java.util.List;
 
-import com.run.poker.card.Card;
-import com.run.poker.card.Rank;
+import com.run.poker.entity.card.Card;
+import com.run.poker.entity.card.Rank;
 
 public class HighCard extends Condition {
 

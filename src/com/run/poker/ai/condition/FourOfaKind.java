@@ -1,10 +1,10 @@
 package com.run.poker.ai.condition;
 
-import java.util.Collections;
 import java.util.List;
 
-import com.run.poker.card.Card;
-import com.run.poker.card.Rank;
+import com.run.poker.entity.card.Card;
+import com.run.poker.entity.card.Rank;
+import com.run.poker.utils.GameUtils;
 
 public class FourOfaKind extends Condition {
 	
@@ -16,7 +16,7 @@ public class FourOfaKind extends Condition {
 	public boolean check(List<Card> cards) {
 		boolean fourOfaKind = false;
 		for (Card card: cards) {
-			int frequency = Collections.frequency(cards, card);
+			int frequency = GameUtils.frequency(cards, card);
 			if (frequency == FOUR_OF_A_KIND_CONDITION) {
 				tempList.add(card);
 				fourOfaKind = true;

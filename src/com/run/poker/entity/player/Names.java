@@ -26,10 +26,10 @@ public enum Names {
 	Luke,
 	Davi;
 	
-	private static final List<Names> NAMES = 
+	public static List<Names> list = 
 			new ArrayList<>(Arrays.asList(Names.values()));
 	
-	public static List<Names> list() {
-		return NAMES;
+	public static void reset() {
+		Names.list = new ArrayList<>(Arrays.asList(Names.values()));
 	}
 }

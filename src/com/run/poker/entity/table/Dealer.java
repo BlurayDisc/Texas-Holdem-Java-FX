@@ -1,11 +1,15 @@
 package com.run.poker.entity.table;
 
-import com.run.poker.card.CommunityCards;
-import com.run.poker.card.HoldCards;
-import com.run.poker.entity.GameEntity;
+import com.run.poker.entity.card.Card;
+import com.run.poker.entity.card.CardList;
+import com.run.poker.entity.card.Deck;
 import com.run.poker.entity.player.PlayerEntity;
+import com.run.poker.view.animation.DealCardAnimation;
+import com.run.poker.view.animation.DrawCardAnimation;
 
-import javafx.scene.canvas.GraphicsContext;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 /**
  * A Dealer is associated with a table.
@@ -14,7 +18,7 @@ import javafx.scene.canvas.GraphicsContext;
  * @author RuN
  *
  */
-public class Dealer extends GameEntity {
+public class Dealer {
 
 	private Table table;
 	
@@ -30,10 +34,10 @@ public class Dealer extends GameEntity {
 	 * Puts a new deck on card (consisting of 52 cards) on the table.
 	 */
 	public void newDeck() {
-		Deck deck = new Deck();
+		Deck deck = table.deck();
+		deck.clear();
 		deck.fill();
 		deck.shuffle();
-		table.setDeck(deck);
 	}
 	
 	//**********************
@@ -51,10 +55,7 @@ public class Dealer extends GameEntity {
 	 * <p> Deal 1 card for every player in this table.
 	 */
 	public void deal() {
-		Deck deck = table.deck();
-		for (PlayerEntity entity: table.playerList()) {
-			entity.acquire(deck.removeFirst());
-		}
+		new DrawCardAnimation(table).play();
 	}
 	
 	/**
@@ -64,7 +65,7 @@ public class Dealer extends GameEntity {
 	 */
 	public void sortHoldCards() {
 		for (PlayerEntity entity: table.playerList()) {
-			HoldCards holdCards = entity.holdCards();
+			CardList holdCards = entity.holdCards();
 			holdCards.reverseSort();
 		}
 	}
@@ -73,45 +74,48 @@ public class Dealer extends GameEntity {
 	//*  The show down  *
 	//*******************
 	
-	public void clearCommunityCards() {
-		CommunityCards cc = table.communityCards();
-		cc.clear();
+	public void clearCC() {
+		table.communityCards().clear();
 	}
 	
 	/**
-	 * Draws one card to the community card stack.
+	 * Stage One: The flop.
 	 */
-	public void draw() {
-		CommunityCards cc = table.communityCards();
-		Deck deck = table.deck();
-		cc.add(deck.removeFirst());
+	public void stageOne() {
+		new DealCardAnimation(table).play(3);
 	}
 	
 	/**
 	 * The turn.
 	 */
 	public void stageTwo() {
-		CommunityCards cc = table.communityCards();
-		Deck deck = table.deck();
-		cc.add(deck.removeFirst());
+		drawCC(1);
 	}
 	
 	/**
 	 * The river.
 	 */
 	public void stageThree() {
-		CommunityCards cc = table.communityCards();
+		drawCC(1);
+	}
+	
+	private void drawCC(int numCards) {
+		Timeline timeline = new Timeline();
+		timeline.setAutoReverse(false);
+		timeline.setCycleCount(numCards);
+		KeyFrame frame = new KeyFrame(Duration.millis(300), e -> drawForCC());
+        timeline.getKeyFrames().add(frame);
+        timeline.play();
+	}
+	
+	private void drawForCC() {
 		Deck deck = table.deck();
-		cc.add(deck.removeFirst());
+		Card card = deck.pop();
+		table.communityCards().add(card);
+		//System.out.println("CC: " + cc.getLayoutX() + ", " + cc.getLayoutY());
 	}
 	
 	//***********************
 	//*  The determination  *
 	//***********************
-
-	@Override
-	public void draw(GraphicsContext gc) {
-		// TODO Auto-generated method stub
-		
-	}
 }
