@@ -2,10 +2,9 @@ package com.run.poker.entity.table;
 
 import java.util.LinkedList;
 
-import com.run.poker.ai.AIManager;
-import com.run.poker.ai.Analyser;
 import com.run.poker.entity.card.CardList;
 import com.run.poker.entity.card.Deck;
+import com.run.poker.entity.chips.Chips;
 import com.run.poker.entity.chips.ChipsManager;
 import com.run.poker.entity.player.Enemy;
 import com.run.poker.entity.player.Player;
@@ -93,7 +92,10 @@ public class Table extends Pane {
 		deck = new Deck();
 		deck.relocate(600, 30);
 		
-		getChildren().addAll(edge, ccText, communityCards, dealerText, deck);
+		Chips chips = new Chips();
+		chips.relocate(350, 250);
+		
+		getChildren().addAll(edge, ccText, communityCards, dealerText, deck, chips);
 	}
 	
 	/**
@@ -113,31 +115,6 @@ public class Table extends Pane {
 		for (int i = 0; i < n; i++) {
 			Enemy enemy = new Enemy();
 			sitDown(enemy);
-		}
-	}
-
-	/**
-	 * <p> Do a test sort and analyze of hands.
-	 */
-	public void analyse() {
-		Analyser analyser = new Analyser(this);
-		analyser.analyse();
-		System.out.println(this);
-	}
-	
-	/**
-	 * 
-	 */
-	public void startBetting() {
-		analyse();
-		AIManager manager = new AIManager(this);
-		for (PlayerEntity entity: playerList) {
-			if (entity instanceof Enemy) {
-				Enemy enemy = (Enemy) entity;
-				manager.process(enemy);
-			} else {
-				gs.enablePlayerOptions();
-			}
 		}
 	}
 	
@@ -190,6 +167,10 @@ public class Table extends Pane {
 	
 	public void setGameStage(GameStage gs) {
 		this.gs = gs;
+	}
+
+	public void enablePlayerOptions() {
+		gs.enablePlayerOptions();
 	}
 	
 	public void swapButton() {

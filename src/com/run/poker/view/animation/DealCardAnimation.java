@@ -1,45 +1,37 @@
 package com.run.poker.view.animation;
 
+import java.util.List;
+
+import com.run.poker.entity.card.Card;
 import com.run.poker.entity.card.CardList;
-import com.run.poker.entity.card.Deck;
 import com.run.poker.entity.table.Table;
 
 import javafx.animation.Animation;
-import javafx.animation.SequentialTransition;
-import javafx.animation.TranslateTransition;
-import javafx.scene.Node;
 import javafx.util.Duration;
 
-public class DealCardAnimation {
+public class DealCardAnimation extends BaseAnimation {
 	
-	private Deck deck;
-	private CardList list;
+	private int turns;
 	
 	public DealCardAnimation(Table table) {
-		this.deck = table.deck();
-		this.list = table.communityCards();
+		super(table);
 	}
 	
-	public void play(int rounds) {
-		SequentialTransition sequence = new SequentialTransition();
-		sequence.setCycleCount(1);
-		sequence.setAutoReverse(false);
-
-		int index = 0;
-		for (int i = 0; i < rounds; i++) {
-			Node card = deck.getChildren().get(index);
-			sequence.getChildren().add(move(card));
-			index++;
+	@Override
+	public void createSequence(List<Animation> animations) {
+		CardList cards = table.communityCards();
+		for (int i = 0; i < turns; i++) {
+			Card card = deck.get(i);
+			Animation animation = card.move(
+					cards, 
+					Duration.millis(300), 
+					e -> cards.add(deck.pop()));
+			animations.add(animation);
 		}
-		sequence.play();
 	}
 	
-	public Animation move(Node node) {
-		TranslateTransition tt = new TranslateTransition(Duration.millis(300), node);
-     	tt.setByX(list.getLayoutX() - node.getParent().getLayoutX());
-     	tt.setByY(list.getLayoutY() - node.getParent().getLayoutY());
-     	tt.setOnFinished(e -> list.add(deck.pop()));
-     	//System.out.println(entity.getName() + " (x " + tt.getByX() + ", y " + tt.getByY() + ")");
-     	return tt;
+	public DealCardAnimation setTurns(int turns) {
+		this.turns = turns;
+		return this;
 	}
 }

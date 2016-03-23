@@ -17,6 +17,10 @@ public class FileUtils {
 		return new Image(ClassLoader.getSystemResourceAsStream(path));
 	}
 	
+	public static Image loadFromJar(String path, double requestedWidth, double requestedHeight) {
+		return new Image(ClassLoader.getSystemResourceAsStream(path), requestedWidth, requestedHeight, true, true);
+	}
+	
 	/**
 	 * <p> Reads an Image file using an URL.
 	 * <p> This method reads files outside of the compiled jar file.

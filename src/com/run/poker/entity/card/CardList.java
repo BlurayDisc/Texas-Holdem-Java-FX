@@ -3,10 +3,14 @@ package com.run.poker.entity.card;
 import java.util.Collection;
 import java.util.Collections;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
+import javafx.util.Duration;
 
 public class CardList extends HBox {
 	
@@ -50,6 +54,11 @@ public class CardList extends HBox {
 		children.add(card);
 	}
 	
+	public Card get(int index) {
+		ObservableList<Node> children = getChildren();
+		return (Card) children.get(index);
+	}
+	
     /**
      * Removes all of the elements from this list (optional operation).
      * The list will be empty after this call returns.
@@ -74,16 +83,25 @@ public class CardList extends HBox {
 	}
 	
 	/**
-	 * Applies the translation for the passed in card based on it's 
-	 * position relative to this stack of card, where the position 
-	 * is determined by the index of the array.
-	 * @param card
+	 * <p> Re-arranges hold cards in each player's hand. 
+	 * <p> This is used for visual effects and has no impact on game logics.
+	 * <p> Creates a delayed animation which updates the View from one of more changes in the 
+	 * Model specified in the EventHandler class.
+	 * @param duration desired time for this frame.
+	 * @param e The on finish event handler.
+	 * @return A Delayed Update Animation
 	 */
-	public void reverseSort() {
-		ObservableList<Node> workingCollection = FXCollections.observableArrayList(getChildren());
-		Collections.sort(workingCollection, Collections.reverseOrder());
-		getChildren().setAll(workingCollection);
-	}
+    public Animation reverseSort() {
+		Timeline timeline = new Timeline();
+		KeyFrame frame = new KeyFrame(
+				Duration.millis(150), e -> {
+				ObservableList<Node> workingCollection = FXCollections.observableArrayList(getChildren());
+				Collections.sort(workingCollection, Collections.reverseOrder());
+				getChildren().setAll(workingCollection);
+		});
+        timeline.getKeyFrames().add(frame);
+        return timeline;
+    }
 	
 	@Override
 	public String toString() {

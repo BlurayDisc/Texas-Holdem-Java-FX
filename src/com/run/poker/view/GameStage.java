@@ -66,29 +66,24 @@ public class GameStage extends Stage {
 		deal.getStyleClass().add("button1");
 		deal.setPrefSize(150, 50);
 		deal.setOnAction(event -> {
+			deal.setDisable(true);
 			Dealer dealer = table.callDealer();
 			dealer.clearCC();
 			dealer.clearHands();
 			dealer.newDeck();
 			dealer.deal();
-			//table.startBetting();
+			dealer.betStart();
 		});
 		
 		Button draw = new Button("Draw");
 		draw.getStyleClass().add("button1");
 		draw.setPrefSize(150, 50);
 		draw.setOnAction(event -> {
+			draw.setDisable(true);
 			Dealer dealer = table.callDealer();
 			dealer.clearCC();
 			dealer.stageOne();
-			//table.startBetting();
-		});
-		
-		Button analyse = new Button("Analyse");
-		analyse.getStyleClass().add("button1");
-		analyse.setPrefSize(150, 50);
-		analyse.setOnAction(event -> {
-			table.analyse();
+			dealer.betStart();
 		});
 		
         Button fullScreen = new Button("Full Screen");
@@ -105,7 +100,7 @@ public class GameStage extends Stage {
 			closeAndShowOwner();
 		});
 
-		ToolBar toolbar = new ToolBar(deal, draw, analyse, fullScreen, exit);
+		ToolBar toolbar = new ToolBar(deal, draw, fullScreen, exit);
 		layout.setTop(toolbar);
 		
 		// Player Tool bar

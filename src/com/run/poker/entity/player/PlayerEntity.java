@@ -188,13 +188,13 @@ public class PlayerEntity extends Pane
 	}
 	
 	@Override
-	public int compareTo(PlayerEntity that) {
-		return this.showDown.compareTo(that.showDown);
-	}
-
-	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println(name.get() + ": " + arg);
+	}
+	
+	@Override
+	public int compareTo(PlayerEntity that) {
+		return this.showDown.compareTo(that.showDown);
 	}
 	
 	@Override

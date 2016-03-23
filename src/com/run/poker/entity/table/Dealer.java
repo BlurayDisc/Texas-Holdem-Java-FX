@@ -1,15 +1,12 @@
 package com.run.poker.entity.table;
 
-import com.run.poker.entity.card.Card;
-import com.run.poker.entity.card.CardList;
+import com.run.poker.ai.AIManager;
+import com.run.poker.ai.Analyser;
 import com.run.poker.entity.card.Deck;
+import com.run.poker.entity.player.Enemy;
 import com.run.poker.entity.player.PlayerEntity;
 import com.run.poker.view.animation.DealCardAnimation;
 import com.run.poker.view.animation.DrawCardAnimation;
-
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
 
 /**
  * A Dealer is associated with a table.
@@ -44,29 +41,20 @@ public class Dealer {
 	//*  Play of the hand  *
 	//**********************
 	
-	public void clearHands() {
-		for (PlayerEntity entity: table.playerList()) {
-			entity.clearHands();
-		}
-	}
-	
 	/**
 	 * <p> Fills each of the player's hand with 1 card.
 	 * <p> Deal 1 card for every player in this table.
 	 */
 	public void deal() {
-		new DrawCardAnimation(table).play();
+		new DrawCardAnimation(table).playSequence();
 	}
 	
 	/**
-	 * Re-arranges hold cards in each player's hand. 
-	 * <p> This is used for visual effects and has no impact 
-	 * on game logics.
+	 * Clears hold cards from players.
 	 */
-	public void sortHoldCards() {
+	public void clearHands() {
 		for (PlayerEntity entity: table.playerList()) {
-			CardList holdCards = entity.holdCards();
-			holdCards.reverseSort();
+			entity.clearHands();
 		}
 	}
 	
@@ -74,48 +62,53 @@ public class Dealer {
 	//*  The show down  *
 	//*******************
 	
-	public void clearCC() {
-		table.communityCards().clear();
-	}
-	
 	/**
 	 * Stage One: The flop.
 	 */
 	public void stageOne() {
-		new DealCardAnimation(table).play(3);
+		new DealCardAnimation(table).setTurns(5).playSequence();
 	}
 	
 	/**
 	 * The turn.
 	 */
 	public void stageTwo() {
-		drawCC(1);
+		new DealCardAnimation(table).setTurns(1).playSequence();
 	}
 	
 	/**
 	 * The river.
 	 */
 	public void stageThree() {
-		drawCC(1);
+		new DealCardAnimation(table).setTurns(1).playSequence();
 	}
 	
-	private void drawCC(int numCards) {
-		Timeline timeline = new Timeline();
-		timeline.setAutoReverse(false);
-		timeline.setCycleCount(numCards);
-		KeyFrame frame = new KeyFrame(Duration.millis(300), e -> drawForCC());
-        timeline.getKeyFrames().add(frame);
-        timeline.play();
-	}
-	
-	private void drawForCC() {
-		Deck deck = table.deck();
-		Card card = deck.pop();
-		table.communityCards().add(card);
-		//System.out.println("CC: " + cc.getLayoutX() + ", " + cc.getLayoutY());
+	public void clearCC() {
+		table.communityCards().clear();
 	}
 	
 	//***********************
 	//*  The determination  *
 	//***********************
+	
+	public void betStart() {
+		analyse();
+		AIManager manager = new AIManager(table);
+		for (PlayerEntity entity: table.playerList()) {
+			if (entity instanceof Enemy) {
+				manager.process((Enemy) entity);
+			} else {
+				table.enablePlayerOptions();
+			}
+		}
+	}
+	
+	/**
+	 * <p> Do a test sort and analyze of hands.
+	 */
+	public void analyse() {
+		Analyser analyser = new Analyser(table);
+		analyser.analyse();
+		System.out.println(table);
+	}
 }
