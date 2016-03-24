@@ -71,10 +71,11 @@ public class Table extends Pane {
 		this.gs = null;
 		
 		//Draw Table		
-		Rectangle edge = new Rectangle(800, 600);
+		Rectangle edge = new Rectangle(796, 596);
 		edge.setStroke(Color.BLACK);
-		edge.setStrokeWidth(5);
+		edge.setStrokeWidth(4);
 		edge.setFill(Color.web("#A78732"));
+		edge.relocate(0, 0);
 		
 		Text ccText = new Text("Community Cards");
 		ccText.setFont(new Font(13));
@@ -93,7 +94,7 @@ public class Table extends Pane {
 		deck.relocate(600, 30);
 		
 		Chips chips = new Chips();
-		chips.relocate(350, 250);
+		chips.relocate(50, 400);
 		
 		getChildren().addAll(edge, ccText, communityCards, dealerText, deck, chips);
 	}

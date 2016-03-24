@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.run.poker.entity.card.Deck;
+import com.run.poker.entity.player.PlayerEntity;
 import com.run.poker.entity.table.Table;
 
 import javafx.animation.Animation;
@@ -64,6 +65,9 @@ public abstract class BaseAnimation {
 	 * @return A Translate Animation.
 	 */
 	public Animation move(Node node, Node target, Duration duration, EventHandler<ActionEvent> e) {
+		while ( !(target instanceof Deck) && !(target instanceof PlayerEntity)) {
+			target = target.getParent();
+		}
 		TranslateTransition tt = new TranslateTransition(duration, node);
      	tt.setByX(target.getLayoutX() - node.getParent().getLayoutX());
      	tt.setByY(target.getLayoutY() - node.getParent().getLayoutY());

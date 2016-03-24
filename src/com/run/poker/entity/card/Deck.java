@@ -15,7 +15,7 @@ import javafx.scene.Node;
 public class Deck extends CardList {
 
 	public Deck() {
-		setSpacing(-Card.WIDTH * 0.75 + 0.5);
+		setSpacing(0.5 - Card.FRONT.getWidth() * Card.FIT_SCALE);
 	}
 
 	public Card pop() {

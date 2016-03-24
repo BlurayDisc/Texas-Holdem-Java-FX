@@ -1,5 +1,6 @@
 package com.run.poker.entity.card;
 
+import com.run.poker.entity.player.PlayerEntity;
 import com.run.poker.utils.FileUtils;
 
 import javafx.animation.Animation;
@@ -20,8 +21,7 @@ public class Card extends Group implements Comparable<Card> {
 	public static final Image FRONT = FileUtils.loadFromJar("images/card.jpg");
 	public static final Image BACK = FileUtils.loadFromJar("images/back.jpg");
 	public static final double GAP = 5;
-	public static final double HEIGHT = FRONT.getHeight();
-	public static final double WIDTH = FRONT.getWidth();
+	public static final double FIT_SCALE =  3.0 / 4.0;
 	
 	public Suit suit;
 	public int value;
@@ -37,20 +37,18 @@ public class Card extends Group implements Comparable<Card> {
 		
 		this.iv = new ImageView();
 		iv.setImage(FRONT);
-		iv.setX(0);
-		iv.setY(0);
-		iv.setScaleX(0.75);
-		iv.setScaleY(0.75);
+		iv.setFitWidth(FRONT.getWidth() * FIT_SCALE);
+		iv.setFitHeight(FRONT.getHeight() * FIT_SCALE);
 		
 		this.text = new Text(this + "");
 	    text.setFont(new Font(24));
-	    text.setX(20);
-	    text.setY(43);
+	    text.setX(10);
+	    text.setY(22);
 	    
 	    this.pattern = new Text(suit + "");
 	    pattern.setFont(new Font(40));
-	    pattern.setX(47);
-	    pattern.setY(100);
+	    pattern.setX(33);
+	    pattern.setY(80);
 	    
 	    getChildren().addAll(iv, text, pattern);
 	    adjustColor();
@@ -112,9 +110,20 @@ public class Card extends Group implements Comparable<Card> {
 	 * @return A Translate Animation.
 	 */
 	public Animation move(Node target, Duration duration, EventHandler<ActionEvent> e) {
+		//Computes the parent node.
+		while (!(target instanceof CardList) && 
+			   !(target instanceof PlayerEntity)) {
+			target = target.getParent();
+		}
+		Node current = this;
+		while (!(current instanceof Deck) && 
+			   !(current instanceof PlayerEntity)) {
+			current = current.getParent();
+		}
+		//Create Translation
 		TranslateTransition tt = new TranslateTransition(duration, this);
-     	tt.setByX(target.getLayoutX() - this.getParent().getLayoutX());
-     	tt.setByY(target.getLayoutY() - this.getParent().getLayoutY());
+		tt.setByX(target.getLayoutX() - current.getLayoutX());
+		tt.setByY(target.getLayoutY() - current.getLayoutY());
      	tt.setOnFinished(e);
      	return tt;
 	}

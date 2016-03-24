@@ -1,7 +1,5 @@
 package com.run.poker;
 
-import java.util.concurrent.ExecutionException;
-
 import com.run.poker.view.PrimaryStage;
 
 import javafx.application.Application;
@@ -16,7 +14,7 @@ public class Poker extends Application {
 	
 	public static final String APP_NAME = "Texas Hold'em Poker v 0.1";
 	
-	public static void main(String[] args) throws InterruptedException, ExecutionException {
+	public static void main(String[] args) {
 		launch(args);
 	}
 	
