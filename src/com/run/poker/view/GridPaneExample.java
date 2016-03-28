@@ -1,5 +1,7 @@
 package com.run.poker.view;
 
+import com.run.poker.utils.FileUtils;
+
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -19,9 +21,7 @@ public class GridPaneExample extends Application {
     final Slider opacityLevel = new Slider(0, 1, 1);    
     final Slider sepiaTone = new Slider(0, 1, 1);
     final Slider scaling = new Slider (0.5, 1, 1);
-    final Image image  = new Image(getClass().getResourceAsStream(
-        "cappuccino.jpg")
-    );
+    final Image image = FileUtils.loadFromJar("images/back.jpg");
  
     final Label opacityCaption = new Label("Opacity Level:");
     final Label sepiaCaption = new Label("Sepia Tone:");

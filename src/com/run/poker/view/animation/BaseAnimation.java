@@ -3,6 +3,7 @@ package com.run.poker.view.animation;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.run.poker.entity.card.CardList;
 import com.run.poker.entity.card.Deck;
 import com.run.poker.entity.player.PlayerEntity;
 import com.run.poker.entity.table.Table;
@@ -64,15 +65,22 @@ public abstract class BaseAnimation {
 	 * @param e The on finish event handler.
 	 * @return A Translate Animation.
 	 */
-	public Animation move(Node node, Node target, Duration duration, EventHandler<ActionEvent> e) {
-		while ( !(target instanceof Deck) && !(target instanceof PlayerEntity)) {
+	public static Animation move(Node node, Node target, Duration duration, EventHandler<ActionEvent> e) {
+		//Computes the parent node.
+		while (!(target instanceof CardList) && 
+			   !(target instanceof PlayerEntity)) {
 			target = target.getParent();
 		}
+		Node current = node;
+		while (!(current instanceof Deck) && 
+			   !(current instanceof PlayerEntity)) {
+			current = current.getParent();
+		}
+		//Create Translation
 		TranslateTransition tt = new TranslateTransition(duration, node);
-     	tt.setByX(target.getLayoutX() - node.getParent().getLayoutX());
-     	tt.setByY(target.getLayoutY() - node.getParent().getLayoutY());
+		tt.setByX(target.getLayoutX() - current.getLayoutX());
+		tt.setByY(target.getLayoutY() - current.getLayoutY());
      	tt.setOnFinished(e);
-     	//System.out.println(entity.getName() + " (x " + tt.getByX() + ", y " + tt.getByY() + ")");
      	return tt;
 	}
 	
@@ -83,9 +91,9 @@ public abstract class BaseAnimation {
 	 * @param e The on finish event handler.
 	 * @return A Delayed Update Animation
 	 */
-    public Animation delay(Duration duration, EventHandler<ActionEvent> e) {
+    public static Animation delay(Duration duration, EventHandler<ActionEvent> e) {
 		Timeline timeline = new Timeline();
-		KeyFrame frame = new KeyFrame(Duration.millis(300), e);
+		KeyFrame frame = new KeyFrame(duration, e);
         timeline.getKeyFrames().add(frame);
         return timeline;
     }

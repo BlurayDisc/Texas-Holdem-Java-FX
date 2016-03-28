@@ -21,12 +21,13 @@ public class AIManager {
 		this.table = table;
 	}
 	
-	public void process(Enemy enemy) {
+	public void process(Enemy enemy) throws InterruptedException {
 		Decision start = new StartPoint();
 		start.setTable(table);
 		start.setEntity(enemy);
 		start.execute();
 		System.out.println(enemy.getName() + "  " + Decision.result());
 		Decision.result().clear();
+		Thread.sleep(1500);
 	}
 }

@@ -2,7 +2,7 @@ package com.run.poker.entity.chips;
 
 import com.run.poker.entity.player.Player;
 
-public class MockTest {
+public class ObserverTest {
 
 	public static void main(String[] args) {
 		ChipsManager manager = ChipsManager.getInstance();

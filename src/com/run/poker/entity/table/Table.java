@@ -12,8 +12,11 @@ import com.run.poker.entity.player.PlayerEntity;
 import com.run.poker.utils.GameUtils;
 import com.run.poker.view.GameStage;
 
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -70,16 +73,26 @@ public class Table extends Pane {
 		this.player = null;
 		this.gs = null;
 		
-		//Draw Table		
-		Rectangle edge = new Rectangle(796, 596);
-		edge.setStroke(Color.BLACK);
-		edge.setStrokeWidth(4);
-		edge.setFill(Color.web("#A78732"));
-		edge.relocate(0, 0);
+		//Effect
+		//Windows Color "0x3b596d"
+		DropShadow dropShadow = new DropShadow();
+		dropShadow.setRadius(5.0);
+		dropShadow.setOffsetX(3.0);
+		dropShadow.setOffsetY(3.0);
+		dropShadow.setColor(Color.BLACK);
+
+		//Draw Table
+		Rectangle table = new Rectangle(795, 595);
+		table.setStrokeWidth(1);
+		table.setStroke(Color.BLACK);
+		Image image = new Image("images/pattern.png");
+		table.setFill(new ImagePattern(image, 0, 0, 50, 50, false));
+		table.setEffect(dropShadow);
+		table.relocate(1, 1);
 		
 		Text ccText = new Text("Community Cards");
 		ccText.setFont(new Font(13));
-		ccText.setFill(Color.WHITE);
+		ccText.setFill(Color.BLACK);
 		ccText.relocate(80, 2);
 		
 		communityCards = new CardList();
@@ -87,7 +100,7 @@ public class Table extends Pane {
 		
 		Text dealerText = new Text("Dealer");
 		dealerText.setFont(new Font(13));
-		dealerText.setFill(Color.WHITE);
+		dealerText.setFill(Color.BLACK);
 		dealerText.relocate(650, 10);
 		
 		deck = new Deck();
@@ -96,7 +109,7 @@ public class Table extends Pane {
 		Chips chips = new Chips();
 		chips.relocate(50, 400);
 		
-		getChildren().addAll(edge, ccText, communityCards, dealerText, deck, chips);
+		getChildren().addAll(table, ccText, communityCards, dealerText, deck, chips);
 	}
 	
 	/**
@@ -171,7 +184,7 @@ public class Table extends Pane {
 	}
 
 	public void enablePlayerOptions() {
-		gs.enablePlayerOptions();
+		gs.setPlayerOptions(true);
 	}
 	
 	public void swapButton() {

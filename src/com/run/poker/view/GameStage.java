@@ -39,7 +39,7 @@ public class GameStage extends Stage {
 	/**
 	 * GUI Components.
 	 */
-	private ToolBar playerBar;
+	private ToolBar playerOptions;
 	private Slider slider;
 	private Text name;
 	private Text money;
@@ -50,8 +50,9 @@ public class GameStage extends Stage {
 
 		//Scene Layouts.
 		BorderPane layout = new BorderPane();
+		layout.getStylesheets().add("css/gameStyle.css");
 		Scene game = new Scene(layout);
-		layout.getStylesheets().add("com/run/poker/view/menuStyle.css");
+		setScene(game);
 		
 		//Main Model.
 		Table table = new Table();
@@ -67,12 +68,14 @@ public class GameStage extends Stage {
 		deal.setPrefSize(150, 50);
 		deal.setOnAction(event -> {
 			deal.setDisable(true);
+			playerOptions.setDisable(true);
 			Dealer dealer = table.callDealer();
 			dealer.clearCC();
 			dealer.clearHands();
 			dealer.newDeck();
 			dealer.deal();
 			dealer.betStart();
+			deal.setDisable(false);
 		});
 		
 		Button draw = new Button("Draw");
@@ -80,6 +83,7 @@ public class GameStage extends Stage {
 		draw.setPrefSize(150, 50);
 		draw.setOnAction(event -> {
 			draw.setDisable(true);
+			playerOptions.setDisable(true);
 			Dealer dealer = table.callDealer();
 			dealer.clearCC();
 			dealer.stageOne();
@@ -182,10 +186,9 @@ public class GameStage extends Stage {
 			table.callManager().set(0);
 		});
 		
-		playerBar = new ToolBar(name, s1, money, s2, check, raise, all, fold);
-        BorderPane.setAlignment(playerBar, Pos.CENTER);
-        layout.setBottom(playerBar);
-        playerBar.setDisable(true);
+		playerOptions = new ToolBar(name, s1, money, s2, check, raise, all, fold);
+        BorderPane.setAlignment(playerOptions, Pos.CENTER);
+        layout.setBottom(playerOptions);
         
         //TODO move slider to Player
         slider = new Slider();
@@ -206,24 +209,21 @@ public class GameStage extends Stage {
 		
 		setTitle(Poker.APP_NAME);
 		getIcons().add(Card.BACK);
-		setOnCloseRequest(event -> {
-			closeAndShowOwner();
-		});
-		setScene(game);
+		setOnCloseRequest(event -> closeAndShowOwner());
 	}
 	
 	public void swap(int option) {
 		Button oldButton = option == 0 ? check : call;
 		Button newButton = option == 0 ? call : check;
-		ObservableList<Node> list = playerBar.getItems();
+		ObservableList<Node> list = playerOptions.getItems();
 		if (list.contains(oldButton)) {
 			list.add(list.indexOf(oldButton), newButton);
 			list.remove(oldButton);
 		}
 	}
 	
-	public void enablePlayerOptions() {
-		this.playerBar.setDisable(false);
+	public void setPlayerOptions(boolean enabled) {
+		this.playerOptions.setDisable(!enabled);
 	}
 	
 	/**

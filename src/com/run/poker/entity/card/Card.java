@@ -1,7 +1,6 @@
 package com.run.poker.entity.card;
 
 import com.run.poker.entity.player.PlayerEntity;
-import com.run.poker.utils.FileUtils;
 
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
@@ -18,8 +17,8 @@ import javafx.util.Duration;
 
 public class Card extends Group implements Comparable<Card> {
 	
-	public static final Image FRONT = FileUtils.loadFromJar("images/card.jpg");
-	public static final Image BACK = FileUtils.loadFromJar("images/back.jpg");
+	public static final Image FRONT = new Image("images/card.png");
+	public static final Image BACK = new Image("images/back.png");
 	public static final double GAP = 5;
 	public static final double FIT_SCALE =  3.0 / 4.0;
 	

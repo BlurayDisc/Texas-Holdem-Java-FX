@@ -10,33 +10,33 @@ import javafx.scene.image.ImageView;
 public class Chips extends ImageView {
 	
 	public static final Image IMAGE = FileUtils.loadFromJar("images/chips.png");
-	public static final double FIT_SCALE =  1.0 / 3.0;
-	public static final double H_SCALE = 1.0 / 3.0;
-	public static final double V_SCALE = 1.0 / 2.0;
-	public static final double[][] COORDS = new double[6][2];
-	
-	static {
-		initCoords();
-	}
 	
 	public Chips() {
 		super(IMAGE);
 		setPreserveRatio(true);
 		setSmooth(true);
-		setFitWidth(IMAGE.getWidth() * FIT_SCALE * H_SCALE);
-		setFitHeight(IMAGE.getHeight() * FIT_SCALE * V_SCALE);
 		selectImage();
 	}
 	
 	/**
-	 * This algorithm produces a 2D array specifying the 
-	 * vertices of a rectangle 2D shape.
+	 * This generated 2-D array contains the following values: 
 	 * {0, 0} 
 	 * {1, 0} 
 	 * {2, 0} 
 	 * {0, 1} 
 	 * {1, 1} 
 	 * {2, 1}
+	 */
+	public static final double[][] COORDS = new double[6][2];
+	
+	static {
+		initCoords();
+	}
+	
+	/**
+	 * This algorithm produces a 2D array specifying the 
+	 * vertices of a rectangle 2D shape.
+
 	 */
 	public static void initCoords() {
 		int index = 0;
@@ -49,12 +49,15 @@ public class Chips extends ImageView {
 		}
 	}
 	
+	public static final double H_SCALE = 1.0 / 3.0;
+	public static final double V_SCALE = 1.0 / 2.0;
+	
 	/**
 	 * Randomly selects an image by using the randomly generated number 
 	 * multiply by the horizontal and vertical scales and the coords.
 	 */
 	public void selectImage() {
-		int i = GameUtils.random(0, 5);
+		int i = GameUtils.random(0, COORDS.length - 1);
 		Rectangle2D viewPort = new Rectangle2D(
 				IMAGE.getWidth() * H_SCALE * COORDS[i][0], 
 				IMAGE.getHeight() * V_SCALE * COORDS[i][1], 

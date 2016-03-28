@@ -11,8 +11,10 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.effect.Bloom;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -63,6 +65,8 @@ public class PlayerEntity extends Pane
 	 */
 	private Showdown showDown;
 	
+	private Rectangle highlight;
+	
 	public PlayerEntity() {
 		
 		this.name = new SimpleStringProperty("New Player");
@@ -70,55 +74,86 @@ public class PlayerEntity extends Pane
 		this.money = new SimpleIntegerProperty(1000);
 		this.state = State.None;
 		
-		//Draw Name
+		//Name
 		Text name = new Text();
 		name.textProperty().bind(this.name);
 		name.setFont(new Font(18));
-		name.setFill(Color.WHITE);
+		name.setFill(Color.BLACK);
 		name.relocate(0, 0);
         
-		//Draw Money
+		//Money
 		Text money = new Text();
 		money.textProperty().bind(GameUtils.createBinding(this.money));
 		money.setFont(new Font(14));
-		money.setFill(Color.WHITE);
+		money.setFill(Color.BLACK);
 		money.relocate(100, 0);
         
         //Draw Title
 		Text title = new Text();
 		title.textProperty().bind(this.title);
 		title.setFont(new Font(14));
-		title.setFill(Color.WHITE);
+		title.setFill(Color.BLACK);
 		title.relocate(0, 25);
 		
-		//Hold Cards
+		//Current Hold Cards
 		holdCards = new CardList();
-		holdCards.relocate(0, 45);
+		holdCards.relocate(0, 55);
+		
+		//Player's turn highlight
+		highlight = new Rectangle(160, 55);
+		highlight.setOpacity(1);
+		highlight.setStrokeWidth(4);
+		highlight.setStroke(Color.web("#3090C7"));
+		highlight.setFill(Color.TRANSPARENT);
+		highlight.setEffect(new Bloom(0.1));
+		highlight.relocate(-10, -5);
+		highlight.setVisible(false);
 		
 		//TODO add show down cards to the GUI, it currently only appears in console.
 		showDown = new Showdown();
 		
-		getChildren().addAll(name, money, title, holdCards);
+		getChildren().addAll(name, money, title, holdCards, highlight);
 	}
 	
+	public void setActive(boolean active) {
+		highlight.setVisible(active);
+	}
+	
+	/**
+	 * 
+	 */
 	public void check() {
 		this.state = State.Checked;
 	}
 	
+	/**
+	 * 
+	 * @param amount
+	 */
 	public void call(int amount) {
 		this.state = State.Called;
 		subtractMoney(amount);
 	}
 	
+	/**
+	 * 
+	 * @param amount
+	 */
 	public void raise(int amount) {
 		this.state = State.Raising;
 		subtractMoney(amount);
 	}
 	
+	/**
+	 * 
+	 */
 	public void fold() {
 		this.state = State.Folded;
 	}
 	
+	/**
+	 * 
+	 */
 	public void allIn() {
 		raise(money.get());
 	}

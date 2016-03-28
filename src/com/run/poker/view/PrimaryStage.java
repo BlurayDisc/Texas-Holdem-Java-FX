@@ -7,7 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -27,7 +26,7 @@ public class PrimaryStage extends Stage {
 		
 		VBox layout = new VBox(20);
 		Scene start = new Scene(layout);
-		layout.getStylesheets().add("com/run/poker/view/menuStyle.css");
+		layout.getStylesheets().add("css/menuStyle.css");
 		layout.setPrefSize(500, 500);
 		layout.setAlignment(Pos.CENTER);
 		
@@ -57,16 +56,8 @@ public class PrimaryStage extends Stage {
 		
 		layout.getChildren().addAll(title, imageView, newButton, loadButton, exitButton);
 		
-		this.setTitle(Poker.APP_NAME);
-		this.getIcons().add(Card.BACK);
-		this.setScene(start);
-	}
-	
-	/**
-	 * Template
-	 */
-	public void addSpacing() {
-		Pane spacing = new Pane();
-		spacing.setPrefSize(100, 100);
+		setTitle(Poker.APP_NAME);
+		getIcons().add(Card.BACK);
+		setScene(start);
 	}
 }

@@ -8,6 +8,8 @@ import com.run.poker.entity.player.PlayerEntity;
 import com.run.poker.view.animation.DealCardAnimation;
 import com.run.poker.view.animation.DrawCardAnimation;
 
+import javafx.concurrent.Task;
+
 /**
  * A Dealer is associated with a table.
  * <p> A Dealer can be created with the {@link Table#callDealer()}
@@ -18,9 +20,13 @@ import com.run.poker.view.animation.DrawCardAnimation;
 public class Dealer {
 
 	private Table table;
+	private Analyser analyser;
+	private AIManager manager;
 	
 	Dealer(Table table) { 
 		this.table = table;
+		this.analyser = new Analyser(table);
+		this.manager = new AIManager(table);
 	}
 	
 	//********************
@@ -92,23 +98,33 @@ public class Dealer {
 	//***********************
 	
 	public void betStart() {
-		analyse();
-		AIManager manager = new AIManager(table);
-		for (PlayerEntity entity: table.playerList()) {
-			if (entity instanceof Enemy) {
-				manager.process((Enemy) entity);
-			} else {
-				table.enablePlayerOptions();
-			}
-		}
+		new Thread(new BetTask()).start();
 	}
 	
-	/**
-	 * <p> Do a test sort and analyze of hands.
-	 */
-	public void analyse() {
-		Analyser analyser = new Analyser(table);
-		analyser.analyse();
-		System.out.println(table);
+	//TODO add index
+	class BetTask extends Task<Void> {
+		
+		@Override
+		protected Void call() throws Exception {
+			
+			Thread.sleep(3000);
+			analyser.analyse();
+			System.out.println(table);
+			
+			PlayerEntity previous = null;
+			for (PlayerEntity current: table.playerList()) {
+				if (previous != null) {
+					previous.setActive(false);
+				}
+				current.setActive(true);
+				if (current instanceof Enemy) {
+					manager.process((Enemy) current);
+				} else {
+					table.enablePlayerOptions();
+				}
+				previous = current;
+			}
+			return null;
+		}
 	}
 }
