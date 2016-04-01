@@ -7,6 +7,7 @@ import com.run.poker.entity.card.Card;
 import com.run.poker.entity.player.Names;
 import com.run.poker.entity.table.Dealer;
 import com.run.poker.entity.table.Table;
+import com.run.poker.manager.GameManager;
 import com.run.poker.utils.GameUtils;
 
 import javafx.collections.ObservableList;
@@ -36,6 +37,8 @@ import javafx.stage.Stage;
  */
 public class GameStage extends Stage {
 	
+	private GameManager manager;
+	
 	/**
 	 * GUI Components.
 	 */
@@ -62,32 +65,20 @@ public class GameStage extends Stage {
 		table.setPrefSize(800, 600);
 		layout.setCenter(table);
 		
+		manager = new GameManager(table);
+		
 		// Game Tool Bar
-		Button deal = new Button("Deal");
-		deal.getStyleClass().add("button1");
-		deal.setPrefSize(150, 50);
-		deal.setOnAction(event -> {
-			deal.setDisable(true);
-			playerOptions.setDisable(true);
+		Button dealButton = new Button("Deal");
+		dealButton.getStyleClass().add("button1");
+		dealButton.setPrefSize(150, 50);
+		dealButton.setOnAction(event -> {
+			dealButton.setDisable(true);
 			Dealer dealer = table.callDealer();
 			dealer.clearCC();
 			dealer.clearHands();
 			dealer.newDeck();
 			dealer.deal();
-			dealer.betStart();
-			deal.setDisable(false);
-		});
-		
-		Button draw = new Button("Draw");
-		draw.getStyleClass().add("button1");
-		draw.setPrefSize(150, 50);
-		draw.setOnAction(event -> {
-			draw.setDisable(true);
-			playerOptions.setDisable(true);
-			Dealer dealer = table.callDealer();
-			dealer.clearCC();
-			dealer.stageOne();
-			dealer.betStart();
+			manager.beforePlayerAction();
 		});
 		
         Button fullScreen = new Button("Full Screen");
@@ -104,7 +95,7 @@ public class GameStage extends Stage {
 			closeAndShowOwner();
 		});
 
-		ToolBar toolbar = new ToolBar(deal, draw, fullScreen, exit);
+		ToolBar toolbar = new ToolBar(dealButton, fullScreen, exit);
 		layout.setTop(toolbar);
 		
 		// Player Tool bar
@@ -152,6 +143,7 @@ public class GameStage extends Stage {
 			swap(0);
 			table.getPlayer().check();
 			table.callManager().set(0);
+			manager.afterPlayerAction();
 		});
 		
 		call = new Button("Call");
@@ -160,6 +152,7 @@ public class GameStage extends Stage {
 		call.setOnAction(e -> {
 			table.getPlayer().call(50);
 			table.callManager().set(50);
+			manager.afterPlayerAction();
 		});
 		
 		Button raise = new Button("Raise");
@@ -168,6 +161,7 @@ public class GameStage extends Stage {
 		raise.setOnAction(e -> {
 			table.getPlayer().raise(50);
 			table.callManager().add(50);
+			manager.afterPlayerAction();
 		});
 		
 		Button all = new Button("All In");
@@ -176,6 +170,7 @@ public class GameStage extends Stage {
 		all.setOnAction(e -> {
 			table.getPlayer().allIn();
 			table.callManager().set(table.getPlayer().getMoney().get());
+			manager.afterPlayerAction();
 		});
 		
 		Button fold = new Button("Fold");
@@ -184,9 +179,11 @@ public class GameStage extends Stage {
 		fold.setOnAction(e -> {
 			table.getPlayer().fold();
 			table.callManager().set(0);
+			manager.afterPlayerAction();
 		});
 		
 		playerOptions = new ToolBar(name, s1, money, s2, check, raise, all, fold);
+		playerOptions.setDisable(true);
         BorderPane.setAlignment(playerOptions, Pos.CENTER);
         layout.setBottom(playerOptions);
         
@@ -222,7 +219,7 @@ public class GameStage extends Stage {
 		}
 	}
 	
-	public void setPlayerOptions(boolean enabled) {
+	public void enablePlayerOptions(boolean enabled) {
 		this.playerOptions.setDisable(!enabled);
 	}
 	

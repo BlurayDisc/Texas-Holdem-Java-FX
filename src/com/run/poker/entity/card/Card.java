@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -19,7 +20,6 @@ public class Card extends Group implements Comparable<Card> {
 	
 	public static final Image FRONT = new Image("images/card.png");
 	public static final Image BACK = new Image("images/back.png");
-	public static final double GAP = 5;
 	public static final double FIT_SCALE =  3.0 / 4.0;
 	
 	public Suit suit;
@@ -38,6 +38,14 @@ public class Card extends Group implements Comparable<Card> {
 		iv.setImage(FRONT);
 		iv.setFitWidth(FRONT.getWidth() * FIT_SCALE);
 		iv.setFitHeight(FRONT.getHeight() * FIT_SCALE);
+		
+		//Effect
+		DropShadow dropShadow = new DropShadow();
+		dropShadow.setRadius(5.0);
+		dropShadow.setOffsetX(3.0);
+		dropShadow.setOffsetY(3.0);
+		dropShadow.setColor(Color.BLACK);
+		iv.setEffect(dropShadow);
 		
 		this.text = new Text(this + "");
 	    text.setFont(new Font(24));

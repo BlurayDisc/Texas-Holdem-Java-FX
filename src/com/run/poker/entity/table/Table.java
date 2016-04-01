@@ -4,11 +4,10 @@ import java.util.LinkedList;
 
 import com.run.poker.entity.card.CardList;
 import com.run.poker.entity.card.Deck;
-import com.run.poker.entity.chips.Chips;
-import com.run.poker.entity.chips.ChipsManager;
 import com.run.poker.entity.player.Enemy;
 import com.run.poker.entity.player.Player;
 import com.run.poker.entity.player.PlayerEntity;
+import com.run.poker.manager.GameManager;
 import com.run.poker.utils.GameUtils;
 import com.run.poker.view.GameStage;
 
@@ -37,6 +36,7 @@ import javafx.scene.text.Text;
 public class Table extends Pane {
 
 	private LinkedList<PlayerEntity> playerList;
+	private LinkedList<PlayerEntity> resultList;
 	private Player player;
 	
 	private Dealer dealer;
@@ -47,7 +47,7 @@ public class Table extends Pane {
 	 */
 	private CardList communityCards;
 	
-	private ChipsManager manager;
+	private GameManager manager;
 	
 	private GameStage gs;
 	
@@ -68,8 +68,9 @@ public class Table extends Pane {
 		this.bigIndex = 0;
 		this.smallIndex = bigIndex + 1;
 		this.playerList = new LinkedList<>();
+		this.resultList = new LinkedList<>();
 		this.dealer = new Dealer(this);
-		this.manager = new ChipsManager();
+		this.manager = new GameManager();
 		this.player = null;
 		this.gs = null;
 		
@@ -162,7 +163,7 @@ public class Table extends Pane {
 		{300, 400},
 		{20, 200}, 
 		{300, 150}, 
-		{600, 200}
+		{580, 200}
 	};
 	
 	private void applyTranslation(PlayerEntity entity) {
@@ -182,9 +183,9 @@ public class Table extends Pane {
 	public void setGameStage(GameStage gs) {
 		this.gs = gs;
 	}
-
-	public void enablePlayerOptions() {
-		gs.setPlayerOptions(true);
+	
+	public void enablePlayerOptions(boolean enable) {
+		gs.enablePlayerOptions(enable);
 	}
 	
 	public void swapButton() {
@@ -202,7 +203,7 @@ public class Table extends Pane {
 	 * @return
 	 */
 	public int getCurrentRanking(PlayerEntity entity) {
-		return playerList.indexOf(entity) + 1;
+		return resultList.indexOf(entity) + 1;
 	}
 
 	
@@ -214,7 +215,7 @@ public class Table extends Pane {
 		return dealer;
 	}
 	
-	public ChipsManager callManager() {
+	public GameManager callManager() {
 		return manager;
 	}
 	
@@ -226,12 +227,22 @@ public class Table extends Pane {
 		return playerList;
 	}
 	
+	public LinkedList<PlayerEntity> resultList() {
+		resultList.clear();
+		resultList.addAll(playerList);
+		return resultList;
+	}
+	
 	/**
 	 * 
 	 * @return
 	 */
 	public CardList communityCards() {
 		return communityCards;
+	}
+	
+	public int getPlayerIndex() {
+		return playerList.indexOf(player);
 	}
 	
 	/**

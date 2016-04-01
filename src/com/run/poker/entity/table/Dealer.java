@@ -1,14 +1,9 @@
 package com.run.poker.entity.table;
 
-import com.run.poker.ai.AIManager;
-import com.run.poker.ai.Analyser;
 import com.run.poker.entity.card.Deck;
-import com.run.poker.entity.player.Enemy;
 import com.run.poker.entity.player.PlayerEntity;
-import com.run.poker.view.animation.DealCardAnimation;
-import com.run.poker.view.animation.DrawCardAnimation;
-
-import javafx.concurrent.Task;
+import com.run.poker.view.animation.DealCard;
+import com.run.poker.view.animation.DrawCard;
 
 /**
  * A Dealer is associated with a table.
@@ -20,13 +15,9 @@ import javafx.concurrent.Task;
 public class Dealer {
 
 	private Table table;
-	private Analyser analyser;
-	private AIManager manager;
 	
 	Dealer(Table table) { 
 		this.table = table;
-		this.analyser = new Analyser(table);
-		this.manager = new AIManager(table);
 	}
 	
 	//********************
@@ -52,7 +43,7 @@ public class Dealer {
 	 * <p> Deal 1 card for every player in this table.
 	 */
 	public void deal() {
-		new DrawCardAnimation(table).playSequence();
+		new DrawCard(table).playSequence();
 	}
 	
 	/**
@@ -72,21 +63,21 @@ public class Dealer {
 	 * Stage One: The flop.
 	 */
 	public void stageOne() {
-		new DealCardAnimation(table).setTurns(5).playSequence();
+		new DealCard(table).setTurns(3).playSequence();
 	}
 	
 	/**
 	 * The turn.
 	 */
 	public void stageTwo() {
-		new DealCardAnimation(table).setTurns(1).playSequence();
+		new DealCard(table).setTurns(1).playSequence();
 	}
 	
 	/**
 	 * The river.
 	 */
 	public void stageThree() {
-		new DealCardAnimation(table).setTurns(1).playSequence();
+		new DealCard(table).setTurns(1).playSequence();
 	}
 	
 	public void clearCC() {
@@ -95,36 +86,5 @@ public class Dealer {
 	
 	//***********************
 	//*  The determination  *
-	//***********************
-	
-	public void betStart() {
-		new Thread(new BetTask()).start();
-	}
-	
-	//TODO add index
-	class BetTask extends Task<Void> {
-		
-		@Override
-		protected Void call() throws Exception {
-			
-			Thread.sleep(3000);
-			analyser.analyse();
-			System.out.println(table);
-			
-			PlayerEntity previous = null;
-			for (PlayerEntity current: table.playerList()) {
-				if (previous != null) {
-					previous.setActive(false);
-				}
-				current.setActive(true);
-				if (current instanceof Enemy) {
-					manager.process((Enemy) current);
-				} else {
-					table.enablePlayerOptions();
-				}
-				previous = current;
-			}
-			return null;
-		}
-	}
+	//***********************	
 }

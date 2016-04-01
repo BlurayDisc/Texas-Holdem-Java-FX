@@ -9,11 +9,11 @@ import com.run.poker.entity.table.Table;
 import javafx.animation.Animation;
 import javafx.util.Duration;
 
-public class DealCardAnimation extends BaseAnimation {
+public class DealCard extends BaseAnimation {
 	
 	private int turns;
 	
-	public DealCardAnimation(Table table) {
+	public DealCard(Table table) {
 		super(table);
 	}
 	
@@ -30,7 +30,7 @@ public class DealCardAnimation extends BaseAnimation {
 		}
 	}
 	
-	public DealCardAnimation setTurns(int turns) {
+	public DealCard setTurns(int turns) {
 		this.turns = turns;
 		return this;
 	}

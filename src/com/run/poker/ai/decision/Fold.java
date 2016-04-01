@@ -4,8 +4,9 @@ public class Fold extends Decision {
 
 	@Override
 	public Decision process() {
-		// TODO Auto-generated method stub
-		System.out.println("Fold");
+		
+		entity.fold();
+		
 		return null;
 	}
 

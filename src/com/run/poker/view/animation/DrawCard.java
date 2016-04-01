@@ -12,9 +12,9 @@ import javafx.animation.Animation;
 import javafx.scene.Node;
 import javafx.util.Duration;
 
-public class DrawCardAnimation extends BaseAnimation {
+public class DrawCard extends BaseAnimation {
 	
-	public DrawCardAnimation(Table table) {
+	public DrawCard(Table table) {
 		super(table);
 	}
 	

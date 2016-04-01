@@ -17,7 +17,7 @@ public class CardList extends HBox {
 	private boolean hidden = false;
 	
 	public CardList() {
-		setSpacing(Card.GAP);
+		//setSpacing(Card.GAP);
 		//setPrefSize(Card.HEIGHT, 2 * (Card.WIDTH + Card.GAP));
 	}
 	

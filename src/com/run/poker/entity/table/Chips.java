@@ -1,4 +1,4 @@
-package com.run.poker.entity.chips;
+package com.run.poker.entity.table;
 
 import com.run.poker.utils.FileUtils;
 import com.run.poker.utils.GameUtils;
@@ -64,10 +64,6 @@ public class Chips extends ImageView {
 				IMAGE.getWidth() * H_SCALE, 
 				IMAGE.getHeight() * V_SCALE);
 		setViewport(viewPort);
-		
-		System.out.println(IMAGE.getWidth() + ", " + IMAGE.getHeight());
-		System.out.println(getFitWidth() + ", " + getFitHeight());
-		System.out.println(viewPort);
 	}
 	
 	@Override

@@ -71,7 +71,9 @@ public class Analyser {
 			analyse(entity, cards);
 		}
 		//Sort players by their hand ranking.
-		Collections.sort(table.playerList(), Collections.reverseOrder());
+		Collections.sort(table.resultList(), Collections.reverseOrder());
+		
+		System.out.println(table);
 	}
 
 	/**

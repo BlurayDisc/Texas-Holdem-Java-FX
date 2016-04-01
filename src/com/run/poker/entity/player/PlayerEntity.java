@@ -1,8 +1,5 @@
 package com.run.poker.entity.player;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import com.run.poker.entity.card.CardList;
 import com.run.poker.entity.card.Showdown;
 import com.run.poker.utils.GameUtils;
@@ -30,8 +27,7 @@ import javafx.scene.text.Text;
  * @author RuN
  *
  */
-public class PlayerEntity extends Pane
-		implements Observer, Comparable<PlayerEntity> {
+public class PlayerEntity extends Pane implements Comparable<PlayerEntity> {
 	
 	/**
 	 * Player name binding
@@ -158,10 +154,6 @@ public class PlayerEntity extends Pane
 		raise(money.get());
 	}
 	
-	public void reset() {
-		this.state = State.None;
-	}
-	
 	/**
 	 * 
 	 * @param amount
@@ -220,11 +212,6 @@ public class PlayerEntity extends Pane
 	
 	public CardList holdCards() {
 		return holdCards;
-	}
-	
-	@Override
-	public void update(Observable o, Object arg) {
-		System.out.println(name.get() + ": " + arg);
 	}
 	
 	@Override

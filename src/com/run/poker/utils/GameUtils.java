@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import com.run.poker.entity.card.Card;
 import com.run.poker.entity.card.CardList;
@@ -13,6 +14,7 @@ import com.run.poker.entity.player.Title;
 
 import javafx.beans.binding.StringBinding;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.scene.Node;
 
 /**
@@ -29,6 +31,15 @@ public class GameUtils {
      */
     public static int inc(int i, int max) {
         return (i == max) ? 0 : i + 1;
+    }
+    
+    public static <T> Task<T> task(Callable<T> callable) {
+        return new Task<T>() {
+            @Override
+            public T call() throws Exception {
+                return callable.call();
+            }
+        };
     }
 	
 	public static String randomName() {

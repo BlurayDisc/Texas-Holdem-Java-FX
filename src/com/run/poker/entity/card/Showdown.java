@@ -40,7 +40,7 @@ public class Showdown extends ArrayList<Card> implements Comparable<Showdown> {
 	
 	@Override
 	public int compareTo(Showdown that) {
-		int result = this.rank.order - that.rank.order;
+		int result = this.rank.ordinal() - that.rank.ordinal();
 		if (result == 0) {
 			switch (rank) {
 			case Flush:
@@ -49,7 +49,7 @@ public class Showdown extends ArrayList<Card> implements Comparable<Showdown> {
 				break;
 			case StraightFlush: case FourOfaKind: case FullHouse: 
 			case Straight: case ThreeOfaKind: case TwoPair: 
-			case OnePair: case HighCard: 
+			case OnePair: case HighCard: case RoyalFlush: 
 				for (int i = 0; i < size(); i++) {
 					result = this.get(i).compareTo(that.get(i));
 					if (result != 0) {
