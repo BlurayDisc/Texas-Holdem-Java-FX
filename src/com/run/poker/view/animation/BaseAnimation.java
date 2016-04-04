@@ -28,8 +28,6 @@ public abstract class BaseAnimation {
 	protected Table table;
 	protected Deck deck;
 	
-	protected Animation nowPlaying;
-	
 	public BaseAnimation(Table table) {
 		this.table = table;
 		this.deck = table.deck();

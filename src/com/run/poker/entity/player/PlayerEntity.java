@@ -4,6 +4,9 @@ import com.run.poker.entity.card.CardList;
 import com.run.poker.entity.card.Showdown;
 import com.run.poker.utils.GameUtils;
 
+import javafx.animation.Animation;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -14,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 /**
  * <p> Base entity for player/enemy objects.
@@ -167,9 +171,9 @@ public class PlayerEntity extends Pane implements Comparable<PlayerEntity> {
 	 * @param amount
 	 */
 	public void subtractMoney(int amount) {
-		if (amount > money.get()) {
-			throw new IllegalArgumentException("Out of Money.");
-		}
+//		if (amount > money.get()) {
+//			throw new IllegalArgumentException("Out of Money.");
+//		}
 		this.money.set(money.get() - amount);
 	}
 	
@@ -212,6 +216,26 @@ public class PlayerEntity extends Pane implements Comparable<PlayerEntity> {
 	
 	public CardList holdCards() {
 		return holdCards;
+	}
+	
+	public Animation flash() {
+		
+		SequentialTransition sequence = new SequentialTransition();
+		sequence.setCycleCount(1);
+		sequence.setAutoReverse(false);
+		
+		PauseTransition t1 = new PauseTransition(Duration.seconds(0.1));
+		t1.setOnFinished(e -> setActive(true));
+		
+		PauseTransition t2 = new PauseTransition(Duration.seconds(1));
+		t2.setOnFinished(e -> setActive(false));
+		sequence.getChildren().addAll(t1, t2);
+		
+		return sequence;
+	}
+	
+	public void onAction() {
+		
 	}
 	
 	@Override

@@ -3,7 +3,13 @@ package com.run.poker.entity.player;
 import java.util.Stack;
 
 import com.run.poker.ai.decision.Decision;
+import com.run.poker.manager.GameManager;
 import com.run.poker.utils.GameUtils;
+
+import javafx.animation.Animation;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
+import javafx.util.Duration;
 
 /**
  * Enemy Bots.
@@ -34,5 +40,25 @@ public class Enemy extends PlayerEntity {
 	
 	public Decision getFinalDecision() {
 		return backTrack.get(backTrack.size() - 1);
+	}
+	
+	@Override
+	public Animation flash() {
+		
+		SequentialTransition sequence = new SequentialTransition();
+		sequence.setCycleCount(1);
+		sequence.setAutoReverse(false);
+		
+		PauseTransition t1 = new PauseTransition(Duration.seconds(0.1));
+		t1.setOnFinished(e -> setActive(true));
+		
+		PauseTransition t2 = new PauseTransition(Duration.seconds(1));
+		t2.setOnFinished(e -> {
+			GameManager.process(this);
+			setActive(false);
+		});
+		sequence.getChildren().addAll(t1, t2);
+		
+		return sequence;
 	}
 }

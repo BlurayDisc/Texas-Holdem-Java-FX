@@ -38,7 +38,7 @@
     -fx-font-size: 14pt;
     -fx-font-family: "Tahoma";
     -fx-base: #3B3131;
-    -fx-background: #565051;
+    -fx-background: #241E1F;
     -fx-focus-color: #B6A678;
 }
  
@@ -57,9 +57,8 @@
     -fx-background-radius: 20;
     -fx-padding: 5;
 }
- 
+
 .slider{
-    -fx-border-color: white;
-    -fx-border-style: dashed;
-    -fx-border-width: 2;
+    -fx-base: #ffffff;
+    -fx-background: #000000;
 }

@@ -11,13 +11,11 @@ import com.run.poker.manager.GameManager;
 import com.run.poker.utils.GameUtils;
 
 import javafx.collections.ObservableList;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
@@ -43,19 +41,19 @@ public class GameStage extends Stage {
 	 * GUI Components.
 	 */
 	private ToolBar playerOptions;
-	private Slider slider;
 	private Text name;
 	private Text money;
 	private Button check;
 	private Button call;
+	
+	private Stage sliderMenu;
 	
 	public GameStage() {
 
 		//Scene Layouts.
 		BorderPane layout = new BorderPane();
 		layout.getStylesheets().add("css/gameStyle.css");
-		Scene game = new Scene(layout);
-		setScene(game);
+		setScene(new Scene(layout));
 		
 		//Main Model.
 		Table table = new Table();
@@ -66,6 +64,8 @@ public class GameStage extends Stage {
 		layout.setCenter(table);
 		
 		manager = new GameManager(table);
+        sliderMenu = new SliderMenu(table);
+        sliderMenu.initOwner(this);
 		
 		// Game Tool Bar
 		Button dealButton = new Button("Deal");
@@ -91,9 +91,7 @@ public class GameStage extends Stage {
 		Button exit = new Button("Exit");
 		exit.getStyleClass().add("button1");
 		exit.setPrefSize(150, 50);
-		exit.setOnAction(event -> {
-			closeAndShowOwner();
-		});
+		exit.setOnAction(event -> closeAndShowOwner());
 
 		ToolBar toolbar = new ToolBar(dealButton, fullScreen, exit);
 		layout.setTop(toolbar);
@@ -161,7 +159,11 @@ public class GameStage extends Stage {
 		raise.setOnAction(e -> {
 			table.getPlayer().raise(50);
 			table.callManager().add(50);
+			sliderMenu.setX(getX() + getWidth() / 2 - 150);
+			sliderMenu.setY(getY() + getHeight() / 2 + 100);
+	        sliderMenu.show();
 			manager.afterPlayerAction();
+			System.out.println(this.getX() + " " + this.getY());
 		});
 		
 		Button all = new Button("All In");
@@ -186,24 +188,7 @@ public class GameStage extends Stage {
 		playerOptions.setDisable(true);
         BorderPane.setAlignment(playerOptions, Pos.CENTER);
         layout.setBottom(playerOptions);
-        
-        //TODO move slider to Player
-        slider = new Slider();
-        slider.setPrefSize(100, 100);
-        slider.setBlockIncrement(25);
-        slider.setMinorTickCount(1);
-        slider.setMajorTickUnit(25);
-        //slider.minorTickCountProperty().bind(table.getPlayer().getMoney().divide(25));
-        //slider.majorTickUnitProperty().bind(table.getPlayer().getMoney().divide(10));
-        //slider.maxProperty().bind(table.getPlayer().getMoney());
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(true);
-        slider.setSnapToTicks(true);
-        slider.setOrientation(Orientation.VERTICAL);
-        slider.setOnMouseClicked(e -> System.out.println(slider.getValue()));
-        //layout.setRight(slider);
-        //BorderPane.setAlignment(slider, Pos.CENTER);
-		
+
 		setTitle(Poker.APP_NAME);
 		getIcons().add(Card.BACK);
 		setOnCloseRequest(event -> closeAndShowOwner());
